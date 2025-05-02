@@ -3,35 +3,35 @@ version: '3.8'
 services:
   backend:
     build:
-      context: ./api
+      context: ./ctij-api
     container_name: laravel-api
     volumes:
-      - ./api:/var/www
+      - ./ctij-api:/var/www
     ports:
       - "8000:8000"
     environment:
       DB_HOST: db
       DB_PORT: 3306
-      DB_DATABASE: laravel
-      DB_USERNAME: laravel
-      DB_PASSWORD: laravel
+      DB_DATABASE: cabinet_tij_db
+      DB_USERNAME: root
+      DB_PASSWORD: 
     depends_on:
       - db
     networks:
       - appnet
 
-  frontend:
-    build:
-      context: ./frontend
-    container_name: react-app
-    volumes:
-      - ./frontend:/app
-    ports:
-      - "3000:3000"
-    stdin_open: true
-    tty: true
-    networks:
-      - appnet
+  # frontend:
+  #   build:
+  #     context: ./ctij-frontend
+  #   container_name: react-app
+  #   volumes:
+  #     - ./ctij-frontend:/app
+  #   ports:
+  #     - "3000:3000"
+  #   stdin_open: true
+  #   tty: true
+  #   networks:
+  #     - appnet
 
   nginx:
     image: nginx:alpine
@@ -40,11 +40,11 @@ services:
       - "8080:80"
     volumes:
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
-      - ./api/public:/var/www/public
-      - ./frontend/build:/usr/share/nginx/html
+      - ./ctij-api/public:/var/www/public
+      - ./ctij-frontend/build:/usr/share/nginx/html
     depends_on:
-      - backend
-      - frontend
+      - backend   # Changed to 'backend' to match the service name
+      # - frontend
     networks:
       - appnet
 
@@ -54,11 +54,11 @@ services:
     restart: unless-stopped
     environment:
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: laravel
-      MYSQL_USER: laravel
-      MYSQL_PASSWORD: laravel
+      MYSQL_DATABASE: cabinet_tij_db
+      MYSQL_USER: root
+      MYSQL_PASSWORD: 
     ports:
-      - "3306:3306"   # Correction : ports en liste
+      - "3306:3306"
     volumes:
       - dbdata:/var/lib/mysql
     networks:
