@@ -46,7 +46,7 @@ const AdminLayout = () => {
           <h1 className="text-xl font-semibold text-gray-800">
             <Link to="/" className="flex flex-row items-center gap-2">
               <FontAwesomeIcon icon={faChevronCircleLeft} />
-              Retour Acceuil
+              Retour Accueil
             </Link>
           </h1>
         </header>
