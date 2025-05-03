@@ -17,6 +17,7 @@ import {
   useLazyGetTraducteursQuery,
 } from "@/services/apis/traducteursApi";
 import { traducteur_status } from "@/pages/Admin/Traducteurs";
+import { faUsers } from "@fortawesome/free-solid-svg-icons/faUsers";
 interface TableData {
   id: number;
   dispo: string;
@@ -188,10 +189,12 @@ export default function Home() {
       <div className="flex flex-row gap-20 mt-10 mb-10  shadow-ann-card p-1 px-4 py-4 rounded-sm">
         <div className="flex flex-row gap-4 flex-1">
           <div className="flex items-center">
-            <FontAwesomeIcon
-              icon={faUsersRectangle}
-              className="text-orange-500 text-5xl "
-            />
+            <div className="rounded-full flex items-center justify-center bg-orange-500 w-[80px] h-[80px] ">
+              <FontAwesomeIcon
+                icon={faUsers}
+                className="text-white text-4xl "
+              />
+            </div>
           </div>
           <div className="flex flex-col gap-2">
             <div className="font-bold text-xl">
@@ -204,8 +207,8 @@ export default function Home() {
               interprètes dispos
             </div>
             <div className="text-xs">
-            <span className="font-bold text-orange-400">
-            {data?.traducteurs?.total_dispo_sms}
+              <span className="font-bold text-orange-400">
+                {data?.traducteurs?.total_dispo_sms}
               </span>{" "}
               interprètes dispos SMS
             </div>
@@ -213,10 +216,9 @@ export default function Home() {
         </div>
         <div className="flex flex-row gap-4 flex-1">
           <div className="flex items-center">
-            <FontAwesomeIcon
-              icon={faFlag}
-              className="text-teal-700 text-5xl "
-            />
+            <div className="rounded-full flex items-center justify-center bg-teal-700 w-[80px] h-[80px] ">
+              <FontAwesomeIcon icon={faFlag} className="text-white text-4xl" />
+            </div>
           </div>
 
           <div className="flex flex-col gap-2">
