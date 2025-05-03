@@ -31,7 +31,7 @@ export default function Login() {
       <div className="container mx-auto max-w-6xl ">
         <div className="max-w-md mx-auto bg-white rounded-xl  border-blue-950 border-opacity-30 border p-6">
           <h3 className="text-xl font-bold mb-3 text-gray-800 text-center">
-            Sign In
+            Connexion
           </h3>
           <form onSubmit={handleLogin} className="space-y-4">
             <p className="text-red-700 text-sm mb-2 h-6">
@@ -64,7 +64,7 @@ export default function Login() {
                 htmlFor="login-password"
                 className="block text-sm font-medium text-gray-700 mb-1"
               >
-                Password
+                Mot de passe
               </label>
               <div className="relative w-full">
                 <input
@@ -94,7 +94,7 @@ export default function Login() {
               </div>
             </div>
             <div className="flex justify-between items-center">
-              <div className="flex items-center">
+              {/* <div className="flex items-center">
                 <input
                   type="checkbox"
                   id="remember"
@@ -106,12 +106,12 @@ export default function Login() {
                 >
                   Remember me
                 </label>
-              </div>
+              </div> */}
               <a
                 href="#"
                 className="text-sm text-prt-main-color-200 hover:text-purple-800"
               >
-                Forgot password?
+                Oublié Mot de passe?
               </a>
             </div>
             <button
@@ -124,16 +124,16 @@ export default function Login() {
                   <ProgressSpinner className="h-6 w-6 ml-2" />
                 </div>
               ) : (
-                "Sign in"
+                "Connexion"
               )}
             </button>
             <div className="text-center text-sm text-gray-600">
-              Don't have an account?{" "}
+              Vous n'avez pas de compte ? {" "}
               <Link
                 to="/register"
                 className="text-prt-main-color-200 hover:text-purple-800 font-medium"
               >
-                Sign up
+                Inscrivez-vous
               </Link>
             </div>
           </form>

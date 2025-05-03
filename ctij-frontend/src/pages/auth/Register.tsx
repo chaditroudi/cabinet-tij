@@ -132,7 +132,7 @@ export default function Register() {
           <div className="max-w-md mx-auto bg-white rounded-xl  border-blue-950 border-opacity-30 border p-6">
             <div className="">
               <h3 className="text-xl font-bold mb-3 text-gray-800 text-center">
-                Sign Up
+                INSCRIPTION
               </h3>
 
               <form onSubmit={handleRegister} className="space-y-3">
@@ -286,7 +286,7 @@ export default function Register() {
                       htmlFor="terms"
                       className="ml-3 block text-sm leading-6 text-gray-700"
                     >
-                      I agree to the terms and conditions
+                      J'accepte les termes et conditions
                     </label>
                   </div>
                 </div>
@@ -316,12 +316,12 @@ export default function Register() {
 
               <div className="mt-4 flex justify-end">
                 <p className="text-center text-sm">
-                  Already have an account?{" "}
+                  Vous avez déjà un compte ?{" "}
                   <Link
                     to="/login"
                     className="text-main-color font-semibold hover:text-main-color"
                   >
-                    Sign in
+                    Connectez-vous
                   </Link>
                 </p>
               </div>
