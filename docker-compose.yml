@@ -1,0 +1,72 @@
+version: '3.8'
+
+services:
+  # PHP / Laravel App
+  app:
+    build:
+      context: ./ctij-api
+      dockerfile: Dockerfile
+    container_name: ctij-app
+    restart: unless-stopped
+    working_dir: /var/www
+    volumes:
+      - ./ctij-api:/var/www
+    networks:
+      - ctij-network
+    depends_on:
+      - db
+
+  # Nginx Server
+  nginx:
+    image: nginx:alpine
+    container_name: ctij-nginx
+    restart: unless-stopped
+    ports:
+      - "8000:80"
+    volumes:
+      - ./ctij-api:/var/www
+      - ./nginx/conf.d:/etc/nginx/conf.d
+    networks:
+      - ctij-network
+    depends_on:
+      - app
+
+  # MySQL Database
+  db:
+    image: mysql:8.0
+    container_name: ctij-db
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_USER: ${DB_USERNAME}
+    ports:
+      - "3306:3306"
+    volumes:
+      - dbdata:/var/lib/mysql
+    networks:
+      - ctij-network
+
+  # phpMyAdmin
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: ctij-phpmyadmin
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    environment:
+      PMA_HOST: db
+      MYSQL_ROOT_PASSWORD: 
+    depends_on:
+      - db
+    networks:
+      - ctij-network
+
+networks:
+  ctij-network:
+    driver: bridge
+
+volumes:
+  dbdata:
+    driver: local

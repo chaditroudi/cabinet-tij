@@ -1,0 +1,9 @@
+
+
+
+laravel auth:
+1/composer require laravel/sanctum laravel/fortify
+2/php artisan vendor:publish --provider="Laravel\Sanctum\SanctumServiceProvider"
+php artisan vendor:publish --provider="Laravel\Fortify\FortifyServiceProvider"
+php artisan migrate
+3/php artisan make:provider FortifyServiceProvider
