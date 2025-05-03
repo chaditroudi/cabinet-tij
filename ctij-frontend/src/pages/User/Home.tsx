@@ -29,7 +29,7 @@ interface TableData {
 }
 
 export default function Home() {
-  const [selectedLanguage, setSelectedLanguage] = useState(null);
+  const [selectedLanguage, setSelectedLanguage] = useState(null) as any;
   const [searchTerm, setSearchTerm] = useState("");
   const [tableData, setTableData] = useState<TableData[]>([]);
   const [selectedDept, setSelectedDept] = useState(null) as any;
@@ -179,11 +179,7 @@ export default function Home() {
               placeholder="Rechercher par Nom, Prénom..."
               className="w-full"
             />
-            <Button
-              icon="pi pi-search"
-              onClick={null}
-              className="ml-2 px-6 bg-blue-800"
-            />
+           
           </div>
         </div>
       </div>

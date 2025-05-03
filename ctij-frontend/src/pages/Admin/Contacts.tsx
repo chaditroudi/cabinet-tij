@@ -371,7 +371,7 @@ export function Contacts() {
             value={formData.dispo.toString()}
             options={contact_status}
             onChange={(e) => onDropdownChange(e, "dispo")}
-            placeholder="Select a status"
+            placeholder="Choidir disponibilité"
             className={classNames({
               "p-invalid": submitted && !formData.dispo,
             })}
