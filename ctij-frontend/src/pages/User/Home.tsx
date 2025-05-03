@@ -194,9 +194,21 @@ export default function Home() {
             />
           </div>
           <div className="flex flex-col gap-2">
-            <div className="font-bold text-xl">444 Traducteurs</div>
-            <div className="text-xs">52 interprètes dispos</div>
-            <div className="text-xs">51 interprètes dispos SMS</div>
+            <div className="font-bold text-xl">
+              {data?.traducteurs?.total_trad} Traducteurs
+            </div>
+            <div className="text-xs">
+              <span className="font-bold text-green-600">
+                {data?.traducteurs?.total_dispo}
+              </span>{" "}
+              interprètes dispos
+            </div>
+            <div className="text-xs">
+            <span className="font-bold text-orange-400">
+            {data?.traducteurs?.total_dispo_sms}
+              </span>{" "}
+              interprètes dispos SMS
+            </div>
           </div>
         </div>
         <div className="flex flex-row gap-4 flex-1">
@@ -208,8 +220,10 @@ export default function Home() {
           </div>
 
           <div className="flex flex-col gap-2">
-            <div className="font-bold text-xl">120 Langues</div>
-            <div className="text-xs">63 langues disponibles</div>
+            <div className="font-bold text-xl">108 Langues</div>
+            <div className="text-xs">
+              {data?.traducteurs?.total_language} langues disponibles
+            </div>
           </div>
         </div>
       </div>
