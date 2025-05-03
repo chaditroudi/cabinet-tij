@@ -12,9 +12,9 @@ import VerifyEmail from "../pages/auth/VerifyEmail";
 import Logout from "../pages/auth/Logout";
 import GuestRoute from "../middleware/GuestRoute";
 import { Home } from "@/pages/User/Index";
-import { Contacts } from "@/pages/Admin/Index";
 import AdminLayout from "@/layouts/AdminLayout";
 import UserLayout from "@/layouts/UserLayout";
+import { Traducteurs } from "@/pages/Admin/Index";
 export default function AppRoutes() {
   const location = useLocation();
   const dispatch = useAppDispatch();
@@ -39,7 +39,7 @@ export default function AppRoutes() {
 
         <Route element={<PrivateRoute />}>
           <Route element={<AdminLayout />}>
-            <Route path="/contacts" element={<Contacts />} />
+            <Route path="/traducteurs" element={<Traducteurs />} />
           </Route>
           <Route path="/logout" element={<Logout />} />
         </Route>

@@ -1,17 +1,17 @@
 import { configureStore } from "@reduxjs/toolkit";
 import authentication from "../services/reducers/authentication";
-import { contactsApi } from "@/services/apis/contactsApi";
+import { traducteursApi } from "@/services/apis/traducteursApi";
 
 export const store = configureStore({
   reducer: {
     authentication: authentication,
-    [contactsApi.reducerPath]: contactsApi.reducer,
+    [traducteursApi.reducerPath]: traducteursApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       thunk: true,
       serializableCheck: false,
-    }).concat(contactsApi.middleware),
+    }).concat(traducteursApi.middleware),
 });
 
 export type RootState = ReturnType<typeof store.getState>;

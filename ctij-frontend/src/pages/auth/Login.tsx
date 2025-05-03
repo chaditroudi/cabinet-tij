@@ -23,7 +23,7 @@ export default function Login() {
     const result = await dispatch(login({ email, password }));
     if (login.fulfilled.match(result)) {
       dispatch(getAccount());
-      navigate("/contacts");
+      navigate("/traducteurs");
     }
   };
   return (

@@ -3,27 +3,27 @@ import { createApi } from "@reduxjs/toolkit/query/react";
 import baseQuery from "../../config/baseQuery";
 
 // Create the API slice
-export const contactsApi = createApi({
-  reducerPath: "contactsApi",
-  tagTypes: ["contacts"],
+export const traducteursApi = createApi({
+  reducerPath: "traducteursApi",
+  tagTypes: ["traducteurs"],
   baseQuery,
   endpoints: (builder) => ({
-    getContacts: builder.query<
-      { contacts: any[] },
+    getTraducteurs: builder.query<
+      { traducteurs: any[] },
       { search: string; code_dept: string; langue: string }
     >({
       query: ({ search, code_dept, langue }) =>
         `/interpretes/filter?keyword=${encodeURIComponent(search)}&departement=${code_dept}&langue=${langue}`,
       transformResponse: (response: any) => ({
-        contacts: response,
+        traducteurs: response,
       }),
     }),
-    getAllContacts: builder.query({
+    getAlltraducteurs: builder.query({
       query: () => `/interpretes`,
       transformResponse: (response: any) => ({
-        contacts: response,
+        traducteurs: response,
       }),
-      providesTags: ["contacts"], // <-- Add this
+      providesTags: ["traducteurs"], // <-- Add this
     }),
 
     deleteTraducteur: builder.mutation({
@@ -31,7 +31,7 @@ export const contactsApi = createApi({
         url: `/interpretes/${id}`,
         method: "DELETE",
       }),
-      invalidatesTags: ["contacts"], // <-- Add this
+      invalidatesTags: ["traducteurs"], // <-- Add this
     }),
     saveTraducteur: builder.mutation({
       query: (data) => ({
@@ -39,23 +39,23 @@ export const contactsApi = createApi({
         method: "POST",
         body: data,
       }),
-      invalidatesTags: ["contacts"],
+      invalidatesTags: ["traducteurs"],
     }),
-    updateInterprete: builder.mutation({
+    updateTraducteur: builder.mutation({
       query: ({ id, data }) => ({
         url: `/interpretes/${id}`,
         method: "PUT", // or "PATCH" if your backend supports partial updates
         body: data,
       }),
-      invalidatesTags: ["contacts"], // adjust this if needed
+      invalidatesTags: ["traducteurs"], // adjust this if needed
     }),
   }),
 });
 
 export const {
-  useUpdateInterpreteMutation,
+  useUpdateTraducteurMutation,
   useSaveTraducteurMutation,
-  useLazyGetContactsQuery,
-  useGetAllContactsQuery,
+  useLazyGetTraducteursQuery,
+  useGetAlltraducteursQuery,
   useDeleteTraducteurMutation,
-} = contactsApi;
+} = traducteursApi;

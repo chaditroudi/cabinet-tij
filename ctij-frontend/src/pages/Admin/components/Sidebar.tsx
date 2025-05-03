@@ -16,7 +16,7 @@ const Sidebar = ({ collapsed, setCollapsed, onLogout }: SidebarProps) => {
 
   const menuItems = [
     {
-      path: "/contacts",
+      path: "/traducteurs",
       icon: "fa-solid fa-address-book",
       label: "Traducteurs",
     },

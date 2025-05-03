@@ -3,22 +3,17 @@
 import { useState, useEffect, useRef, useMemo } from "react";
 import { Dropdown } from "primereact/dropdown";
 import { InputText } from "primereact/inputtext";
-import { Button } from "primereact/button";
 import "primereact/resources/primereact.min.css";
 import "primereact/resources/themes/lara-light-indigo/theme.css";
 import "primeicons/primeicons.css";
 import departement from "@/assets/js/departements.json";
 import languages from "@/assets/js/languages.json";
-import { useLazyGetContactsQuery } from "@/services/apis/contactsApi";
 import { ProgressSpinner } from "primereact/progressspinner";
-import { contact_status } from "@/pages/Admin/Contacts";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faFlag,
-  faUsers,
-  faUsersRectangle,
-} from "@fortawesome/free-solid-svg-icons";
+import { faFlag, faUsersRectangle } from "@fortawesome/free-solid-svg-icons";
 import useAuthContext from "@/context/AuthContext";
+import { useLazyGetTraducteursQuery } from "@/services/apis/traducteursApi";
+import { traducteur_status } from "@/pages/Admin/Traducteurs";
 interface TableData {
   id: number;
   dispo: string;
@@ -36,8 +31,8 @@ export default function Home() {
   const [selectedDept, setSelectedDept] = useState(null) as any;
   const { getLanguageLabel } = useAuthContext();
 
-  const [triggerGetContacts, { isFetching, isLoading }] =
-    useLazyGetContactsQuery();
+  const [triggerGettraducteurs, { isFetching, isLoading }] =
+    useLazyGetTraducteursQuery();
   const isFirstRender = useRef(true);
   const [showSpinner, setShowSpinner] = useState(false);
   const [_, setSpinnerVisible] = useState(false);
@@ -78,15 +73,15 @@ export default function Home() {
     }
     const fetchData = async () => {
       try {
-        const result = await triggerGetContacts({
+        const result = await triggerGettraducteurs({
           search: searchTerm || "",
           code_dept: selectedDept?.code || "",
           langue: selectedLanguage?.code || "",
         }).unwrap();
-        setTableData(result.contacts || []);
+        setTableData(result.traducteurs || []);
       } catch (error) {
         // Clear table on error
-        console.error("Error fetching contacts:", error);
+        console.error("Error fetching traducteurs:", error);
         setTableData([]);
       }
     };
@@ -110,7 +105,7 @@ export default function Home() {
     <>
       <h1 className="text-2xl font-bold mb-6 ">Recherche de Traducteur</h1>
       <div className="flex flex-row gap-2 md:gap-20 mt-10 mb-10  shadow-ann-card p-1 px-4 py-4 rounded-sm flex-wrap">
-        {contact_status.map((item) => (
+        {traducteur_status.map((item) => (
           <div className="flex flex-row gap-3">
             <div>{item.label}</div>
             <div
@@ -236,7 +231,7 @@ export default function Home() {
               </tr>
             ) : tableData.length > 0 ? (
               tableData.map((item) => {
-                const status = contact_status.find(
+                const status = traducteur_status.find(
                   (s) => s.value === item.dispo.toString()
                 );
 

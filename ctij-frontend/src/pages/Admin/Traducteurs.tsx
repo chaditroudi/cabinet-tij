@@ -19,19 +19,19 @@ import { faEdit } from "@fortawesome/free-solid-svg-icons/faEdit";
 import useAuthContext from "@/context/AuthContext";
 import {
   useDeleteTraducteurMutation,
-  useGetAllContactsQuery,
+  useGetAlltraducteursQuery,
   useSaveTraducteurMutation,
-  useUpdateInterpreteMutation,
-} from "@/services/apis/contactsApi";
+  useUpdateTraducteurMutation,
+} from "@/services/apis/traducteursApi";
 
-export const contact_status = [
+export const traducteur_status = [
   { label: "Disponible", value: "1", color: "border-green-500" },
   { label: "Disponible par Téléphone", value: "2", color: "border-gray-700" },
-  { label: "Contact par sms", value: "3", color: "border-orange-400" },
+  { label: "traducteur par sms", value: "3", color: "border-orange-400" },
   { label: "Disponibilité inconnu", value: "4", color: "border-red-700" },
 ];
 
-interface Contact {
+interface traducteur {
   id: number;
   identite: string;
   telephone: string;
@@ -51,10 +51,10 @@ interface FormData {
   langue: string;
 }
 
-export function Contacts() {
-  const [contacts, setContacts] = useState<Contact[]>([]);
+export function Traducteurs() {
+  const [traducteurs, setTraducteurs] = useState<traducteur[]>([]);
   const [dialogVisible, setDialogVisible] = useState(false);
-  const [updateTraducteur] = useUpdateInterpreteMutation();
+  const [updateTraducteur] = useUpdateTraducteurMutation();
   const [deleteTraducteur] = useDeleteTraducteurMutation();
   const [saveTraducteur] = useSaveTraducteurMutation();
   const getdepartementLabel = (code: string) => {
@@ -66,13 +66,13 @@ export function Contacts() {
   };
 
   const { getLanguageLabel, TopEndAlert } = useAuthContext();
-  const getContactStatusLabel = (value: string) => {
-    const status = contact_status.find(
+  const gettraducteurstatusLabel = (value: string) => {
+    const status = traducteur_status.find(
       (item) => item.value.toString() == value.toString()
     );
     return status ? status.label : "";
   };
-  const { data } = useGetAllContactsQuery(
+  const { data } = useGetAlltraducteursQuery(
     {},
     { refetchOnMountOrArgChange: true }
   );
@@ -89,7 +89,7 @@ export function Contacts() {
 
   // Load mock data
   useEffect(() => {
-    if (data) setContacts(data.contacts);
+    if (data) setTraducteurs(data.traducteurs);
   }, [data]);
 
   const openNew = () => {
@@ -111,16 +111,16 @@ export function Contacts() {
     setDialogVisible(false);
   };
 
-  const editContact = (contact: Contact) => {
-    setFormData({ ...contact });
+  const edittraducteur = (traducteur: traducteur) => {
+    setFormData({ ...traducteur });
     setDialogVisible(true);
   };
 
-  const deleteContact = (contact: Contact) => {
-    let id = contact?.id;
+  const deletetraducteur = (traducteur: traducteur) => {
+    let id = traducteur?.id;
     Swal.fire({
       title: "Are you sure?",
-      text: `Do you want to delete ${contact.identite}'s contact?`,
+      text: `Do you want to delete ${traducteur.identite}'s traducteur?`,
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
@@ -134,7 +134,7 @@ export function Contacts() {
     });
   };
 
-  const saveContact = async () => {
+  const savetraducteur = async () => {
     setSubmitted(true);
 
     if (
@@ -145,29 +145,29 @@ export function Contacts() {
       formData.departement &&
       formData.langue
     ) {
-      const updatedContacts = [...contacts];
+      const updatedtraducteurs = [...traducteurs];
 
       if (formData.id) {
-        // Update existing contact
+        // Update existing traducteur
         const index = findIndexById(formData.id);
-        updatedContacts[index] = { ...formData } as Contact;
+        updatedtraducteurs[index] = { ...formData } as traducteur;
         await await updateTraducteur({
           id: formData.id,
-          data: updatedContacts[index],
+          data: updatedtraducteurs[index],
         }).unwrap();
 
-        TopEndAlert("success", "Contact Modifée avec succès", "#fff");
+        TopEndAlert("success", "traducteur Modifée avec succès", "#fff");
       } else {
-        // Create new contact
-        const newContact = {
+        // Create new traducteur
+        const newtraducteur = {
           ...formData,
-        } as Contact;
+        } as traducteur;
 
         try {
           // Make API request with the FormData object
-          await await saveTraducteur(newContact).unwrap();
+          await await saveTraducteur(newtraducteur).unwrap();
 
-          TopEndAlert("success", "Contact Ajouté avec succès", "#fff");
+          TopEndAlert("success", "traducteur Ajouté avec succès", "#fff");
         } catch (e) {
           TopEndAlert("error", e, "#fff");
         }
@@ -177,7 +177,7 @@ export function Contacts() {
   };
 
   const findIndexById = (id: number) => {
-    return contacts.findIndex((contact) => contact.id === id);
+    return traducteurs.findIndex((traducteur) => traducteur.id === id);
   };
 
   const onInputChange = (
@@ -199,14 +199,14 @@ export function Contacts() {
     }));
   };
 
-  const actionBodyTemplate = (rowData: Contact) => {
+  const actionBodyTemplate = (rowData: traducteur) => {
     return (
       <div className="flex gap-4">
-        <button onClick={() => editContact(rowData)}>
+        <button onClick={() => edittraducteur(rowData)}>
           <FontAwesomeIcon icon={faEdit} className="text-blue-600" />
         </button>
 
-        <button onClick={() => deleteContact(rowData)}>
+        <button onClick={() => deletetraducteur(rowData)}>
           <FontAwesomeIcon icon={faTrashAlt} className="text-red-700" />
         </button>
       </div>
@@ -239,7 +239,7 @@ export function Contacts() {
         className="p-button-text"
         onClick={hideDialog}
       />
-      <Button label="Save" icon="fa-solid fa-check" onClick={saveContact} />
+      <Button label="Save" icon="fa-solid fa-check" onClick={savetraducteur} />
     </div>
   );
   const optionsWithLabel = useMemo(
@@ -253,14 +253,14 @@ export function Contacts() {
   return (
     <div>
       <DataTable
-        value={contacts}
+        value={traducteurs}
         header={header}
         resizableColumns
         // paginator
         rows={10}
         rowsPerPageOptions={[5, 10, 25]}
         dataKey="id"
-        className="p-datatable-contacts"
+        className="p-datatable-traducteurs"
       >
         <Column
           field="identite"
@@ -274,7 +274,7 @@ export function Contacts() {
           field="dispo"
           header="Statut de traducteur"
           sortable
-          body={(rowData) => getContactStatusLabel(rowData.dispo.toString())}
+          body={(rowData) => gettraducteurstatusLabel(rowData.dispo.toString())}
         />
         <Column
           field="departement"
@@ -372,7 +372,7 @@ export function Contacts() {
           <Dropdown
             id="dispo"
             value={formData.dispo.toString()}
-            options={contact_status}
+            options={traducteur_status}
             onChange={(e) => onDropdownChange(e, "dispo")}
             placeholder="Choisir disponibilité"
             className={classNames({
