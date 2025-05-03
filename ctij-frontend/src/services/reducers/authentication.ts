@@ -80,88 +80,81 @@ export const verifyEmail = createAsyncThunk<
   LoginResponse,
   string,
   { rejectValue: string }
->(
-  "auth/verifyEmail",
-  async (token, thunkAPI) => {
-    try {
-      const response = await axiosInstance.get(`/verify-email/${token}`);
-      const { access_token, refresh_token } = response.data;
-      localStorage.setItem("accessToken", access_token);
-      localStorage.setItem("refreshToken", refresh_token);
-      thunkAPI.dispatch(getAccount());
-      return { access_token, refresh_token };
-    } catch (error: any) {
-      const status = error?.response?.status;
-      const message = status === 400
+>("auth/verifyEmail", async (token, thunkAPI) => {
+  try {
+    const response = await axiosInstance.get(`/verify-email/${token}`);
+    const { access_token, refresh_token } = response.data;
+    localStorage.setItem("accessToken", access_token);
+    localStorage.setItem("refreshToken", refresh_token);
+    thunkAPI.dispatch(getAccount());
+    return { access_token, refresh_token };
+  } catch (error: any) {
+    const status = error?.response?.status;
+    const message =
+      status === 400
         ? "Invalid or expired token."
         : "Email verification failed.";
-      return thunkAPI.rejectWithValue(message);
-    }
+    return thunkAPI.rejectWithValue(message);
   }
-);
+});
 
 // Login
 export const login = createAsyncThunk<
   LoginResponse,
   LoginCredentials,
   { rejectValue: any }
->(
-  "auth/login",
-  async (credentials, thunkAPI) => {
-    try {
-      const response = await axiosInstance.post("/login/", credentials);
-      const { access_token, refresh_token } = response.data;
-      localStorage.setItem("accessToken", access_token);
-      localStorage.setItem("refreshToken", refresh_token.token);
-      thunkAPI.dispatch(getAccount());
-      return {
-        access_token,
-        refresh_token: refresh_token.token,
-      };
-    } catch (error: any) {
-      const msg = error.code === "ECONNABORTED"
+>("auth/login", async (credentials, thunkAPI) => {
+  try {
+    const response = await axiosInstance.post("/login/", credentials);
+    const { access_token, refresh_token } = response.data;
+    localStorage.setItem("accessToken", access_token);
+    localStorage.setItem("refreshToken", refresh_token.token);
+    thunkAPI.dispatch(getAccount());
+    return {
+      access_token,
+      refresh_token: refresh_token.token,
+    };
+  } catch (error: any) {
+    const msg =
+      error.code === "ECONNABORTED"
         ? "Request timed out."
         : error.response?.data || "Login failed";
-      return thunkAPI.rejectWithValue(msg);
-    }
+    return thunkAPI.rejectWithValue(msg);
   }
-);
+});
 
 // Register
 export const register = createAsyncThunk<
   LoginResponse,
   RegisterCredentials,
   { rejectValue: any }
->(
-  "auth/register",
-  async (credentials, thunkAPI) => {
-    try {
-      const response = await axiosInstance.post("/register/", credentials);
-      return response.data;
-    } catch (error: any) {
-      const msg = error.code === "ECONNABORTED"
+>("auth/register", async (credentials, thunkAPI) => {
+  try {
+    const response = await axiosInstance.post("/register/", credentials);
+    return response.data;
+  } catch (error: any) {
+    const msg =
+      error.code === "ECONNABORTED"
         ? "Request timed out."
-        : error.response?.data?.message || error.response?.data || "Register failed";
-      return thunkAPI.rejectWithValue(msg);
-    }
+        : error.response?.data?.message ||
+          error.response?.data ||
+          "Register failed";
+    return thunkAPI.rejectWithValue(msg);
   }
-);
+});
 
 // Fetch user profile
-export const getAccount = createAsyncThunk<
-  User,
-  void,
-  { rejectValue: any }
->(
+export const getAccount = createAsyncThunk<User, void, { rejectValue: any }>(
   "auth/getAccount",
   async (_, thunkAPI) => {
     try {
       const response = await axiosInstance.get("/user/");
       return response.data;
     } catch (error: any) {
-      const msg = error.code === "ECONNABORTED"
-        ? "Request timed out."
-        : error.response || { status: 500, message: "Fetch failed" };
+      const msg =
+        error.code === "ECONNABORTED"
+          ? "Request timed out."
+          : error.response || { status: 500, message: "Fetch failed" };
       return thunkAPI.rejectWithValue(msg);
     }
   }
@@ -172,33 +165,31 @@ export const refreshAccessToken = createAsyncThunk<
   string,
   void,
   { rejectValue: any }
->(
-  "auth/refreshAccessToken",
-  async (_, thunkAPI) => {
-    const refresh = localStorage.getItem("refreshToken");
-    if (!refresh) {
-      return thunkAPI.rejectWithValue("No refresh token");
-    }
+>("auth/refreshAccessToken", async (_, thunkAPI) => {
+  const refresh = localStorage.getItem("refreshToken");
+  if (!refresh) {
+    return thunkAPI.rejectWithValue("No refresh token");
+  }
 
-    try {
-      const response = await axiosInstance.post("/refresh/", {
-        refresh_token: refresh,
-      });
-      const { access_token, refresh_token } = response.data.data;
-      localStorage.setItem("accessToken", access_token);
-      localStorage.setItem("refreshToken", refresh_token);
-      return access_token;
-    } catch (error: any) {
-      if ([401, 403].includes(error.response?.status)) {
-        thunkAPI.dispatch(logout());
-      }
-      const msg = error.code === "ECONNABORTED"
+  try {
+    const response = await axiosInstance.post("/refresh/", {
+      refresh_token: refresh,
+    });
+    const { access_token, refresh_token } = response.data.data;
+    localStorage.setItem("accessToken", access_token);
+    localStorage.setItem("refreshToken", refresh_token);
+    return access_token;
+  } catch (error: any) {
+    if ([401, 403].includes(error.response?.status)) {
+      thunkAPI.dispatch(logout());
+    }
+    const msg =
+      error.code === "ECONNABORTED"
         ? "Request timed out."
         : error.response?.data || "Refresh failed";
-      return thunkAPI.rejectWithValue(msg);
-    }
+    return thunkAPI.rejectWithValue(msg);
   }
-);
+});
 
 // Slice
 const authentication = createSlice({
@@ -219,6 +210,9 @@ const authentication = createSlice({
     resetError(state) {
       state.error = null;
       state.refreshError = null;
+    },
+    setIsRegister(state) {
+      state.isRegister = false;
     },
   },
   extraReducers: (builder) => {
@@ -304,10 +298,8 @@ const authentication = createSlice({
         state.refreshError = action.payload;
         state.isAuthenticated = false;
       });
-
- 
   },
 });
 
-export const { logout, resetError } = authentication.actions;
+export const { logout, resetError,setIsRegister } = authentication.actions;
 export default authentication.reducer;

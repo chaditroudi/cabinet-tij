@@ -120,7 +120,7 @@ export default function Login() {
             >
               {loading ? (
                 <div className="flex flex-row text-center items-center justify-center">
-                  <label htmlFor="">Signin...</label>
+                  <label htmlFor="">Connexion en cours...</label>
                   <ProgressSpinner className="h-6 w-6 ml-2" />
                 </div>
               ) : (

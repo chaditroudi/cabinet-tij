@@ -5,7 +5,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { RootState } from "../../config/store";
-import { register, resetError } from "../../services/reducers/authentication";
+import {
+  register,
+  resetError,
+  setIsRegister,
+} from "../../services/reducers/authentication";
 import { ProgressSpinner } from "primereact/progressspinner";
 
 export default function Register() {
@@ -77,6 +81,7 @@ export default function Register() {
         navigate("/login");
       }
     });
+    dispatch(setIsRegister());
   }
 
   const renderErrorMessages = (field: string) => {
@@ -290,15 +295,20 @@ export default function Register() {
                   <button
                     disabled={isLoadingRegister}
                     type="submit"
-                    className="w-full bg-blue-950 text-white px-6 py-3 rounded-lg hover:opacity-90 transition-opacity font-medium"
+                    className="w-full items-center justify-center flex text-center bg-blue-950 text-white px-6 py-3 rounded-lg hover:opacity-90 transition-opacity font-medium"
                   >
                     {isLoadingRegister ? (
-                      <div className="flex flex-row text-center items-center justify-center">
-                        <label htmlFor="">Registering...</label>
-                        <ProgressSpinner className="h-6 w-6 ml-2" />
+                      <div className="flex w-full flex-row text-center items-center justify-center">
+                        <label htmlFor="">Inscription en cours...</label>
+                        <div>
+                          <ProgressSpinner
+                            color="white"
+                            className="h-6 w-6 ml-2 text-white"
+                          />
+                        </div>
                       </div>
                     ) : (
-                      "Register"
+                      "S'inscrire"
                     )}
                   </button>
                 </div>
