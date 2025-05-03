@@ -27,7 +27,7 @@ import {
 export const traducteur_status = [
   { label: "Disponible", value: "1", color: "border-green-500" },
   { label: "Disponible par Téléphone", value: "2", color: "border-gray-700" },
-  { label: "traducteur par sms", value: "3", color: "border-orange-400" },
+  { label: "Disponible  par sms", value: "3", color: "border-orange-400" },
   { label: "Disponibilité inconnu", value: "4", color: "border-red-700" },
 ];
 
