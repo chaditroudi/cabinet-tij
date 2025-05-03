@@ -141,7 +141,7 @@ export const register = createAsyncThunk<
     } catch (error: any) {
       const msg = error.code === "ECONNABORTED"
         ? "Request timed out."
-        : error.response?.data || "Register failed";
+        : error.response?.data?.message || "Register failed";
       return thunkAPI.rejectWithValue(msg);
     }
   }
