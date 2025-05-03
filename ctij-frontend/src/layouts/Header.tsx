@@ -26,7 +26,7 @@ const Header = () => {
       ]
     : [
         {
-          label: "Acceuil",
+          label: "Accueil",
           icon: "pi pi-home",
           command: () => navigate("/"), // navigate to /home
         },
