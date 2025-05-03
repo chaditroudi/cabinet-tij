@@ -9,9 +9,9 @@ import { Helmet, HelmetProvider } from "react-helmet-async";
 import AppRoutes from "./routes/routes";
 
 // Access dynamic title and description from .env
-const metaTitle = import.meta.env.VITE_APP_META_TITLE || "Annuaire";
+const metaTitle = import.meta.env.VITE_APP_META_TITLE || "Cabinet TIJ";
 const metaDescription =
-  import.meta.env.VITE_APP_META_DESCRIPTION || "Annuaire";
+  import.meta.env.VITE_APP_META_DESCRIPTION || "Cabinet TIJ";
 
 function MainApp() {
   return (
