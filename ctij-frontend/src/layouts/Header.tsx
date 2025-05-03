@@ -12,7 +12,7 @@ const Header = () => {
   const items = isAuthenticated
     ? [
         {
-          label: "Acceuil",
+          label: "Accueil",
           icon: "pi pi-home",
 
           command: () => navigate("/"), // navigate to /home or /dashboard for admins
