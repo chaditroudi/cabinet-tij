@@ -12,7 +12,10 @@ import { ProgressSpinner } from "primereact/progressspinner";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFlag, faUsersRectangle } from "@fortawesome/free-solid-svg-icons";
 import useAuthContext from "@/context/AuthContext";
-import { useLazyGetTraducteursQuery } from "@/services/apis/traducteursApi";
+import {
+  useGetTradStatsQuery,
+  useLazyGetTraducteursQuery,
+} from "@/services/apis/traducteursApi";
 import { traducteur_status } from "@/pages/Admin/Traducteurs";
 interface TableData {
   id: number;
@@ -36,6 +39,11 @@ export default function Home() {
   const isFirstRender = useRef(true);
   const [showSpinner, setShowSpinner] = useState(false);
   const [_, setSpinnerVisible] = useState(false);
+
+  const { data } = useGetTradStatsQuery(
+    {},
+    { refetchOnMountOrArgChange: true }
+  );
 
   useEffect(() => {
     let delayTimer: NodeJS.Timeout;

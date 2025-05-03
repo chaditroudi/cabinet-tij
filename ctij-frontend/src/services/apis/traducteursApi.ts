@@ -26,6 +26,14 @@ export const traducteursApi = createApi({
       providesTags: ["traducteurs"], // <-- Add this
     }),
 
+    getTradStats: builder.query({
+      query: () => `/interpretes/stats`,
+      transformResponse: (response: any) => ({
+        traducteurs: response,
+      }),
+      providesTags: ["traducteurs"], // <-- Add this
+    }),
+
     deleteTraducteur: builder.mutation({
       query: ({ id }) => ({
         url: `/interpretes/${id}`,
@@ -58,4 +66,5 @@ export const {
   useLazyGetTraducteursQuery,
   useGetAlltraducteursQuery,
   useDeleteTraducteurMutation,
+  useGetTradStatsQuery,
 } = traducteursApi;
