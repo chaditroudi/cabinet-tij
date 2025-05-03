@@ -66,11 +66,10 @@ class InterpreteController extends Controller
      // Combined method to get both the total of a selected language and available interpreters (dispo=1)
      public function getTotals(Request $request)
      {
-         $request->validate([
-             'langue' => 'required|string'
-         ]);
  
-         $totalLanguage = Interprete::where('langue', '!=', '')->count();
+ 
+        $totalLanguage = Interprete::where('langue', '!=', '')->count();
+        $totalTrad= Interprete::count();
  
          // Get total of available interpreters (dispo=1)
          $totalDispoSMS = Interprete::where('dispo', 2)->count();
@@ -79,7 +78,8 @@ class InterpreteController extends Controller
          return response()->json([
              'total_language' => $totalLanguage,
              'total_dispo_sms' => $totalDispoSMS,
-             'total_dispo' => $totalDispo
+             'total_dispo' => $totalDispo,
+             'total_trad'=>$totalTrad
          ]);
      }
     
