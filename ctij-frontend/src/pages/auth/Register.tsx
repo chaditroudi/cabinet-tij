@@ -17,7 +17,7 @@ export default function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [terms_accepted, setTerms_accepted] = useState(false);
-  const [full_name, setFullName] = useState("");
+  const [name, setName] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
@@ -43,8 +43,9 @@ export default function Register() {
 
     const userData = {
       email,
-      full_name,
+      name,
       password,
+      password_confirmation: confirmPassword,
       terms_accepted,
     };
 
@@ -60,14 +61,14 @@ export default function Register() {
     // Display success alert
     Swal.fire({
       title: "Success!",
-      text: "Registration successful! Please check your email to verify your account.",
+      text: "Inscription réussie ! Vous pouvez maintenant vous connecter.",
       icon: "success",
       confirmButtonText: "OK",
     }).then((result) => {
       if (result.isConfirmed) {
         setEmail("");
         setPassword("");
-        setFullName("");
+        setName("");
         setConfirmPassword("");
         setTerms_accepted(false);
         dispatch(resetError());
@@ -80,7 +81,7 @@ export default function Register() {
 
   const renderErrorMessages = (field: string) => {
     // grab the raw value
-    const raw = error?.[field];
+    const raw = error?.errors?.[field];
     if (!raw) return null;
 
     // if it's an array, map over it
@@ -146,14 +147,14 @@ export default function Register() {
                       id="name"
                       name="name"
                       required
-                      value={full_name}
-                      onChange={(e) => setFullName(e.target.value)}
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
                       type="text"
                       autoComplete="name"
                       className="h-10 block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-secondary-color sm:text-sm sm:leading-6"
                     />
                   </div>
-                  <div>{renderErrorMessages("full_name")}</div>
+                  <div>{renderErrorMessages("name")}</div>
                 </div>
 
                 <div>

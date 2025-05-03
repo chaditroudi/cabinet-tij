@@ -26,6 +26,7 @@ interface TableData {
   identite: string;
   telephone: string;
   region: string;
+  gender: string;
 }
 
 export default function Home() {
@@ -236,7 +237,7 @@ export default function Home() {
             ) : tableData.length > 0 ? (
               tableData.map((item) => {
                 const status = contact_status.find(
-                  (s) => s.value === (item.dispo).toString()
+                  (s) => s.value === item.dispo.toString()
                 );
 
                 return (
@@ -250,7 +251,9 @@ export default function Home() {
                     <td className="py-2 px-4 border-b">
                       {getLanguageLabel(item.langue, languages)}
                     </td>
-                    <td className="py-2 px-4 border-b">{item.identite}</td>
+                    <td className="py-2 px-4 border-b">
+                      {item?.gender == "0" ? "Mr" : "Mme"} {item.identite}
+                    </td>
                     <td className="py-2 px-4 border-b">{item.telephone}</td>
                   </tr>
                 );

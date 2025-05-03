@@ -23,6 +23,7 @@ import {
   useSaveTraducteurMutation,
   useUpdateInterpreteMutation,
 } from "@/services/apis/contactsApi";
+import { identity } from "lodash";
 
 export const contact_status = [
   { label: "Disponible", value: "0", color: "border-green-500" },
@@ -61,6 +62,11 @@ export function Contacts() {
     const found = departement.find((dept) => dept.code === code);
     return found ? `${found.code} - ${found.name}` : code;
   };
+  const getIdentityLabel = (identite: string,gender:string) => {
+    return  `${gender=="0" ? "Mr":"Mme"} ${identite}`;
+  };
+  
+
   const { getLanguageLabel, TopEndAlert } = useAuthContext();
   const getContactStatusLabel = (value: string) => {
     const status = contact_status.find((item) => item.value === value);
@@ -265,7 +271,13 @@ export function Contacts() {
         dataKey="id"
         className="p-datatable-contacts"
       >
-        <Column field="identite" header="Identité" sortable />
+        <Column
+          field="identite"
+          header="Identité"
+          sortable
+          body={(rowData) => getIdentityLabel(rowData.identite, rowData.gender)}
+        />
+
         <Column field="telephone" header="Numéro Tél" sortable />
         <Column
           field="dispo"
