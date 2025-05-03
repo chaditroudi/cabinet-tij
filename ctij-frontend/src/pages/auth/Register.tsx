@@ -10,7 +10,7 @@ import { ProgressSpinner } from "primereact/progressspinner";
 
 export default function Register() {
   const dispatch = useDispatch();
-  const { error, isRegister, isloadingRegister } = useSelector(
+  const { error, isRegister, isLoadingRegister } = useSelector(
     (state: RootState) => state.authentication
   );
 
@@ -50,7 +50,7 @@ export default function Register() {
     };
 
     try {
-      await dispatch(register(userData) as any);
+      await dispatch(register(userData as any) as any);
     } catch (err) {
       // Handle registration error
       console.error("Registration error:", err);
@@ -288,11 +288,11 @@ export default function Register() {
 
                 <div>
                   <button
-                    disabled={isloadingRegister}
+                    disabled={isLoadingRegister}
                     type="submit"
                     className="w-full bg-blue-950 text-white px-6 py-3 rounded-lg hover:opacity-90 transition-opacity font-medium"
                   >
-                    {isloadingRegister ? (
+                    {isLoadingRegister ? (
                       <div className="flex flex-row text-center items-center justify-center">
                         <label htmlFor="">Registering...</label>
                         <ProgressSpinner className="h-6 w-6 ml-2" />
