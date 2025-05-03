@@ -24,6 +24,7 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 });
 Route::get(uri: '/interpretes/filter', action: [InterpreteController::class, 'filter']);
+Route::get(uri: '/interpretes/stats', action: [InterpreteController::class, 'getTotals']);
 
 
 Route::apiResource(name: 'interpretes', controller: InterpreteController::class);
