@@ -140,7 +140,7 @@ export default function Register() {
                     htmlFor="name"
                     className="block text-sm font-medium leading-6 text-gray-900"
                   >
-                    Full Name
+                    Nom & prénom
                   </label>
                   <div className="mt-2">
                     <input
@@ -162,7 +162,7 @@ export default function Register() {
                     htmlFor="email"
                     className="block text-sm font-medium leading-6 text-gray-900"
                   >
-                    Email address
+                    Email
                   </label>
                   <div className="mt-2">
                     <input
@@ -184,7 +184,7 @@ export default function Register() {
                     htmlFor="password"
                     className="block text-sm font-medium leading-6 text-gray-900"
                   >
-                    Password
+                    Mot de passe
                   </label>
                   <div className="mt-2 relative">
                     <input
@@ -225,7 +225,7 @@ export default function Register() {
                     htmlFor="confirm-password"
                     className="block text-sm font-medium leading-6 text-gray-900"
                   >
-                    Confirm Password
+                    confirmer mot de passe
                   </label>
                   <div className="mt-2 relative">
                     <input
@@ -260,7 +260,7 @@ export default function Register() {
                   <div className="">
                     {passwordMismatch && (
                       <small style={{ color: "red" }}>
-                        Password and Confirm Password do not match.
+                        Le mot de passe et la confirmation ne correspondent pas
                       </small>
                     )}
                   </div>
