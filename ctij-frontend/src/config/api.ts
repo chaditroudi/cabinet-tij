@@ -35,17 +35,17 @@ axiosInstance.interceptors.response.use(
       return Promise.reject(new Error('Request timed out. Please check your network connection.'));
     }
 
-    // Retry logic for certain types of errors
-    if (error.response && error.response.status >= 500) {
-      // Retry for server errors (5xx)
-      return await retry(async () => {
-        return axiosInstance.request(error.config);
-      }, {
-        retries: 3,
-        minTimeout: 1000,
-        factor: 2,
-      });
-    }
+    // // Retry logic for certain types of errors
+    // if (error.response && error.response.status >= 500) {
+    //   // Retry for server errors (5xx)
+    //   return await retry(async () => {
+    //     return axiosInstance.request(error.config);
+    //   }, {
+    //     retries: 3,
+    //     minTimeout: 1000,
+    //     factor: 2,
+    //   });
+    // }
 
     return Promise.reject(error);
   }
