@@ -25,10 +25,10 @@ import {
 } from "@/services/apis/contactsApi";
 
 export const contact_status = [
-  { label: "Disponible", value: "0", color: "green-500" },
-  { label: "Disponible par Téléphone", value: "1", color: "gray-700" },
-  { label: "Contact par sms", value: "2", color: "orange-500" },
-  { label: "Disponibilité inconnu", value: "3", color: "red-800" },
+  { label: "Disponible", value: "0", color: "border-green-500" },
+  { label: "Disponible par Téléphone", value: "1", color: "border-gray-700" },
+  { label: "Contact par sms", value: "2", color: "border-orange-400" },
+  { label: "Disponibilité inconnu", value: "3", color: "border-red-700" },
 ];
 
 interface Contact {

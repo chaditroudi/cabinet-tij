@@ -105,7 +105,6 @@ export default function Home() {
       })),
     [departement]
   );
-  console.log(contact_status);
   return (
     <>
       <h1 className="text-2xl font-bold mb-6 ">Recherche de Traducteur</h1>
@@ -114,7 +113,7 @@ export default function Home() {
           <div className="flex flex-row gap-3">
             <div>{item.label}</div>
             <div
-              className={`inline-block border-[3px] w-[20px] h-[20px] rounded-full text-xs  border-${item.color.toString()}`}
+              className={`inline-block border-[3px] w-[20px] h-[20px] rounded-full text-xs  ${item.color.toString()}`}
             ></div>
           </div>
         ))}
@@ -179,7 +178,6 @@ export default function Home() {
               placeholder="Rechercher par Nom, Prénom..."
               className="w-full"
             />
-           
           </div>
         </div>
       </div>
@@ -236,27 +234,27 @@ export default function Home() {
                 </td>
               </tr>
             ) : tableData.length > 0 ? (
-              tableData.map((item) => (
-                <tr key={item.id} className="hover:bg-gray-50">
-                  <td className="py-2 px-4 border-b">
-                    <a
-                      href={`sip:${item.telephone}`}
-                      className={`inline-block border-[4px] w-[20px] h-[20px] rounded-full text-xs ${
-                        item.dispo == "0"
-                          ? "border-green-800"
-                          : item.dispo == "1"
-                            ? "border-orange-400"
-                            : "border-red-600"
-                      }`}
-                    ></a>
-                  </td>
-                  <td className="py-2 px-4 border-b">
-                    {getLanguageLabel(item.langue, languages)}
-                  </td>
-                  <td className="py-2 px-4 border-b">{item.identite}</td>
-                  <td className="py-2 px-4 border-b">{item.telephone}</td>
-                </tr>
-              ))
+              tableData.map((item) => {
+                const status = contact_status.find(
+                  (s) => s.value === (item.dispo).toString()
+                );
+
+                return (
+                  <tr key={item.id} className="hover:bg-gray-50">
+                    <td className="py-2 px-4 border-b">
+                      <a
+                        href={`sip:${item.telephone}`}
+                        className={`inline-block border-[4px] w-[20px] h-[20px] rounded-full text-xs ${status?.color}`}
+                      ></a>
+                    </td>
+                    <td className="py-2 px-4 border-b">
+                      {getLanguageLabel(item.langue, languages)}
+                    </td>
+                    <td className="py-2 px-4 border-b">{item.identite}</td>
+                    <td className="py-2 px-4 border-b">{item.telephone}</td>
+                  </tr>
+                );
+              })
             ) : (
               <tr>
                 <td colSpan={4} className="py-4 text-center">
