@@ -23,13 +23,12 @@ import {
   useSaveTraducteurMutation,
   useUpdateInterpreteMutation,
 } from "@/services/apis/contactsApi";
-import { identity } from "lodash";
 
 export const contact_status = [
-  { label: "Disponible", value: "0", color: "border-green-500" },
-  { label: "Disponible par Téléphone", value: "1", color: "border-gray-700" },
-  { label: "Contact par sms", value: "2", color: "border-orange-400" },
-  { label: "Disponibilité inconnu", value: "3", color: "border-red-700" },
+  { label: "Disponible", value: "1", color: "border-green-500" },
+  { label: "Disponible par Téléphone", value: "2", color: "border-gray-700" },
+  { label: "Contact par sms", value: "3", color: "border-orange-400" },
+  { label: "Disponibilité inconnu", value: "4", color: "border-red-700" },
 ];
 
 interface Contact {
@@ -62,15 +61,16 @@ export function Contacts() {
     const found = departement.find((dept) => dept.code === code);
     return found ? `${found.code} - ${found.name}` : code;
   };
-  const getIdentityLabel = (identite: string,gender:string) => {
-    return  `${gender=="0" ? "Mr":"Mme"} ${identite}`;
+  const getIdentityLabel = (identite: string, gender: string) => {
+    return `${gender == "0" ? "Mr" : "Mme"} ${identite}`;
   };
-  
 
   const { getLanguageLabel, TopEndAlert } = useAuthContext();
   const getContactStatusLabel = (value: string) => {
-    const status = contact_status.find((item) => item.value === value);
-    return status ? status.label : value;
+    const status = contact_status.find(
+      (item) => item.value.toString() == value.toString()
+    );
+    return status ? status.label : "";
   };
   const { data } = useGetAllContactsQuery(
     {},
@@ -173,15 +173,6 @@ export function Contacts() {
         }
       }
       setDialogVisible(false);
-      setFormData({
-        id: null,
-        identite: "",
-        telephone: "",
-        dispo: "",
-        departement: "",
-        gender: "",
-        langue: "",
-      });
     }
   };
 
