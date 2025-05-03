@@ -119,13 +119,13 @@ export function Traducteurs() {
   const deletetraducteur = (traducteur: traducteur) => {
     let id = traducteur?.id;
     Swal.fire({
-      title: "Are you sure?",
-      text: `Do you want to delete ${traducteur.identite}'s traducteur?`,
+      title: "Êtes-vous sûr ?",
+      text: `Voulez-vous supprimer le traducteur ${traducteur.identite} ?`,
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it!",
+      confirmButtonText: "Oui, supprimer !",
     }).then((result) => {
       if (result.isConfirmed) {
         deleteTraducteur({ id }).unwrap();
