@@ -20,7 +20,6 @@ class InterpreteController extends Controller
             'langue' => 'required|string',
             'identite' => 'required|string',
             'departement' => 'required|string',
-            
             'region'=>'string',
             'gender' => 'required|string',
             'telephone' => 'required|string|max:20',
@@ -53,7 +52,7 @@ class InterpreteController extends Controller
         $query = Interprete::query();
     
         if ($request->filled('langue')) {
-            $query->where('langue', 'LIKE', '%' . $request->input('langue') . '%');
+            $query->where('langue', $request->input('langue'));
         }
         if ($request->filled('keyword')) {
             $query->where('identite', 'LIKE', '%' . $request->input('keyword') . '%');
