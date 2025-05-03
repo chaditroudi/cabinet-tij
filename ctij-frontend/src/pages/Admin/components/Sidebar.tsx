@@ -79,7 +79,7 @@ const Sidebar = ({ collapsed, setCollapsed, onLogout }: SidebarProps) => {
           className="mt-4 w-full flex items-center justify-center px-4 py-2 bg-red-600 hover:bg-red-700 rounded-lg transition-colors"
         >
           <FontAwesomeIcon icon={faSignOutAlt} className="mr-2" />
-          {!collapsed && <span>Logout</span>}
+          {!collapsed && <span>déconnexion</span>}
         </button>
       </div>
     </div>
