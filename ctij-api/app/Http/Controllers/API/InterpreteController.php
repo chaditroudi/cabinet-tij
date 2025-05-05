@@ -51,18 +51,35 @@ class InterpreteController extends Controller
     {
         $query = Interprete::query();
     
-        if ($request->filled('langue')) {
-            $query->where('langue', $request->input('langue'));
-        }
-        if ($request->filled('keyword')) {
-            $query->where('identite', 'LIKE', '%' . $request->input('keyword') . '%');
-        }
-        if ($request->filled('departement')) {
-            $query->where('departement', $request->input('departement'));
+        // Loop through all request parameters and add filters dynamically
+        foreach ($request->all() as $key => $value) {
+            if (!empty($value)) {
+                // Apply dynamic filters based on the request parameters
+                if ($key == 'keyword') {
+                    // Case-insensitive LIKE for keyword matching
+                    $query->where('identite', 'LIKE', '%' . $value . '%');
+                } elseif ($key == 'departement') {
+                    // Ensure departement is treated as an integer and matches
+                    $query->where('departement', (int) $value);
+                } elseif ($key == 'langue') {
+                    // Remove the extra characters from langue to ensure the comparison matches the prefix
+                    $query->whereRaw('LOWER(SUBSTRING_INDEX(langue, " |", 1)) = ?', [strtolower($value)]);
+                }
+            }
         }
     
-        return response()->json($query->get());
+        // Execute the query and get results
+        $results = $query->get();
+    
+        // If no results found, return a message
+        if ($results->isEmpty()) {
+            return response()->json(['message' => 'No results found'], 404);
+        }
+    
+        // Return the filtered results as JSON
+        return response()->json($results);
     }
+    
      // Combined method to get both the total of a selected language and available interpreters (dispo=1)
      public function getTotals(Request $request)
      {

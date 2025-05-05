@@ -6,8 +6,10 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "src"),
+      crypto: 'crypto-browserify',
+
     },
-  },
+    },
   build: {
     outDir: "dist", // Ensure this points to the correct build directory
   },

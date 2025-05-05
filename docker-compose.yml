@@ -31,21 +31,37 @@ services:
       - app
 
   # MySQL Database
+
   db:
     image: mysql:8.0
     container_name: ctij-db
     restart: unless-stopped
     environment:
-      MYSQL_DATABASE: ${DB_DATABASE}
-      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
-      MYSQL_PASSWORD: ${DB_PASSWORD}
-      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_ROOT_PASSWORD: ""         # No root password
+      MYSQL_DATABASE: cabinet_tij_db
+      MYSQL_USER: root               
+      MYSQL_PASSWORD: ""              
     ports:
       - "3306:3306"
     volumes:
       - dbdata:/var/lib/mysql
     networks:
       - ctij-network
+
+
+
+  # Frontend App
+  frontend:
+    build:
+      context: ./ctij-frontend
+      dockerfile: Dockerfile
+    container_name: ctij-frontend
+    restart: unless-stopped
+    ports:
+      - "3000:80"
+    networks:
+      - ctij-network
+
 
   # phpMyAdmin
   phpmyadmin:

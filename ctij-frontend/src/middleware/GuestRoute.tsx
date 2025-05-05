@@ -2,7 +2,6 @@ import { useLocation, Navigate, Outlet } from "react-router-dom";
 import { useAppSelector } from "../hooks";
 import { RootState } from "../config/store";
 import LoadingPage from "../components/LoadingPage"; // Assuming you have a LoadingPage component
-import { useEffect, useState } from "react";
 
 export const GuestRoute = () => {
   const location = useLocation();
@@ -10,7 +9,6 @@ export const GuestRoute = () => {
     (state: RootState) => state.authentication
   );
 
-  const [minimumDelayPassed, setMinimumDelayPassed] = useState(false);
 
   // useEffect(() => {
   //   const timer = setTimeout(() => {

@@ -1,16 +1,14 @@
 import { Link, useLocation } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBook, faHospitalAlt, faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
+import {  faHospitalAlt, faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
 import { useAppSelector } from "@/hooks";
 
 interface SidebarProps {
-  collapsed: boolean;
-  setCollapsed: (collapsed: boolean) => void;
-  user: { name: string; email: string };
   onLogout: () => void;
+  collapsed: boolean;
 }
 
-const Sidebar = ({ collapsed, setCollapsed, onLogout }: SidebarProps) => {
+const Sidebar = ({ onLogout, collapsed }: SidebarProps) => {
   const location = useLocation();
   const { user } = useAppSelector((state) => state.authentication) as any;
 

@@ -1,5 +1,4 @@
 import Axios from 'axios';
-import retry from 'async-retry';
 
 // Create an Axios instance
 const axiosInstance = Axios.create({

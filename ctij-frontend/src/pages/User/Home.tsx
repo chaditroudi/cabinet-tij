@@ -10,7 +10,7 @@ import departement from "@/assets/js/departements.json";
 import languages from "@/assets/js/languages.json";
 import { ProgressSpinner } from "primereact/progressspinner";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFlag, faUsersRectangle } from "@fortawesome/free-solid-svg-icons";
+import { faFlag } from "@fortawesome/free-solid-svg-icons";
 import useAuthContext from "@/context/AuthContext";
 import {
   useGetTradStatsQuery,
@@ -112,7 +112,10 @@ export default function Home() {
   );
   return (
     <>
-      <h1 className="text-2xl font-bold mb-6 ">Recherche de Traducteur</h1>
+  <div className="bg-gradient-to-r from-teal-400 to-blue-500 p-6 rounded-lg shadow-lg mb-8">
+    <h1 className="text-3xl font-semibold text-white">Recherche de Traducteur</h1>
+    <p className="text-lg text-white mt-2">Trouvez rapidement des traducteurs qualifiés selon vos besoins.</p>
+  </div>
       <div className="flex flex-row gap-2 md:gap-20 mt-10 mb-10  shadow-ann-card p-1 px-4 py-4 rounded-sm flex-wrap">
         {traducteur_status.map((item) => (
           <div className="flex flex-row gap-3">

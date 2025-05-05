@@ -18,10 +18,7 @@ interface LoginResponse {
   refresh_token: string;
 }
 
-interface UpdatePasswordData {
-  old_password: string;
-  new_password: string;
-}
+
 
 interface User {
   id: number;

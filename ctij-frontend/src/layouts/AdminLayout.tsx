@@ -28,11 +28,10 @@ const AdminLayout = () => {
   };
   return (
     <div className="flex h-screen bg-gray-100">
-      <Sidebar
-        collapsed={collapsed}
-        setCollapsed={setCollapsed}
-        onLogout={handleLogout}
-      />
+  <Sidebar
+  collapsed={collapsed}
+  onLogout={handleLogout}
+/>
       <div className="flex-1 overflow-auto">
         <header className="bg-white shadow-sm h-16 flex items-center px-6">
           <button
