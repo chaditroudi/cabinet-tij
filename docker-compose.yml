@@ -14,6 +14,7 @@ services:
       - ctij-network
     depends_on:
       - db
+    
 
   # Nginx Server
   nginx:
@@ -61,6 +62,7 @@ services:
       - "3000:80"
     networks:
       - ctij-network
+    
 
 
   # phpMyAdmin
