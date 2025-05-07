@@ -11,7 +11,7 @@ import { initializeAuth } from "../services/reducers/authentication";
 import VerifyEmail from "../pages/auth/VerifyEmail";
 import Logout from "../pages/auth/Logout";
 import GuestRoute from "../middleware/GuestRoute";
-import { Home } from "@/pages/User/Index";
+import { Home, Search } from "@/pages/User/Index";
 import AdminLayout from "@/layouts/AdminLayout";
 import UserLayout from "@/layouts/UserLayout";
 import { Traducteurs } from "@/pages/Admin/Index";
@@ -33,10 +33,12 @@ export default function AppRoutes() {
             <Route path="/verify-email/:token" element={<VerifyEmail />} />
           </Route>
         </Route>
-        <Route element={<UserLayout />}>
+        <Route element={<UserLayout  />}>
           <Route path="/" element={<Home />} />
         </Route>
-
+        <Route element={<UserLayout pd />}>
+          <Route path="/recherche" element={<Search />} />
+        </Route>
         <Route element={<PrivateRoute />}>
           <Route element={<AdminLayout />}>
             <Route path="/traducteurs" element={<Traducteurs />} />

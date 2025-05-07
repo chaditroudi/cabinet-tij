@@ -1,11 +1,11 @@
 {
-  "name": "tenderflow",
+  "name": "cabinet-tij",
   "private": true,
   "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite --host",
-    "build": "tsc -b || true && vite build",
+    "build": "tsc --noEmit && vite build",
     "lint": "eslint .",
     "start": "vite",
     "preview": "vite preview"
