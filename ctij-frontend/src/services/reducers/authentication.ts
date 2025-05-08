@@ -106,7 +106,7 @@ export const login = createAsyncThunk<
     const { access_token, refresh_token } = response.data;
 
     localStorage.setItem("accessToken", access_token);
-    localStorage.setItem("refreshToken", refresh_token.token);
+    localStorage.setItem("refreshToken", refresh_token);
 
     thunkAPI.dispatch(getAccount());
 
