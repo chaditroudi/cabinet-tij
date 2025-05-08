@@ -28,7 +28,7 @@ interface TableData {
   gender: string;
 }
 
-export  function Search() {
+export function Search() {
   const [selectedLanguage, setSelectedLanguage] = useState(null) as any;
   const [searchTerm, setSearchTerm] = useState("");
   const [tableData, setTableData] = useState<TableData[]>([]);
@@ -41,7 +41,7 @@ export  function Search() {
   const [showSpinner, setShowSpinner] = useState(false);
   const [_, setSpinnerVisible] = useState(false);
 
-  const { data } = useGetTradStatsQuery(
+  const { data, isFetching: isFetchingStats } = useGetTradStatsQuery(
     {},
     { refetchOnMountOrArgChange: true }
   );
@@ -194,47 +194,61 @@ export  function Search() {
         </div>
       </div>
       <div className="flex flex-row gap-20 mt-10 mb-10  shadow-ann-card p-1 px-4 py-4 rounded-sm">
-        <div className="flex flex-row gap-4 flex-1">
-          <div className="flex items-center">
-            <div className="rounded-full flex items-center justify-center bg-orange-500 w-[80px] h-[80px] ">
-              <FontAwesomeIcon
-                icon={faUsers}
-                className="text-white text-4xl "
-              />
+        {isFetchingStats ? (
+          <div className="card p-fluid h-full items-center flex justify-center w-full">
+            <div className="h-full gap-3 flex-col flex justify-center items-center">
+              <ProgressSpinner />
+              <div>Loading...</div>
             </div>
           </div>
-          <div className="flex flex-col gap-2">
-            <div className="font-bold text-xl">
-              {data?.traducteurs?.total_trad} Traducteurs
+        ) : (
+          <>
+            <div className="flex flex-row gap-4 flex-1 flex-wrap">
+              <div className="flex items-center">
+                <div className="rounded-full flex items-center justify-center bg-orange-500 w-[80px] h-[80px] ">
+                  <FontAwesomeIcon
+                    icon={faUsers}
+                    className="text-white text-4xl "
+                  />
+                </div>
+              </div>
+              <div className="flex flex-col gap-2">
+                <div className="font-bold text-xl">
+                  {data?.traducteurs?.total_trad} Traducteurs
+                </div>
+                <div className="text-xs">
+                  <span className="font-bold text-green-600">
+                    {data?.traducteurs?.total_dispo}
+                  </span>{" "}
+                  interprètes dispos
+                </div>
+                <div className="text-xs">
+                  <span className="font-bold text-orange-400">
+                    {data?.traducteurs?.total_dispo_sms}
+                  </span>{" "}
+                  interprètes dispos SMS
+                </div>
+              </div>
             </div>
-            <div className="text-xs">
-              <span className="font-bold text-green-600">
-                {data?.traducteurs?.total_dispo}
-              </span>{" "}
-              interprètes dispos
-            </div>
-            <div className="text-xs">
-              <span className="font-bold text-orange-400">
-                {data?.traducteurs?.total_dispo_sms}
-              </span>{" "}
-              interprètes dispos SMS
-            </div>
-          </div>
-        </div>
-        <div className="flex flex-row gap-4 flex-1">
-          <div className="flex items-center">
-            <div className="rounded-full flex items-center justify-center bg-teal-700 w-[80px] h-[80px] ">
-              <FontAwesomeIcon icon={faFlag} className="text-white text-4xl" />
-            </div>
-          </div>
+            <div className="flex flex-row gap-4 flex-1">
+              <div className="flex items-center">
+                <div className="rounded-full flex items-center justify-center bg-teal-700 w-[80px] h-[80px] ">
+                  <FontAwesomeIcon
+                    icon={faFlag}
+                    className="text-white text-4xl"
+                  />
+                </div>
+              </div>
 
-          <div className="flex flex-col gap-2">
-            <div className="font-bold text-xl">108 Langues</div>
-            <div className="text-xs">
-              {data?.traducteurs?.total_language} langues disponibles
+              <div className="flex flex-col gap-2">
+                <div className="font-bold text-xl">108 Langues</div>
+                <div className="text-xs">
+                  {data?.traducteurs?.total_language} langues disponibles
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
+          </>
+        )}
       </div>
       <div className="overflow-x-auto ">
         <table className="min-w-full bg-white border border-gray-200 mb-10">
