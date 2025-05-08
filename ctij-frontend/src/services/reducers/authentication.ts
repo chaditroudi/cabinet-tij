@@ -18,8 +18,6 @@ interface LoginResponse {
   refresh_token: string;
 }
 
-
-
 interface User {
   id: number;
   email: string;
@@ -102,11 +100,16 @@ export const login = createAsyncThunk<
   { rejectValue: any }
 >("auth/login", async (credentials, thunkAPI) => {
   try {
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
     const response = await axiosInstance.post("/login/", credentials);
     const { access_token, refresh_token } = response.data;
+
     localStorage.setItem("accessToken", access_token);
     localStorage.setItem("refreshToken", refresh_token.token);
+
     thunkAPI.dispatch(getAccount());
+
     return {
       access_token,
       refresh_token: refresh_token.token,
@@ -298,5 +301,5 @@ const authentication = createSlice({
   },
 });
 
-export const { logout, resetError,setIsRegister } = authentication.actions;
+export const { logout, resetError, setIsRegister } = authentication.actions;
 export default authentication.reducer;

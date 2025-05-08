@@ -18,6 +18,7 @@ import {
 } from "@/services/apis/traducteursApi";
 import { traducteur_status } from "@/pages/Admin/Traducteurs";
 import { faUsers } from "@fortawesome/free-solid-svg-icons/faUsers";
+import { Skeleton } from "primereact/skeleton";
 interface TableData {
   id: number;
   dispo: string;
@@ -194,61 +195,114 @@ export function Search() {
         </div>
       </div>
       <div className="flex flex-row gap-20 mt-10 mb-10  shadow-ann-card p-1 px-4 py-4 rounded-sm">
-        {isFetchingStats ? (
-          <div className="card p-fluid h-full items-center flex justify-center w-full">
-            <div className="h-full gap-3 flex-col flex justify-center items-center">
-              <ProgressSpinner />
-              <div>Loading...</div>
-            </div>
-          </div>
-        ) : (
-          <>
-            <div className="flex flex-row gap-4 flex-1 flex-wrap">
-              <div className="flex items-center">
-                <div className="rounded-full flex items-center justify-center bg-orange-500 w-[80px] h-[80px] ">
-                  <FontAwesomeIcon
-                    icon={faUsers}
-                    className="text-white text-4xl "
-                  />
-                </div>
+        <div className="flex flex-row gap-4 flex-1 flex-wrap items-center">
+          <div className="flex items-center ">
+            {!isFetchingStats ? (
+              <div className="rounded-full flex items-center justify-center bg-orange-500 w-[80px] h-[80px] ">
+                <FontAwesomeIcon
+                  icon={faUsers}
+                  className="text-white text-4xl "
+                />
               </div>
-              <div className="flex flex-col gap-2">
-                <div className="font-bold text-xl">
-                  {data?.traducteurs?.total_trad} Traducteurs
-                </div>
-                <div className="text-xs">
+            ) : (
+              <Skeleton
+                animation="wave"
+                shape="circle"
+                height="80px"
+                width="80px"
+                style={{ width: "80px", height: "80px" }}
+                className="bg-gray-300 rounded-full"
+              />
+            )}
+          </div>
+          <div className="flex flex-col gap-2">
+            {!isFetchingStats ? (
+              <div className="font-bold text-xl">
+                {data?.traducteurs?.total_trad} Traducteurs
+              </div>
+            ) : (
+              <Skeleton
+                animation="wave"
+                height="10px"
+                width="120px"
+                className="bg-gray-300 rounded-full"
+              />
+            )}
+
+            <div className="text-xs">
+              {!isFetchingStats ? (
+                <>
                   <span className="font-bold text-green-600">
                     {data?.traducteurs?.total_dispo}
                   </span>{" "}
                   interprètes dispos
-                </div>
-                <div className="text-xs">
+                </>
+              ) : (
+                <Skeleton
+                  animation="wave"
+                  height="10px"
+                  width="100px"
+                  className="bg-gray-300 rounded-full"
+                />
+              )}
+            </div>
+            <div className="text-xs">
+              {!isFetchingStats ? (
+                <>
                   <span className="font-bold text-orange-400">
                     {data?.traducteurs?.total_dispo_sms}
                   </span>{" "}
                   interprètes dispos SMS
-                </div>
-              </div>
+                </>
+              ) : (
+                <Skeleton
+                  animation="wave"
+                  height="10px"
+                  width="120px"
+                  className="bg-gray-300 rounded-full"
+                />
+              )}
             </div>
-            <div className="flex flex-row gap-4 flex-1">
-              <div className="flex items-center">
-                <div className="rounded-full flex items-center justify-center bg-teal-700 w-[80px] h-[80px] ">
-                  <FontAwesomeIcon
-                    icon={faFlag}
-                    className="text-white text-4xl"
-                  />
-                </div>
+          </div>
+        </div>
+        <div className="flex flex-row gap-4 flex-1">
+          <div className="flex items-center">
+            {!isFetchingStats ? (
+              <div className="rounded-full flex items-center justify-center bg-teal-700 w-[80px] h-[80px] ">
+                <FontAwesomeIcon
+                  icon={faFlag}
+                  className="text-white text-4xl"
+                />
               </div>
+            ) : (
+              <Skeleton
+                animation="wave"
+                shape="circle"
+                height="80px"
+                width="80px"
+                style={{ width: "80px", height: "80px" }}
+                className="bg-gray-300 rounded-full"
+              />
+            )}
+          </div>
 
-              <div className="flex flex-col gap-2">
-                <div className="font-bold text-xl">108 Langues</div>
-                <div className="text-xs">
-                  {data?.traducteurs?.total_language} langues disponibles
-                </div>
-              </div>
+          <div className="flex flex-col gap-2  justify-center">
+            <div className="font-bold text-xl">108 Langues</div>
+            <div className="text-xs">
+              {!isFetchingStats ? (
+                <>{data?.traducteurs?.total_language} langues disponibles</>
+              ) : (
+                <Skeleton
+                  animation="wave"
+                  shape="circle"
+                  height="10px"
+                  width="120px"
+                  className="bg-gray-300 rounded-full"
+                />
+              )}
             </div>
-          </>
-        )}
+          </div>
+        </div>
       </div>
       <div className="overflow-x-auto ">
         <table className="min-w-full bg-white border border-gray-200 mb-10">

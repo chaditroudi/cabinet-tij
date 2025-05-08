@@ -1,3 +1,4 @@
+import { RootState } from "@/config/store";
 import { useAppDispatch, useAppSelector } from "@/hooks";
 import { getAccount, login } from "@/services/reducers/authentication";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
@@ -12,11 +13,9 @@ export default function Login() {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const isLoading = useAppSelector((state: RootState) => state.authentication.isLoadingLogin);
+  const error = useAppSelector((state: RootState) => state.authentication.error);
 
-  // Accessing state from authSlice
-  const { isloadingLogin: isLoadingLogin, error } = useAppSelector(
-    (state) => state.authentication
-  ) as any;
 
   const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -119,9 +118,9 @@ export default function Login() {
             </div>
             <button
               type="submit"
-              className="w-full bg-blue-950  text-white px-6 py-3 rounded-lg hover:opacity-90 transition-opacity font-medium"
+              className="w-full bg-blue-950  text-white px-6 py-3 rounded-lg hover:opacity-90 transition-opacity font-medium flex text-center items-center justify-center"
             >
-              {isLoadingLogin ? (
+              {isLoading ? (
                 <div className="flex flex-row text-center items-center justify-center ">
                   <label htmlFor="">Connexion en cours...</label>
                   <ProgressSpinner className="h-6 w-6 ml-2" />
