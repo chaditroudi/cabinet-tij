@@ -25,7 +25,7 @@ export default function AppRoutes() {
     <>
       <Routes location={location}>
         <Route element={<GuestRoute />}>
-          <Route element={<UserLayout />}>
+          <Route element={<UserLayout pd />}>
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/reset-password" element={<ResetPassword />} />

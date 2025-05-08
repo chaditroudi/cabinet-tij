@@ -10,3 +10,14 @@
   @tailwind components;
   @tailwind utilities;
 }
+
+.wrapper:after {
+  background: transparent linear-gradient(180deg, #242d65, #cf2032) 0 0 no-repeat padding-box;
+  content: "";
+  height: 100%;
+  left: 0;
+  opacity: 23%;
+  position: absolute;
+  top: 0;
+  width: 100%;
+}
