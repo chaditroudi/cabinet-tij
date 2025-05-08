@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Interprete extends Model
 {
-    protected $fillable = ['dispo', 'langue', 'identite', 'telephone','region',    'departement','gender'
+    protected $fillable = ['dispo', 'langue', 'identite', 'telephone','region', 'departement','gender'
 ];
 
     use HasFactory;

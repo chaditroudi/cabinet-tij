@@ -20,7 +20,8 @@ class InterpreteController extends Controller
             'langue' => 'required|string',
             'identite' => 'required|string',
             'departement' => 'required|string',
-            'region'=>'string',
+            'region' => 'nullable|string',
+
             'gender' => 'required|string',
             'telephone' => 'required|string|max:20',
         ]);

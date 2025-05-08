@@ -27,6 +27,9 @@ class InterpreteFactory extends Factory
         ];
         $departements = ['75', '13', '69', '59', '92', '33', '31']; // Paris, Marseille, Lyon...
 
+        // Randomly assign gender based on the identite
+        $gender = str_starts_with($this->faker->randomElement($identites), 'M.') ? 'Monsieur' : 'Madame';
+
         return [
             'dispo' => $this->faker->boolean(80),
             'langue' => 'AR | Arabe',
@@ -38,9 +41,8 @@ class InterpreteFactory extends Factory
                 'Occitanie',
                 'Nouvelle-Aquitaine'
             ]),
-            'departement' => $this->faker->randomElement($departements)
-
-
+            'departement' => $this->faker->randomElement($departements),
+            'gender' => $gender,  // Add the gender value based on identite
         ];
     }
 }
