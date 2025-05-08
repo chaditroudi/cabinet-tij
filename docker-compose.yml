@@ -1,3 +1,4 @@
+version: '3.8'
 
 services:
   # PHP / Laravel App
@@ -14,7 +15,6 @@ services:
       - ctij-network
     depends_on:
       - db
-    
 
   # Nginx Server
   nginx:
@@ -32,13 +32,12 @@ services:
       - app
 
   # MySQL Database
-
   db:
     image: mysql:8.0
     container_name: ctij-db
     restart: unless-stopped
     environment:
-      MYSQL_ROOT_PASSWORD: "root"         # No root password
+      MYSQL_ROOT_PASSWORD: "root"
       MYSQL_DATABASE: cabinet_tij_db
     ports:
       - "3306:3306"
@@ -46,22 +45,6 @@ services:
       - dbdata:/var/lib/mysql
     networks:
       - ctij-network
-
-
-
-  # Frontend App
-  frontend:
-    build:
-      context: ./ctij-frontend
-      dockerfile: Dockerfile
-    container_name: ctij-frontend
-    restart: unless-stopped
-    ports:
-      - "3000:80"
-    networks:
-      - ctij-network
-    
-
 
   # phpMyAdmin
   phpmyadmin:
@@ -78,10 +61,43 @@ services:
     networks:
       - ctij-network
 
-networks:
-  ctij-network:
-    driver: bridge
+  # Frontend App (React.js or similar)
+  frontend:
+    build:
+      context: ./ctij-frontend
+      dockerfile: Dockerfile
+    container_name: ctij-frontend
+    restart: unless-stopped
+    ports:
+      - "3000:80"
+    networks:
+      - ctij-network
 
+  # SonarQube for code quality
+  sonarqube:
+    image: sonarqube:latest
+    container_name: sonarqube
+    restart: unless-stopped
+    ports:
+      - "9000:9000"
+    environment:
+      - SONAR_ES_BOOTSTRAP_CHECKS_DISABLE=true
+    volumes:
+      - sonarqube_data:/opt/sonarqube/data
+      - sonarqube_logs:/opt/sonarqube/logs
+      - sonarqube_extensions:/opt/sonarqube/extensions
+    networks:
+      - ctij-network
+
+# Named Volumes
 volumes:
   dbdata:
     driver: local
+  sonarqube_data:
+  sonarqube_logs:
+  sonarqube_extensions:
+
+# Docker Network
+networks:
+  ctij-network:
+    driver: bridge
