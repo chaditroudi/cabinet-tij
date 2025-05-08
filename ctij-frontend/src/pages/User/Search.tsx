@@ -256,14 +256,13 @@ export function Search() {
         </div>
         <div className="flex flex-row gap-4 flex-1">
           <div className="flex items-center">
-            <Skeleton
-              animation="wave"
-              shape="circle"
-              height="80px"
-              width="80px"
-              style={{ width: "80px", height: "80px" }}
-              className="bg-gray-300 rounded-full"
-            />
+              <div className="rounded-full flex items-center justify-center bg-teal-700 w-[80px] h-[80px] ">
+                <FontAwesomeIcon
+                  icon={faFlag}
+                  className="text-white text-4xl"
+                />
+              </div>
+          
           </div>
 
           <div className="flex flex-col gap-2  justify-center">
