@@ -22,12 +22,10 @@ export default function Login() {
     event.preventDefault();
     const result = await dispatch(login({ email, password }));
 
-
-    if(email === "admin@ctij.com" && password === "admin")
-      navigate("/traducteurs");
-
-    else if (login.fulfilled.match(result)) {
+    
+    if (login.fulfilled.match(result)) {
       dispatch(getAccount());
+      
       navigate("/traducteurs");
     }
   };

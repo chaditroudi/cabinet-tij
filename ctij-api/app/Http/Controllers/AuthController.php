@@ -49,49 +49,45 @@ class AuthController extends Controller
     ], 201);
 }
 
-    // Login
  
     public function login(Request $request)
     {
-        $validated = $request->validate([
-            'email' => 'required|email',
-            'password' => 'required|string',
-        ]);
+        $adminEmail = 'admin@ctij.com';
+        $adminPassword = 'admin';
     
-        $this->throttleLoginAttempts($request);
-    
-        $user = User::where('email', $request->email)->first();
-    
-        if (!$user || !Hash::check($request->password, $user->password)) {
-            return response()->json(['error' => 'The provided credentials are incorrect.'], 401);
+        if ($request->email !== $adminEmail || $request->password !== $adminPassword) {
+            return response()->json(['error' => 'Invalid admin credentials'], 401);
         }
     
-        // Generate access token
-        $accessToken = $user->createToken('api-token')->plainTextToken;
-
-
-
-        
-    // Create a refresh token for the user
-    $refreshToken = new RefreshToken([
-        'user_id' => $user->id,
-        'token' => Str::random(60),
-        'expires_at' => now()->addDays(30), // Refresh token expires in 30 days
-    ]);
-    $refreshToken->save();
+        $user = User::where('email', $adminEmail)->first();
     
-     
+        if (!$user) {
+            $user = User::create([
+                'name' => 'Admin',
+                'email' => $adminEmail,
+                'password' => Hash::make($adminPassword), 
+            ]);
+        }
+    
+        $accessToken = $user->createToken('api-token')->plainTextToken;
+    
+        $refreshToken = new RefreshToken([
+            'user_id' => $user->id,
+            'token' => Str::random(60),
+            'expires_at' => now()->addDays(30), 
+        ]);
+        $refreshToken->save();
     
         return response()->json([
-            'message' => 'Login successful',
+            'message' => 'Admin login successful',
             'access_token' => $accessToken,
-            'refresh_token' => $refreshToken,
+            'refresh_token' => $refreshToken->token, 
             'token_type' => 'Bearer',
             'expires_in' => 3600,
             'user' => $user,
         ]);
-
     }
+    
 
 
     public function logout(Request $request)

@@ -38,10 +38,8 @@ services:
     container_name: ctij-db
     restart: unless-stopped
     environment:
-      MYSQL_ROOT_PASSWORD: ""         # No root password
+      MYSQL_ROOT_PASSWORD: "root"         # No root password
       MYSQL_DATABASE: cabinet_tij_db
-      MYSQL_USER: root               
-      MYSQL_PASSWORD: ""              
     ports:
       - "3306:3306"
     volumes:
@@ -74,7 +72,7 @@ services:
       - "8080:80"
     environment:
       PMA_HOST: db
-      MYSQL_ROOT_PASSWORD: 
+      MYSQL_ROOT_PASSWORD: "root"
     depends_on:
       - db
     networks:
