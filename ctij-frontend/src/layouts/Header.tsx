@@ -1,7 +1,7 @@
 import { useAppSelector } from "@/hooks";
 import { Menubar } from "primereact/menubar";
 import { Link, useNavigate } from "react-router-dom";
-import logo from "@/assets/images/logo.png"
+import logo from "@/assets/images/logo.png";
 const Header = () => {
   const navigate = useNavigate();
   const { isAuthenticated } = useAppSelector(
@@ -14,8 +14,14 @@ const Header = () => {
         {
           label: "Accueil",
           icon: "pi pi-home",
-
+          className: "text-green-900", // Customize color for text
           command: () => navigate("/"), // navigate to /home or /dashboard for admins
+        },
+        {
+          label: "Recherche",
+          icon: "pi pi-search",
+          command: () => navigate("/search"), // navigate to admin dashboard
+          className: "text-green-900", // Customize color for text
         },
         {
           label: "Admin",
@@ -31,14 +37,15 @@ const Header = () => {
           command: () => navigate("/"), // navigate to /home
         },
         {
+          label: "Recherche",
+          icon: "pi pi-search",
+          command: () => navigate("/recherche"), // navigate to admin dashboard
+          className: "text-green-900", // Customize color for text
+        },
+        {
           label: "Connexion",
           icon: "pi pi-key",
           command: () => navigate("/login"), // navigate to /login
-        },
-        {
-          label: "Inscription",
-          icon: "pi pi-user-plus",
-          command: () => navigate("/register"), // navigate to /register
         },
       ];
 
@@ -50,7 +57,11 @@ const Header = () => {
           start={
             <div className="flex flex-col items-start md:gap-2 text-blue-800 font-bold px-2 py-2">
               <Link to={"/"} className="flex items-center gap-3 text-xl">
-                <img src={logo} alt="" style={{width:"60px",height:"auto"}} />
+                <img
+                  src={logo}
+                  alt=""
+                  style={{ width: "60px", height: "auto" }}
+                />
                 <div className="flex flex-col">
                   <span>Cabinet TIJ</span>
                   <div className="text-xs text-gray-500">

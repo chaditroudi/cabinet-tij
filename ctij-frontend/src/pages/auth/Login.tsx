@@ -14,7 +14,7 @@ export default function Login() {
   const navigate = useNavigate();
 
   // Accessing state from authSlice
-  const { isloadingLogin: loading, error } = useAppSelector(
+  const { isloadingLogin: isLoadingLogin, error } = useAppSelector(
     (state) => state.authentication
   ) as any;
 
@@ -121,8 +121,8 @@ export default function Login() {
               type="submit"
               className="w-full bg-blue-950  text-white px-6 py-3 rounded-lg hover:opacity-90 transition-opacity font-medium"
             >
-              {loading ? (
-                <div className="flex flex-row text-center items-center justify-center">
+              {isLoadingLogin ? (
+                <div className="flex flex-row text-center items-center justify-center ">
                   <label htmlFor="">Connexion en cours...</label>
                   <ProgressSpinner className="h-6 w-6 ml-2" />
                 </div>
