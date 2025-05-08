@@ -197,23 +197,12 @@ export function Search() {
       <div className="flex flex-row gap-20 mt-10 mb-10  shadow-ann-card p-1 px-4 py-4 rounded-sm">
         <div className="flex flex-row gap-4 flex-1 flex-wrap items-center">
           <div className="flex items-center ">
-            {!isFetchingStats ? (
-              <div className="rounded-full flex items-center justify-center bg-orange-500 w-[80px] h-[80px] ">
-                <FontAwesomeIcon
-                  icon={faUsers}
-                  className="text-white text-4xl "
-                />
-              </div>
-            ) : (
-              <Skeleton
-                animation="wave"
-                shape="circle"
-                height="80px"
-                width="80px"
-                style={{ width: "80px", height: "80px" }}
-                className="bg-gray-300 rounded-full"
+            <div className="rounded-full flex items-center justify-center bg-orange-500 w-[80px] h-[80px] ">
+              <FontAwesomeIcon
+                icon={faUsers}
+                className="text-white text-4xl "
               />
-            )}
+            </div>
           </div>
           <div className="flex flex-col gap-2">
             {!isFetchingStats ? (
@@ -267,23 +256,14 @@ export function Search() {
         </div>
         <div className="flex flex-row gap-4 flex-1">
           <div className="flex items-center">
-            {!isFetchingStats ? (
-              <div className="rounded-full flex items-center justify-center bg-teal-700 w-[80px] h-[80px] ">
-                <FontAwesomeIcon
-                  icon={faFlag}
-                  className="text-white text-4xl"
-                />
-              </div>
-            ) : (
-              <Skeleton
-                animation="wave"
-                shape="circle"
-                height="80px"
-                width="80px"
-                style={{ width: "80px", height: "80px" }}
-                className="bg-gray-300 rounded-full"
-              />
-            )}
+            <Skeleton
+              animation="wave"
+              shape="circle"
+              height="80px"
+              width="80px"
+              style={{ width: "80px", height: "80px" }}
+              className="bg-gray-300 rounded-full"
+            />
           </div>
 
           <div className="flex flex-col gap-2  justify-center">
