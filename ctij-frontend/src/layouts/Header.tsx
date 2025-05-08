@@ -20,7 +20,7 @@ const Header = () => {
         {
           label: "Recherche",
           icon: "pi pi-search",
-          command: () => navigate("/search"), // navigate to admin dashboard
+          command: () => navigate("/recherche"), // navigate to admin dashboard
           className: "text-green-900", // Customize color for text
         },
         {
