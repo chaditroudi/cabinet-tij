@@ -56,7 +56,7 @@ class AuthController extends Controller
         $adminPassword = 'admin';
     
         if ($request->email !== $adminEmail || $request->password !== $adminPassword) {
-            return response()->json(['error' => 'Invalid admin credentials'], 401);
+            return response()->json(['error' => 'Identifiants administrateur invalide'], 401);
         }
     
         $user = User::where('email', $adminEmail)->first();

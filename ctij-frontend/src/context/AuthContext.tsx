@@ -58,6 +58,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const found = languages.find((lang: any) => lang.code === code);
     return found ? `${upperCase(found.code)} | ${found.name}` : code;
   };
+
   return (
     <AuthContext.Provider
       value={{

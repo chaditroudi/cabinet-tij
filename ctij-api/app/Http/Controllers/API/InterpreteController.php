@@ -4,25 +4,22 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\Interprete;
+use App\Models\Langue;
 use Illuminate\Http\Request;
 
 class InterpreteController extends Controller
 {
     public function index()
     {
-        return Interprete::all();
+        return Interprete::with('langue')->get(); 
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'dispo' => 'required|string',
-            'langue' => 'required|string',
+            'langue_id' => 'required',
             'identite' => 'required|string',
-            'departement' => 'required|string',
-            'region' => 'nullable|string',
-
-            'gender' => 'required|string',
+            'region' => 'required|string',
             'telephone' => 'required|string|max:20',
         ]);
 
@@ -59,18 +56,16 @@ class InterpreteController extends Controller
                 if ($key == 'keyword') {
                     // Case-insensitive LIKE for keyword matching
                     $query->where('identite', 'LIKE', '%' . $value . '%');
-                } elseif ($key == 'departement') {
-                    // Ensure departement is treated as an integer and matches
-                    $query->where('departement', (int) $value);
+                } elseif ($key == 'region') {
+                    $query->where('region', $value);
                 } elseif ($key == 'langue') {
-                    // Remove the extra characters from langue to ensure the comparison matches the prefix
-                    $query->whereRaw('LOWER(SUBSTRING_INDEX(langue, " |", 1)) = ?', [strtolower($value)]);
+                    $query->where('langue_id', $value);
                 }
             }
         }
     
         // Execute the query and get results
-        $results = $query->get();
+        $results = $query->with('langue')->get();
     
         // If no results found, return a message
         if ($results->isEmpty()) {
@@ -86,18 +81,15 @@ class InterpreteController extends Controller
      {
  
  
-        $totalLanguage = Interprete::where('langue', '!=', '')->count();
+        $totalLanguage = Langue::count();
         $totalTrad= Interprete::count();
- 
-         // Get total of available interpreters (dispo=1)
-         $totalDispoSMS = Interprete::where('dispo', 3)->count();
-         $totalDispo = Interprete::where('dispo', 1)->count();
- 
+        $totalLanDispo = Interprete::where('langue_id', '!=', "")->count();
+
+
          return response()->json([
-             'total_language' => $totalLanguage,
-             'total_dispo_sms' => $totalDispoSMS,
-             'total_dispo' => $totalDispo,
-             'total_trad'=>$totalTrad
+            'total_language' => $totalLanguage,
+            'total_language_dispo' => $totalLanguage,
+            'total_trad'=>$totalTrad
          ]);
      }
     

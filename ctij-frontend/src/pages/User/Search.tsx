@@ -6,8 +6,7 @@ import { InputText } from "primereact/inputtext";
 import "primereact/resources/primereact.min.css";
 import "primereact/resources/themes/lara-light-indigo/theme.css";
 import "primeicons/primeicons.css";
-import departement from "@/assets/js/departements.json";
-import languages from "@/assets/js/languages.json";
+import regions from "@/assets/js/regions.json";
 import { ProgressSpinner } from "primereact/progressspinner";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFlag } from "@fortawesome/free-solid-svg-icons";
@@ -16,37 +15,43 @@ import {
   useGetTradStatsQuery,
   useLazyGetTraducteursQuery,
 } from "@/services/apis/traducteursApi";
-import { traducteur_status } from "@/pages/Admin/Traducteurs";
 import { faUsers } from "@fortawesome/free-solid-svg-icons/faUsers";
 import { Skeleton } from "primereact/skeleton";
+import { useGetAlllanguesQuery } from "@/services/apis/languesApi";
 interface TableData {
   id: number;
-  dispo: string;
-  langue: string;
   identite: string;
   telephone: string;
   region: string;
-  gender: string;
+  langue: {
+    name:string,
+    id:string
+  };
 }
 
 export function Search() {
   const [selectedLanguage, setSelectedLanguage] = useState(null) as any;
   const [searchTerm, setSearchTerm] = useState("");
   const [tableData, setTableData] = useState<TableData[]>([]);
-  const [selectedDept, setSelectedDept] = useState(null) as any;
-  const { getLanguageLabel } = useAuthContext();
+  const [selectedreg, setSelectedreg] = useState(null) as any;
+  const [languages, setlangues] = useState(null) as any;
 
   const [triggerGettraducteurs, { isFetching, isLoading }] =
     useLazyGetTraducteursQuery();
   const isFirstRender = useRef(true);
   const [showSpinner, setShowSpinner] = useState(false);
   const [_, setSpinnerVisible] = useState(false);
-
+  const { data: fetchedLangues } = useGetAlllanguesQuery(
+    {},
+    { refetchOnMountOrArgChange: true }
+  );
   const { data, isFetching: isFetchingStats } = useGetTradStatsQuery(
     {},
     { refetchOnMountOrArgChange: true }
   );
-
+  useEffect(() => {
+    if (fetchedLangues) setlangues(fetchedLangues.langues);
+  }, [fetchedLangues]);
   useEffect(() => {
     let delayTimer: NodeJS.Timeout;
     let minDisplayTimer: NodeJS.Timeout;
@@ -85,32 +90,31 @@ export function Search() {
       try {
         const result = await triggerGettraducteurs({
           search: searchTerm || "",
-          code_dept: selectedDept?.code || "",
-          langue: selectedLanguage?.code || "",
+          region: selectedreg || "",
+          langue: selectedLanguage || "",
         }).unwrap();
         setTableData(result.traducteurs || []);
       } catch (error) {
-        // Clear table on error
         console.error("Error fetching traducteurs:", error);
         setTableData([]);
       }
     };
-    if (searchTerm || selectedDept || selectedLanguage) {
+    if (searchTerm || selectedreg || selectedLanguage) {
       fetchData();
     } else {
       setTableData([]);
     }
-  }, [searchTerm, selectedDept, selectedLanguage]);
+  }, [searchTerm, selectedreg, selectedLanguage]);
 
-  // 1️⃣ Build a new array once with a `label` property:
-  const optionsWithLabel = useMemo(
-    () =>
-      departement.map((d) => ({
-        ...d,
-        label: `${d.code} - ${d.name}`, // exactly what shows in the UI
-      })),
-    [departement]
-  );
+  // // 1️⃣ Build a new array once with a `label` property:
+  // const optionsWithLabel = useMemo(
+  //   () =>
+  //     region.map((d) => ({
+  //       ...d,
+  //       label: `${d.code} - ${d.name}`, // exactly what shows in the UI
+  //     })),
+  //   [region]
+  // );
   return (
     <>
       <div className="bg-gradient-to-r from-teal-400 to-blue-500 p-6 rounded-lg shadow-lg mb-8">
@@ -121,16 +125,6 @@ export function Search() {
           Trouvez rapidement des traducteurs qualifiés selon vos besoins.
         </p>
       </div>
-      <div className="flex flex-row gap-2 md:gap-20 mt-10 mb-10  shadow-ann-card p-1 px-4 py-4 rounded-sm flex-wrap">
-        {traducteur_status.map((item) => (
-          <div className="flex flex-row gap-3">
-            <div>{item.label}</div>
-            <div
-              className={`inline-block border-[3px] w-[20px] h-[20px] rounded-full text-xs  ${item.color.toString()}`}
-            ></div>
-          </div>
-        ))}
-      </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 ">
         <div>
@@ -140,6 +134,7 @@ export function Search() {
             onChange={(e) => setSelectedLanguage(e.value)}
             options={languages}
             optionLabel="name"
+            optionValue="id"
             placeholder="Sélectionner une langue"
             className="w-full"
             filter // Enable search
@@ -162,23 +157,22 @@ export function Search() {
           />
         </div> */}
         <div>
-          <label className="block text-sm font-medium mb-1">Départements</label>
+          
+          <label className="block text-sm font-medium mb-1">Régions</label>
           <Dropdown
-            value={selectedDept}
-            onChange={(e) => setSelectedDept(e.value)}
-            // 2️⃣ Use your new array
-            options={optionsWithLabel}
-            // 3️⃣ Display the label in the dropdown and filter by it
-            optionLabel="label"
-            placeholder="Sélectionner un Département"
+            value={selectedreg}
+            onChange={(e) => setSelectedreg(e.value)}
+            options={regions}
+            optionLabel="region"
+            optionValue="code"
+            placeholder="Sélectionner une région"
             className="w-full"
             filter
             filterPlaceholder="Recherche…"
-            filterBy="label" // ← now searches the full "code - name" string
+            filterBy="region"
             filterMatchMode="contains"
             showClear
-            // 4️⃣ Your template can just render the label too (or break it out if you prefer)
-            itemTemplate={(opt) => <div>{opt.label}</div>}
+            itemTemplate={(opt) => <div>{opt.region}</div>}
           />
         </div>
 
@@ -217,69 +211,18 @@ export function Search() {
                 className="bg-gray-300 rounded-full"
               />
             )}
-
-            <div className="text-xs">
-              {!isFetchingStats ? (
-                <>
-                  <span className="font-bold text-green-600">
-                    {data?.traducteurs?.total_dispo}
-                  </span>{" "}
-                  interprètes dispos
-                </>
-              ) : (
-                <Skeleton
-                  animation="wave"
-                  height="10px"
-                  width="100px"
-                  className="bg-gray-300 rounded-full"
-                />
-              )}
-            </div>
-            <div className="text-xs">
-              {!isFetchingStats ? (
-                <>
-                  <span className="font-bold text-orange-400">
-                    {data?.traducteurs?.total_dispo_sms}
-                  </span>{" "}
-                  interprètes dispos SMS
-                </>
-              ) : (
-                <Skeleton
-                  animation="wave"
-                  height="10px"
-                  width="120px"
-                  className="bg-gray-300 rounded-full"
-                />
-              )}
-            </div>
           </div>
         </div>
         <div className="flex flex-row gap-4 flex-1">
           <div className="flex items-center">
-              <div className="rounded-full flex items-center justify-center bg-teal-700 w-[80px] h-[80px] ">
-                <FontAwesomeIcon
-                  icon={faFlag}
-                  className="text-white text-4xl"
-                />
-              </div>
-          
+            <div className="rounded-full flex items-center justify-center bg-teal-700 w-[80px] h-[80px] ">
+              <FontAwesomeIcon icon={faFlag} className="text-white text-4xl" />
+            </div>
           </div>
 
           <div className="flex flex-col gap-2  justify-center">
-            <div className="font-bold text-xl">108 Langues</div>
-            <div className="text-xs">
-              {!isFetchingStats ? (
-                <>{data?.traducteurs?.total_language} langues disponibles</>
-              ) : (
-                <Skeleton
-                  animation="wave"
-                  shape="circle"
-                  height="10px"
-                  width="120px"
-                  className="bg-gray-300 rounded-full"
-                />
-              )}
-            </div>
+            <div className="font-bold text-xl">{data?.traducteurs?.total_language} Langues</div>
+          
           </div>
         </div>
       </div>
@@ -287,7 +230,6 @@ export function Search() {
         <table className="min-w-full bg-white border border-gray-200 mb-10">
           <thead>
             <tr className="bg-gray-100">
-              <th className="py-2 px-4 border-b text-left">Dispo</th>
               <th className="py-2 px-4 border-b text-left">Langue</th>
               <th className="py-2 px-4 border-b text-left">Identité</th>
               <th className="py-2 px-4 border-b text-left">Téléphone</th>
@@ -309,24 +251,10 @@ export function Search() {
               </tr>
             ) : tableData.length > 0 ? (
               tableData.map((item) => {
-                const status = traducteur_status.find(
-                  (s) => s.value === item.dispo.toString()
-                );
-
                 return (
                   <tr key={item.id} className="hover:bg-gray-50">
-                    <td className="py-2 px-4 border-b">
-                      <a
-                        href={`sip:${item.telephone}`}
-                        className={`inline-block border-[4px] w-[20px] h-[20px] rounded-full text-xs ${status?.color}`}
-                      ></a>
-                    </td>
-                    <td className="py-2 px-4 border-b">
-                      {getLanguageLabel(item.langue, languages)}
-                    </td>
-                    <td className="py-2 px-4 border-b">
-                      {item?.gender == "0" ? "Mr" : "Mme"} {item.identite}
-                    </td>
+                    <td className="py-2 px-4 border-b">{item?.langue?.name}</td>
+                    <td className="py-2 px-4 border-b">{item.identite}</td>
                     <td className="py-2 px-4 border-b">{item.telephone}</td>
                   </tr>
                 );

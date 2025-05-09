@@ -2,7 +2,7 @@
 
 import type React from "react";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect } from "react";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { Button } from "primereact/button";
@@ -11,8 +11,7 @@ import { InputText } from "primereact/inputtext";
 import { Dropdown } from "primereact/dropdown";
 import { classNames } from "primereact/utils";
 import Swal from "sweetalert2";
-import departement from "@/assets/js/departements.json";
-import languages from "@/assets/js/languages.json";
+import regions from "@/assets/js/regions.json";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlusCircle, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import { faEdit } from "@fortawesome/free-solid-svg-icons/faEdit";
@@ -24,6 +23,7 @@ import {
   useUpdateTraducteurMutation,
 } from "@/services/apis/traducteursApi";
 import { Card } from "primereact/card";
+import { useGetAlllanguesQuery } from "@/services/apis/languesApi";
 
 export const traducteur_status = [
   { label: "Disponible", value: "1", color: "border-green-500" },
@@ -36,20 +36,16 @@ interface traducteur {
   id: number;
   identite: string;
   telephone: string;
-  dispo: string;
-  gender: string;
-  departement: string;
-  langue: string;
+  region: string;
+  langue_id: string;
 }
 
 interface FormData {
   id: number | null;
   identite: string;
   telephone: string;
-  dispo: string;
-  gender: string;
-  departement: string;
-  langue: string;
+  region: string;
+  langue_id: string;
 }
 
 export function Traducteurs() {
@@ -58,21 +54,20 @@ export function Traducteurs() {
   const [updateTraducteur] = useUpdateTraducteurMutation();
   const [deleteTraducteur] = useDeleteTraducteurMutation();
   const [saveTraducteur] = useSaveTraducteurMutation();
-  const getdepartementLabel = (code: string) => {
-    const found = departement.find((dept) => dept.code === code);
-    return found ? `${found.code} - ${found.name}` : code;
-  };
-  const getIdentityLabel = (identite: string, gender: string) => {
-    return `${gender == "0" ? "Mr" : "Mme"} ${identite}`;
-  };
 
-  const { getLanguageLabel, TopEndAlert } = useAuthContext();
-  const gettraducteurstatusLabel = (value: string) => {
-    const status = traducteur_status.find(
-      (item) => item.value.toString() == value.toString()
-    );
-    return status ? status.label : "";
-  };
+  const [langues, setlangues] = useState<FormData[]>([]);
+
+  const { data: fetchedData } = useGetAlllanguesQuery(
+    {},
+    { refetchOnMountOrArgChange: true }
+  );
+
+  useEffect(() => {
+    if (fetchedData) setlangues(fetchedData.langues);
+  }, [fetchedData]);
+
+  const { TopEndAlert } = useAuthContext();
+
   const { data } = useGetAlltraducteursQuery(
     {},
     { refetchOnMountOrArgChange: true }
@@ -81,10 +76,8 @@ export function Traducteurs() {
     id: null,
     identite: "",
     telephone: "",
-    dispo: "",
-    gender: "",
-    departement: "",
-    langue: "",
+    region: "",
+    langue_id: "",
   });
   const [submitted, setSubmitted] = useState(false);
 
@@ -98,10 +91,8 @@ export function Traducteurs() {
       id: null,
       identite: "",
       telephone: "",
-      dispo: "",
-      departement: "",
-      gender: "",
-      langue: "",
+      region: "",
+      langue_id: "",
     });
     setSubmitted(false);
     setDialogVisible(true);
@@ -141,10 +132,8 @@ export function Traducteurs() {
     if (
       formData.identite.trim() &&
       formData.telephone.trim() &&
-      formData.dispo &&
-      formData.gender &&
-      formData.departement &&
-      formData.langue
+      formData.region &&
+      formData.langue_id
     ) {
       const updatedtraducteurs = [...traducteurs];
 
@@ -243,14 +232,7 @@ export function Traducteurs() {
       <Button label="Save" icon="fa-solid fa-check" onClick={savetraducteur} />
     </div>
   );
-  const optionsWithLabel = useMemo(
-    () =>
-      departement.map((d) => ({
-        ...d,
-        label: `${d.code} - ${d.name}`,
-      })),
-    [departement]
-  );
+
   return (
     <div className="p-4">
       <Card title="Liste des Traducteurs" className="mb-4 shadow-md rounded-xl">
@@ -288,6 +270,14 @@ export function Traducteurs() {
               getIdentityLabel(rowData.identite, rowData.gender)
             }
           />
+        className="p-datatable-traducteurs"
+      >
+        <Column
+          field="identite"
+          header="Identité"
+          sortable
+          body={(rowData) => rowData.identite}
+        />
 
           <Column field="telephone" header="Numéro Tél" sortable />
           <Column
@@ -316,6 +306,26 @@ export function Traducteurs() {
             style={{ minWidth: "8rem" }}
           />
         </DataTable>
+        <Column field="telephone" header="Numéro Tél" sortable />
+
+        <Column
+          field="region"
+          header="Région"
+          sortable
+          body={(rowData) => rowData.region}
+        />
+        <Column
+          field="langue"
+          header="Langue"
+          sortable
+          body={(rowData) => (rowData?.langue?.name)}
+        />
+        <Column
+          body={actionBodyTemplate}
+          exportable={false}
+          style={{ width: "50px" }}
+        />
+      </DataTable>
 
         <Dialog
           visible={dialogVisible}
@@ -371,6 +381,31 @@ export function Traducteurs() {
                 <small className="p-error">Nom & Prénom requis.</small>
               )}
             </div>
+      <Dialog
+        visible={dialogVisible}
+        style={{ width: "550px" }}
+        header={formData.id ? "Editer Traducteur" : "Ajouter Traducteur"}
+        modal
+        className="p-fluid"
+        footer={dialogFooter}
+        onHide={hideDialog}
+      >
+        <div className="flex flex-row gap-2">
+          <div className="field mt-4">
+            <label htmlFor="identite">Nom & Prénom</label>
+            <InputText
+              id="identite"
+              value={formData.identite}
+              onChange={(e) => onInputChange(e, "identite")}
+              required
+              className={classNames({
+                "p-invalid": submitted && !formData.identite,
+              })}
+            />
+            {submitted && !formData.identite && (
+              <small className="p-error">Nom & Prénom requis.</small>
+            )}
+          </div>
 
             <div className="field mt-4">
               <label htmlFor="telephone">Num Téléphone</label>
@@ -408,6 +443,8 @@ export function Traducteurs() {
 
           <div className="field mt-4">
             <label htmlFor="departement">Départment</label>
+        <div className="field mt-4">
+          <label htmlFor="region">Régions</label>
 
             <Dropdown
               id="departement"
@@ -427,11 +464,33 @@ export function Traducteurs() {
                 "p-invalid": submitted && !formData.departement,
               })}
             />
+          <Dropdown
+            id="region"
+            value={formData.region}
+            onChange={(e) => onDropdownChange(e, "region")}
+            options={regions}
+            optionLabel="region"
+            optionValue="code" // ← tell it to match by the `code` field
+            placeholder="Sélectionner une Région"
+            filter
+            filterPlaceholder="Recherche…"
+            filterBy="label"
+            filterMatchMode="contains"
+            showClear
+            itemTemplate={(opt) => <div>{opt.region}</div>}
+            className={classNames({
+              "p-invalid": submitted && !formData.region,
+            })}
+          />
 
             {submitted && !formData.departement && (
               <small className="p-error">departement requis.</small>
             )}
           </div>
+          {submitted && !formData.region && (
+            <small className="p-error">region requis.</small>
+          )}
+        </div>
 
           <div className="field mt-4">
             <label htmlFor="langue">Langues</label>
@@ -451,6 +510,21 @@ export function Traducteurs() {
               filterBy="name"
               showClear
             />
+          <Dropdown
+            id="langue"
+            value={formData.langue_id}
+            onChange={(e) => onDropdownChange(e, "langue_id")}
+            options={langues}
+            optionLabel="name"
+            optionValue="id" // ← and here for languages
+            placeholder="Sélectionner une langue"
+            className={classNames({
+              "p-invalid": submitted && !formData.langue_id,
+            })}
+            filter
+            filterBy="name"
+            showClear
+          />
 
             {submitted && !formData.langue && (
               <small className="p-error">langue requis.</small>
@@ -458,6 +532,14 @@ export function Traducteurs() {
           </div>
         </Dialog>
       </Card>
+
+
+
+          {submitted && !formData.langue_id && (
+            <small className="p-error">langue requis.</small>
+          )}
+        </div>
+      </Dialog>
     </div>
   );
 }

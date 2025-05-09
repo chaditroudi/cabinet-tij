@@ -14,7 +14,7 @@ import GuestRoute from "../middleware/GuestRoute";
 import { Home, Search } from "@/pages/User/Index";
 import AdminLayout from "@/layouts/AdminLayout";
 import UserLayout from "@/layouts/UserLayout";
-import { Traducteurs } from "@/pages/Admin/Index";
+import { Langues, Traducteurs } from "@/pages/Admin/Index";
 export default function AppRoutes() {
   const location = useLocation();
   const dispatch = useAppDispatch();
@@ -33,15 +33,14 @@ export default function AppRoutes() {
             <Route path="/verify-email/:token" element={<VerifyEmail />} />
           </Route>
         </Route>
-        <Route element={<UserLayout  />}>
-          <Route path="/" element={<Home />} />
-        </Route>
+
         <Route element={<UserLayout pd />}>
-          <Route path="/recherche" element={<Search />} />
+          <Route path="/" element={<Search />} />
         </Route>
         <Route element={<PrivateRoute />}>
           <Route element={<AdminLayout />}>
             <Route path="/traducteurs" element={<Traducteurs />} />
+            <Route path="/langues" element={<Langues />} />
           </Route>
           <Route path="/logout" element={<Logout />} />
         </Route>
