@@ -61,7 +61,7 @@ services:
     networks:
       - ctij-network
 
-  # Frontend App (React.js or similar)
+  # Frontend App (React.js)
   frontend:
     build:
       context: ./ctij-frontend
@@ -73,29 +73,10 @@ services:
     networks:
       - ctij-network
 
-  # SonarQube for code quality
-  # sonarqube:
-  #   image: sonarqube:latest
-  #   container_name: sonarqube
-  #   restart: unless-stopped
-  #   ports:
-  #     - "9000:9000"
-  #   environment:
-  #     - SONAR_ES_BOOTSTRAP_CHECKS_DISABLE=true
-  #   volumes:
-  #     - sonarqube_data:/opt/sonarqube/data
-  #     - sonarqube_logs:/opt/sonarqube/logs
-  #     - sonarqube_extensions:/opt/sonarqube/extensions
-  #   networks:
-  #     - ctij-network
-
 # Named Volumes
 volumes:
   dbdata:
     driver: local
-  sonarqube_data:
-  sonarqube_logs:
-  sonarqube_extensions:
 
 # Docker Network
 networks:
