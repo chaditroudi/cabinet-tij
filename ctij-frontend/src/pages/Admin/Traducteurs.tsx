@@ -23,6 +23,7 @@ import {
   useSaveTraducteurMutation,
   useUpdateTraducteurMutation,
 } from "@/services/apis/traducteursApi";
+import { Card } from "primereact/card";
 
 export const traducteur_status = [
   { label: "Disponible", value: "1", color: "border-green-500" },
@@ -251,8 +252,9 @@ export function Traducteurs() {
     [departement]
   );
   return (
-    <div>
-      <DataTable
+    <div className="p-4">
+      <Card title="Liste des Traducteurs" className="mb-4 shadow-md rounded-xl">
+        {/* <DataTable
         value={traducteurs}
         header={header}
         resizableColumns
@@ -260,181 +262,202 @@ export function Traducteurs() {
         rows={10}
         rowsPerPageOptions={[5, 10, 25]}
         dataKey="id"
-        className="p-datatable-traducteurs"
-      >
-        <Column
-          field="identite"
-          header="Identité"
-          sortable
-          body={(rowData) => getIdentityLabel(rowData.identite, rowData.gender)}
-        />
+        className="p-datatable-sm p-datatable-striped p-datatable-gridlines"
+      > */}
+        <DataTable
+          value={traducteurs}
+          header={header}
+          resizableColumns
+          paginator
+          rows={10}
+          rowsPerPageOptions={[5, 10, 25, 50]}
+          dataKey="id"
+          responsiveLayout="scroll"
+          stripedRows
+          className="p-datatable-sm p-datatable-gridlines"
+          currentPageReportTemplate="Résultats {first} à {last} sur {totalRecords}"
+          paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
+          paginatorClassName="justify-content-end"
+          emptyMessage="Aucun traducteur trouvé."
+        >
+          <Column
+            field="identite"
+            header="Identité"
+            sortable
+            body={(rowData) =>
+              getIdentityLabel(rowData.identite, rowData.gender)
+            }
+          />
 
-        <Column field="telephone" header="Numéro Tél" sortable />
-        <Column
-          field="dispo"
-          header="Statut de traducteur"
-          sortable
-          body={(rowData) => gettraducteurstatusLabel(rowData.dispo.toString())}
-        />
-        <Column
-          field="departement"
-          header="Département"
-          sortable
-          body={(rowData) => getdepartementLabel(rowData.departement)}
-        />
-        <Column
-          field="langue"
-          header="Langue"
-          sortable
-          body={(rowData) => getLanguageLabel(rowData.langue, languages)}
-        />
-        <Column
-          body={actionBodyTemplate}
-          exportable={false}
-          style={{ minWidth: "8rem" }}
-        />
-      </DataTable>
+          <Column field="telephone" header="Numéro Tél" sortable />
+          <Column
+            field="dispo"
+            header="Statut de traducteur"
+            sortable
+            body={(rowData) =>
+              gettraducteurstatusLabel(rowData.dispo.toString())
+            }
+          />
+          <Column
+            field="departement"
+            header="Département"
+            sortable
+            body={(rowData) => getdepartementLabel(rowData.departement)}
+          />
+          <Column
+            field="langue"
+            header="Langue"
+            sortable
+            body={(rowData) => getLanguageLabel(rowData.langue, languages)}
+          />
+          <Column
+            body={actionBodyTemplate}
+            exportable={false}
+            style={{ minWidth: "8rem" }}
+          />
+        </DataTable>
 
-      <Dialog
-        visible={dialogVisible}
-        style={{ width: "550px" }}
-        header={formData.id ? "Editer Traducteur" : "Ajouter Traducteur"}
-        modal
-        className="p-fluid"
-        footer={dialogFooter}
-        onHide={hideDialog}
-      >
-        <div className="field mt-4">
-          <div className="flex gap-4">
-            <div className="flex items-center gap-2">
-              <input
-                type="radio"
-                id="monsieur"
-                name="gender"
-                value="0"
-                checked={formData.gender == "0"}
-                onChange={(e) => onInputChange(e, "gender")}
-              />
-              <label htmlFor="monsieur">Monsieur</label>
+        <Dialog
+          visible={dialogVisible}
+          style={{ width: "550px" }}
+          header={formData.id ? "Editer Traducteur" : "Ajouter Traducteur"}
+          modal
+          className="p-fluid"
+          footer={dialogFooter}
+          onHide={hideDialog}
+        >
+          <div className="field mt-4">
+            <div className="flex gap-4">
+              <div className="flex items-center gap-2">
+                <input
+                  type="radio"
+                  id="monsieur"
+                  name="gender"
+                  value="0"
+                  checked={formData.gender == "0"}
+                  onChange={(e) => onInputChange(e, "gender")}
+                />
+                <label htmlFor="monsieur">Monsieur</label>
+              </div>
+              <div className="flex items-center flex-row gap-2">
+                <input
+                  type="radio"
+                  id="madame"
+                  name="gender"
+                  value="1"
+                  checked={formData.gender == "1"}
+                  onChange={(e) => onInputChange(e, "gender")}
+                />
+                <label htmlFor="madame">Madame</label>
+              </div>
             </div>
-            <div className="flex items-center flex-row gap-2">
-              <input
-                type="radio"
-                id="madame"
-                name="gender"
-                value="1"
-                checked={formData.gender == "1"}
-                onChange={(e) => onInputChange(e, "gender")}
+            {submitted && !formData.gender && (
+              <small className="p-error">Civilité requise.</small>
+            )}
+          </div>
+          <div className="flex flex-row gap-2">
+            <div className="field mt-4">
+              <label htmlFor="identite">Nom & Prénom</label>
+              <InputText
+                id="identite"
+                value={formData.identite}
+                onChange={(e) => onInputChange(e, "identite")}
+                required
+                className={classNames({
+                  "p-invalid": submitted && !formData.identite,
+                })}
               />
-              <label htmlFor="madame">Madame</label>
+              {submitted && !formData.identite && (
+                <small className="p-error">Nom & Prénom requis.</small>
+              )}
+            </div>
+
+            <div className="field mt-4">
+              <label htmlFor="telephone">Num Téléphone</label>
+              <InputText
+                id="telephone"
+                value={formData.telephone}
+                onChange={(e) => onInputChange(e, "telephone")}
+                required
+                className={classNames({
+                  "p-invalid": submitted && !formData.telephone,
+                })}
+              />
+              {submitted && !formData.telephone && (
+                <small className="p-error">Téléphone requis.</small>
+              )}
             </div>
           </div>
-          {submitted && !formData.gender && (
-            <small className="p-error">Civilité requise.</small>
-          )}
-        </div>
-        <div className="flex flex-row gap-2">
+
           <div className="field mt-4">
-            <label htmlFor="identite">Nom & Prénom</label>
-            <InputText
-              id="identite"
-              value={formData.identite}
-              onChange={(e) => onInputChange(e, "identite")}
-              required
+            <label htmlFor="dispo">Dispo</label>
+            <Dropdown
+              id="dispo"
+              value={formData.dispo.toString()}
+              options={traducteur_status}
+              onChange={(e) => onDropdownChange(e, "dispo")}
+              placeholder="Choisir disponibilité"
               className={classNames({
-                "p-invalid": submitted && !formData.identite,
+                "p-invalid": submitted && !formData.dispo,
               })}
             />
-            {submitted && !formData.identite && (
-              <small className="p-error">Nom & Prénom requis.</small>
+            {submitted && !formData.dispo && (
+              <small className="p-error">Statut requis.</small>
             )}
           </div>
 
           <div className="field mt-4">
-            <label htmlFor="telephone">Num Téléphone</label>
-            <InputText
-              id="telephone"
-              value={formData.telephone}
-              onChange={(e) => onInputChange(e, "telephone")}
-              required
+            <label htmlFor="departement">Départment</label>
+
+            <Dropdown
+              id="departement"
+              value={formData.departement}
+              onChange={(e) => onDropdownChange(e, "departement")}
+              options={optionsWithLabel}
+              optionLabel="label"
+              optionValue="code" // ← tell it to match by the `code` field
+              placeholder="Sélectionner un Département"
+              filter
+              filterPlaceholder="Recherche…"
+              filterBy="label"
+              filterMatchMode="contains"
+              showClear
+              itemTemplate={(opt) => <div>{opt.label}</div>}
               className={classNames({
-                "p-invalid": submitted && !formData.telephone,
+                "p-invalid": submitted && !formData.departement,
               })}
             />
-            {submitted && !formData.telephone && (
-              <small className="p-error">Téléphone requis.</small>
+
+            {submitted && !formData.departement && (
+              <small className="p-error">departement requis.</small>
             )}
           </div>
-        </div>
 
-        <div className="field mt-4">
-          <label htmlFor="dispo">Dispo</label>
-          <Dropdown
-            id="dispo"
-            value={formData.dispo.toString()}
-            options={traducteur_status}
-            onChange={(e) => onDropdownChange(e, "dispo")}
-            placeholder="Choisir disponibilité"
-            className={classNames({
-              "p-invalid": submitted && !formData.dispo,
-            })}
-          />
-          {submitted && !formData.dispo && (
-            <small className="p-error">Statut requis.</small>
-          )}
-        </div>
+          <div className="field mt-4">
+            <label htmlFor="langue">Langues</label>
 
-        <div className="field mt-4">
-          <label htmlFor="departement">Départment</label>
+            <Dropdown
+              id="langue"
+              value={formData.langue}
+              onChange={(e) => onDropdownChange(e, "langue")}
+              options={languages}
+              optionLabel="name"
+              optionValue="code" // ← and here for languages
+              placeholder="Sélectionner une langue"
+              className={classNames({
+                "p-invalid": submitted && !formData.langue,
+              })}
+              filter
+              filterBy="name"
+              showClear
+            />
 
-          <Dropdown
-            id="departement"
-            value={formData.departement}
-            onChange={(e) => onDropdownChange(e, "departement")}
-            options={optionsWithLabel}
-            optionLabel="label"
-            optionValue="code" // ← tell it to match by the `code` field
-            placeholder="Sélectionner un Département"
-            filter
-            filterPlaceholder="Recherche…"
-            filterBy="label"
-            filterMatchMode="contains"
-            showClear
-            itemTemplate={(opt) => <div>{opt.label}</div>}
-            className={classNames({
-              "p-invalid": submitted && !formData.departement,
-            })}
-          />
-
-          {submitted && !formData.departement && (
-            <small className="p-error">departement requis.</small>
-          )}
-        </div>
-
-        <div className="field mt-4">
-          <label htmlFor="langue">Langues</label>
-
-          <Dropdown
-            id="langue"
-            value={formData.langue}
-            onChange={(e) => onDropdownChange(e, "langue")}
-            options={languages}
-            optionLabel="name"
-            optionValue="code" // ← and here for languages
-            placeholder="Sélectionner une langue"
-            className={classNames({
-              "p-invalid": submitted && !formData.langue,
-            })}
-            filter
-            filterBy="name"
-            showClear
-          />
-
-          {submitted && !formData.langue && (
-            <small className="p-error">langue requis.</small>
-          )}
-        </div>
-      </Dialog>
+            {submitted && !formData.langue && (
+              <small className="p-error">langue requis.</small>
+            )}
+          </div>
+        </Dialog>
+      </Card>
     </div>
   );
 }

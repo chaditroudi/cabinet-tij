@@ -90,7 +90,7 @@ class InterpreteController extends Controller
         $totalTrad= Interprete::count();
  
          // Get total of available interpreters (dispo=1)
-         $totalDispoSMS = Interprete::where('dispo', 2)->count();
+         $totalDispoSMS = Interprete::where('dispo', 3)->count();
          $totalDispo = Interprete::where('dispo', 1)->count();
  
          return response()->json([

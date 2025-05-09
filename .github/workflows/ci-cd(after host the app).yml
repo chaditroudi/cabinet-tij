@@ -1,0 +1,97 @@
+# name: CI/CD Workflow
+
+# on:
+#   push:
+#     branches:
+#       - main
+#   pull_request:
+#     branches:
+#       - main
+
+# jobs:
+#   # Job for Laravel API
+#   laravel:
+#     runs-on: ubuntu-latest
+    
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v3
+
+#       - name: Set up PHP
+#         uses: shivammathur/setup-php@v2
+#         with:
+#           php-version: '8.1'  # or the PHP version you're using
+
+#       - name: Cache Composer dependencies
+#         uses: actions/cache@v3
+#         with:
+#           path: ~/.composer/cache
+#           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+#           restore-keys: |
+#             ${{ runner.os }}-composer-
+
+#       - name: Install dependencies (Laravel)
+#         run: |
+#           cd ctij-api
+#           composer install --no-interaction --prefer-dist
+#           cp .env.example .env
+#           php artisan key:generate
+
+#       - name: Run tests (Laravel)
+#         run: |
+#           cd ctij-api
+#           vendor/bin/phpunit --configuration phpunit.xml
+
+#   # Job for React Frontend
+#   react:
+#     runs-on: ubuntu-latest
+
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v3
+
+#       - name: Set up Node.js
+#         uses: actions/setup-node@v3
+#         with:
+#           node-version: '16'  # or the Node.js version you're using
+
+#       - name: Cache Node.js dependencies
+#         uses: actions/cache@v3
+#         with:
+#           path: node_modules
+#           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+#           restore-keys: |
+#             ${{ runner.os }}-node-
+
+#       - name: Install dependencies (React)
+#         run: |
+#           cd ctij-frontend
+#           npm install
+
+#       - name: Run tests (React)
+#         run: |
+#           cd ctij-frontend
+#           npm run test
+
+#   # Deployment (optional)
+#   deploy:
+#     needs: [laravel, react]
+#     runs-on: ubuntu-latest
+#     if: github.ref == 'refs/heads/main'  # Deploy only on push to main branch
+
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v3
+
+#       - name: Set up SSH for deployment
+#         uses: webfactory/ssh-agent@v0.5.3
+#         with:
+#           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+#       - name: Deploy to server
+#         run: |
+#           # Deploy Laravel API
+#           ssh -o StrictHostKeyChecking=no user@your-server-ip 'cd /path/to/ctij-api && git pull && composer install --no-interaction && php artisan migrate'
+
+#           # Deploy React frontend
+#           ssh -o StrictHostKeyChecking=no user@your-server-ip 'cd /path/to/ctij-frontend && git pull && npm install && npm run build && pm2 restart your-app'
