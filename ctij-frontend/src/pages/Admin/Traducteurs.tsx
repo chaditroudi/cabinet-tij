@@ -53,7 +53,10 @@ export function Traducteurs() {
   const [updateTraducteur] = useUpdateTraducteurMutation();
   const [deleteTraducteur] = useDeleteTraducteurMutation();
   const [saveTraducteur] = useSaveTraducteurMutation();
-
+  const getRegionLabel = (code: string) => {
+    const found = regions.find((reg) => reg.code === code);
+    return found ? `${found.code} - ${found.region}` : code;
+  };
   const [langues, setlangues] = useState<FormData[]>([]);
 
   const { data: fetchedData } = useGetAlllanguesQuery(
@@ -257,13 +260,13 @@ export function Traducteurs() {
           field="region"
           header="Région"
           sortable
-          body={(rowData) => rowData.region}
+          body={(rowData) => getRegionLabel(rowData.region)}
         />
         <Column
           field="langue"
           header="Langue"
           sortable
-          body={(rowData) => (rowData?.langue?.name)}
+          body={(rowData) => rowData?.langue?.name}
         />
         <Column
           body={actionBodyTemplate}
@@ -360,9 +363,6 @@ export function Traducteurs() {
             filterBy="name"
             showClear
           />
-
-
-
 
           {submitted && !formData.langue_id && (
             <small className="p-error">langue requis.</small>
