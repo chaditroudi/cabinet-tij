@@ -17,20 +17,11 @@ return new class extends Migration
             // Primary key with auto-increment
             $table->id();
 
-            // dispo (tinyint(1)) - a small integer, possibly for availability status
-            $table->tinyInteger('dispo')->default(0);
-            $table->string('gender', 45)->nullable();
-
-
             // langue (varchar(255)) - language field with UTF-8 support
-            $table->string('langue', 255)->collation('utf8mb4_unicode_ci');
+            $table->string('langue_id', 255)->collation('utf8mb4_unicode_ci');
 
             // identite (varchar(255)) - identity field, could be name or identifier
             $table->string('identite', 255)->collation('utf8mb4_unicode_ci');
-
-            // departement (varchar(255)) - department field, for categorizing
-            $table->string('departement', 255)->collation('utf8mb4_unicode_ci');
-
             // region (varchar(255)) - region field, for geographical categorization
             $table->string('region', 255)->collation('utf8mb4_unicode_ci');
 

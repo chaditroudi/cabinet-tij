@@ -18,6 +18,11 @@ const Sidebar = ({ onLogout, collapsed }: SidebarProps) => {
       icon: "fa-solid fa-address-book",
       label: "Traducteurs",
     },
+    {
+      path: "/langues",
+      icon: "fa-solid fa-flag",
+      label: "Langues",
+    },
   ];
 
   return (

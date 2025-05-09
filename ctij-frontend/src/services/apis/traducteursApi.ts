@@ -10,10 +10,10 @@ export const traducteursApi = createApi({
   endpoints: (builder) => ({
     getTraducteurs: builder.query<
       { traducteurs: any[] },
-      { search: string; code_dept: string; langue: string }
+      { search: string; region: string; langue: string }
     >({
-      query: ({ search, code_dept, langue }) =>
-        `/interpretes/filter?keyword=${encodeURIComponent(search)}&departement=${code_dept}&langue=${langue}`,
+      query: ({ search, region, langue }) =>
+        `/interpretes/filter?keyword=${encodeURIComponent(search)}&region=${region}&langue=${langue}`,
       transformResponse: (response: any) => ({
         traducteurs: response,
       }),

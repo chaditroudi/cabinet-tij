@@ -17,12 +17,7 @@ const Header = () => {
           className: "text-green-900", // Customize color for text
           command: () => navigate("/"), // navigate to /home or /dashboard for admins
         },
-        {
-          label: "Recherche",
-          icon: "pi pi-search",
-          command: () => navigate("/recherche"), // navigate to admin dashboard
-          className: "text-green-900", // Customize color for text
-        },
+
         {
           label: "Admin",
           icon: "pi pi-cog",
@@ -36,12 +31,7 @@ const Header = () => {
           icon: "pi pi-home",
           command: () => navigate("/"), // navigate to /home
         },
-        {
-          label: "Recherche",
-          icon: "pi pi-search",
-          command: () => navigate("/recherche"), // navigate to admin dashboard
-          className: "text-green-900", // Customize color for text
-        },
+
         {
           label: "Connexion",
           icon: "pi pi-key",

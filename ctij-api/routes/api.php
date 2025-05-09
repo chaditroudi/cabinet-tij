@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\API\InterpreteController;
+use App\Http\Controllers\API\LangueController;
 use App\Http\Controllers\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -26,6 +27,7 @@ Route::middleware('auth:sanctum')->group(function () {
 Route::get(uri: '/interpretes/filter', action: [InterpreteController::class, 'filter']);
 Route::get(uri: '/interpretes/stats', action: [InterpreteController::class, 'getTotals']);
 
+Route::apiResource(name: 'langues', controller: LangueController::class);
 
 Route::apiResource(name: 'interpretes', controller: InterpreteController::class);
 

@@ -4,11 +4,16 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
+use App\Models\Langue; 
 class Interprete extends Model
-{
-    protected $fillable = ['dispo', 'langue', 'identite', 'telephone','region', 'departement','gender'
-];
-
+{    
     use HasFactory;
+
+    protected $fillable = ['dispo', 'langue_id', 'identite', 'telephone','region'];
+    public function langue()
+    {
+        return $this->belongsTo(Langue::class, 'langue_id'); 
+    }
+
+
 }
