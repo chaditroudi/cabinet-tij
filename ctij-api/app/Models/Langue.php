@@ -13,20 +13,26 @@ use Illuminate\Database\Eloquent\SoftDeletes;
         protected $table = 'langues';
         protected $fillable = ['id', 'name'];
 
-        public function langues()
+        /**
+         * The interpreters that speak this language.
+         */
+        public function interpretes()
         {
             return $this->belongsToMany(
-                Langue::class,
-                'langue_interpretes', 
-                'interprete_id',
-                'langue_id'
+                Interprete::class,          // related model
+                'langue_interpretes',        // pivot table name
+                'langue_id',                // this model’s FK on pivot
+                'interprete_id'             // related model’s FK on pivot
             )->withTimestamps();
         }
     
+        /**
+         * Detach pivot links when soft- or hard-deleting a language.
+         */
         protected static function booted()
         {
-            static::deleting(function (Interprete $i) {
-                $i->langues()->detach();
+            static::deleting(function (Langue $langue) {
+                $langue->interpretes()->detach();
             });
         }
     }
