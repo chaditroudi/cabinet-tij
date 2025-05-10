@@ -5,7 +5,6 @@ import type React from "react";
 import { useState, useEffect } from "react";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
-import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
 import { InputText } from "primereact/inputtext";
 import { Dropdown } from "primereact/dropdown";
@@ -49,6 +48,7 @@ interface FormData {
 
 export function Traducteurs() {
   const [traducteurs, setTraducteurs] = useState<traducteur[]>([]);
+  const [total, setTotal] = useState<any>();
   const [dialogVisible, setDialogVisible] = useState(false);
   const [updateTraducteur] = useUpdateTraducteurMutation();
   const [deleteTraducteur] = useDeleteTraducteurMutation();
@@ -58,9 +58,11 @@ export function Traducteurs() {
     return found ? `${found.code} - ${found.region}` : code;
   };
   const [langues, setlangues] = useState<FormData[]>([]);
+  const [page, setPage] = useState(1);
+  const limit = 2;
 
-  const { data: fetchedData } = useGetAlllanguesQuery(
-    {},
+  const { data: fetchedData, isLoading } = useGetAlllanguesQuery(
+    { page },
     { refetchOnMountOrArgChange: true }
   );
 
@@ -71,7 +73,7 @@ export function Traducteurs() {
   const { TopEndAlert } = useAuthContext();
 
   const { data } = useGetAlltraducteursQuery(
-    {},
+    { page },
     { refetchOnMountOrArgChange: true }
   );
   const [formData, setFormData] = useState<FormData>({
@@ -85,7 +87,10 @@ export function Traducteurs() {
 
   // Load mock data
   useEffect(() => {
-    if (data) setTraducteurs(data.traducteurs);
+    if (data) {
+      setTraducteurs(data?.traducteurs.data);
+      setTotal(data?.traducteurs.total);
+    }
   }, [data]);
 
   const resetForm = () => {
@@ -260,12 +265,16 @@ export function Traducteurs() {
         value={traducteurs}
         header={header}
         resizableColumns
-        // paginator
-        rows={10}
-        rowsPerPageOptions={[5, 10, 25]}
+        lazy
         dataKey="id"
         className="p-datatable-traducteurs"
         emptyMessage="Aucun traducteur disponible"
+        paginator
+        rows={20}
+        totalRecords={total || 0}
+        loading={isLoading}
+        first={(page - 1) * limit}
+        onPage={(e: any) => setPage(e.page + 1)} // PrimeReact uses 0-based page
       >
         <Column
           field="identite"
@@ -320,7 +329,7 @@ export function Traducteurs() {
               onKeyDown={(e) => {
                 if (e.key === "Enter") {
                   e.preventDefault();
-                  savetraducteur(true); 
+                  savetraducteur(true);
                 }
               }}
             />
@@ -344,10 +353,9 @@ export function Traducteurs() {
               onKeyDown={(e) => {
                 if (e.key === "Enter") {
                   e.preventDefault();
-                  savetraducteur(true); 
+                  savetraducteur(true);
                 }
               }}
-              
             />
             {submitted && !formData.telephone && (
               <small className="p-error">Téléphone requis.</small>
@@ -361,7 +369,6 @@ export function Traducteurs() {
           </div>
 
           <Dropdown
-          
             id="region"
             value={formData.region}
             onChange={(e) => onDropdownChange(e, "region")}
@@ -418,7 +425,3 @@ export function Traducteurs() {
     </div>
   );
 }
-
-
-
-

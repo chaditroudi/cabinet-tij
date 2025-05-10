@@ -9,10 +9,13 @@ use Illuminate\Http\Request;
 
 class InterpreteController extends Controller
 {
-    public function index()
+   
+    public function index(Request $request)
     {
-        return Interprete::with('langue')->get(); 
+        $interpretes = Interprete::paginate(20);
+        return response()->json($interpretes);
     }
+    
 
     public function store(Request $request)
     {
@@ -49,12 +52,9 @@ class InterpreteController extends Controller
     {
         $query = Interprete::query();
     
-        // Loop through all request parameters and add filters dynamically
         foreach ($request->all() as $key => $value) {
             if (!empty($value)) {
-                // Apply dynamic filters based on the request parameters
                 if ($key == 'keyword') {
-                    // Case-insensitive LIKE for keyword matching
                     $query->where('identite', 'LIKE', '%' . $value . '%');
                 } elseif ($key == 'region') {
                     $query->where('region', $value);
@@ -64,19 +64,15 @@ class InterpreteController extends Controller
             }
         }
     
-        // Execute the query and get results
         $results = $query->with('langue')->get();
     
-        // If no results found, return a message
         if ($results->isEmpty()) {
             return response()->json(['message' => 'No results found'], 404);
         }
     
-        // Return the filtered results as JSON
         return response()->json($results);
     }
     
-     // Combined method to get both the total of a selected language and available interpreters (dispo=1)
      public function getTotals(Request $request)
      {
  

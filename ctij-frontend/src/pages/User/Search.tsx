@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef, useMemo } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Dropdown } from "primereact/dropdown";
 import { InputText } from "primereact/inputtext";
 import "primereact/resources/primereact.min.css";
@@ -10,7 +10,6 @@ import regions from "@/assets/js/regions.json";
 import { ProgressSpinner } from "primereact/progressspinner";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFlag } from "@fortawesome/free-solid-svg-icons";
-import useAuthContext from "@/context/AuthContext";
 import {
   useGetTradStatsQuery,
   useLazyGetTraducteursQuery,

@@ -19,7 +19,7 @@ export const traducteursApi = createApi({
       }),
     }),
     getAlltraducteurs: builder.query({
-      query: () => `/interpretes`,
+      query: ({ page}) => `/interpretes/?page=${page}`,
       transformResponse: (response: any) => ({
         traducteurs: response,
       }),
