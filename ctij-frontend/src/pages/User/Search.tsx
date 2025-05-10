@@ -18,6 +18,7 @@ import { Skeleton } from "primereact/skeleton";
 import { useGetAlllanguesQuery } from "@/services/apis/languesApi";
 import { Column } from "primereact/column";
 import { DataTable } from "primereact/datatable";
+import { languesBodyTemplate } from "@/pages/Admin/Traducteurs";
 interface TableData {
   id: number;
   identite: string;
@@ -59,12 +60,11 @@ export function Search() {
     if (isFetching || isLoading) {
       delayTimer = setTimeout(() => {
         setSpinnerVisible(true);
-      }, 200); // delay showing spinner slightly
+      }, 200);
 
       setShowSpinner(true);
     } else {
       if (showSpinner) {
-        // If spinner was showing, keep it for at least 500ms
         minDisplayTimer = setTimeout(() => {
           setShowSpinner(false);
           setSpinnerVisible(false);
@@ -254,7 +254,7 @@ export function Search() {
           <Column
             field="langue.name"
             header="Langue"
-            body={(rowData) => rowData?.langue?.name}
+            body={languesBodyTemplate}
           />
           <Column field="identite" header="Identité" />
           <Column field="telephone" header="Téléphone" />

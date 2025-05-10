@@ -3,17 +3,30 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Langue; 
 class Interprete extends Model
 {    
     use HasFactory;
+    protected $fillable = ['dispo', 'identite', 'telephone','region'];
 
-    protected $fillable = ['dispo', 'langue_id', 'identite', 'telephone','region'];
-    public function langue()
+    protected static function booted()
     {
-        return $this->belongsTo(Langue::class, 'langue_id'); 
+        static::deleting(function (Interprete $interprete) {
+            $interprete->langues()->detach();
+        });
     }
 
+    public function langues()
+    {
+        return $this->belongsToMany(
+            Langue::class,           
+            'langue_interpretes',     
+            'interprete_id',          
+            'langue_id'              
+        )->withTimestamps();
+    }
+    
 
 }

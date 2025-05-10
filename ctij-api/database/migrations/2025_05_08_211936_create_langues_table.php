@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('langues', function (Blueprint $table) {
             $table->id();
             $table->string('name'); // e.g., French, English
-            $table->string('code', 5)->unique(); // e.g., fr, en
             $table->timestamps();
         });
     }

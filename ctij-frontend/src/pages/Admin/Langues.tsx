@@ -56,8 +56,6 @@ export function Langues() {
   });
   const [submitted, setSubmitted] = useState(false);
 
-  // Load mock data
-
   useEffect(() => {
     if (data) setlangues(data.langues);
   }, [data]);
@@ -125,7 +123,7 @@ export function Langues() {
       }
 
       if (addAnother) {
-        setFormData({ id: null, name: "" }); // reset for new entry
+        setFormData({ id: null, name: "" }); 
         setSubmitted(false);
       } else {
         setDialogVisible(false);

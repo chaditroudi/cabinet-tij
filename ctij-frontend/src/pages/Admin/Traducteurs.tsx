@@ -12,7 +12,11 @@ import { classNames } from "primereact/utils";
 import Swal from "sweetalert2";
 import regions from "@/assets/js/regions.json";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlusCircle, faSearch, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
+import {
+  faPlusCircle,
+  faSearch,
+  faTrashAlt,
+} from "@fortawesome/free-solid-svg-icons";
 import { faEdit } from "@fortawesome/free-solid-svg-icons/faEdit";
 import useAuthContext from "@/context/AuthContext";
 import {
@@ -23,6 +27,7 @@ import {
 } from "@/services/apis/traducteursApi";
 import { useGetAlllanguesQuery } from "@/services/apis/languesApi";
 import { debounce } from "lodash";
+import { MultiSelect } from "primereact/multiselect";
 
 export const traducteur_status = [
   { label: "Disponible", value: "1", color: "border-green-500" },
@@ -36,7 +41,7 @@ interface traducteur {
   identite: string;
   telephone: string;
   region: string;
-  langue_id: string;
+  langue_ids: [];
 }
 
 interface FormData {
@@ -44,8 +49,13 @@ interface FormData {
   identite: string;
   telephone: string;
   region: string;
-  langue_id: string;
+  langue_ids: [];
 }
+
+export const languesBodyTemplate = (rowData:any) => {
+  const langs = rowData.langues ?? [];
+  return langs.map((l:any) => l.name).join(", ");
+};
 
 export function Traducteurs() {
   const [traducteurs, setTraducteurs] = useState<traducteur[]>([]);
@@ -64,7 +74,7 @@ export function Traducteurs() {
 
   const debouncedSearch = useCallback(
     debounce((value) => {
-      setDebouncedKeyword(value); // Set the debounced value after 300ms
+      setDebouncedKeyword(value); 
     }, 300),
     []
   );
@@ -92,7 +102,7 @@ export function Traducteurs() {
     identite: "",
     telephone: "",
     region: "",
-    langue_id: "",
+    langue_ids: [],
   });
   const [submitted, setSubmitted] = useState(false);
 
@@ -105,8 +115,8 @@ export function Traducteurs() {
 
   const handleInputChange = (e: any) => {
     const value = e.target.value;
-    setSearchTerm(value); // Update the local input state immediately
-    debouncedSearch(value); // Trigger the debounced API call
+    setSearchTerm(value); 
+    debouncedSearch(value); 
   };
 
   const resetForm = () => {
@@ -115,7 +125,7 @@ export function Traducteurs() {
       identite: "",
       telephone: "",
       region: "",
-      langue_id: "",
+      langue_ids: [],
     });
   };
   const openNew = () => {
@@ -124,7 +134,7 @@ export function Traducteurs() {
       identite: "",
       telephone: "",
       region: "",
-      langue_id: "",
+      langue_ids: [],
     });
     setSubmitted(false);
     setDialogVisible(true);
@@ -135,8 +145,15 @@ export function Traducteurs() {
     setDialogVisible(false);
   };
 
-  const edittraducteur = (traducteur: traducteur) => {
-    setFormData({ ...traducteur });
+  const edittraducteur = (traducteur: any) => {
+    setFormData({
+      id: traducteur.id,
+      identite: traducteur.identite,
+      telephone: traducteur.telephone,
+      region: traducteur.region,
+      langue_ids: traducteur.langues.map((l:any) => l.id), 
+    });
+    setSubmitted(false);
     setDialogVisible(true);
   };
 
@@ -157,54 +174,72 @@ export function Traducteurs() {
       }
     });
   };
-
-  const savetraducteur = async (SaveAnother: boolean) => {
+  const savetraducteur = async (saveAnother: boolean) => {
     setSubmitted(true);
 
     if (
-      formData.identite.trim() &&
-      formData.telephone.trim() &&
-      formData.region &&
-      formData.langue_id
+      !formData.identite.trim() ||
+      !formData.telephone.trim() ||
+      !formData.region ||
+      formData.langue_ids.length === 0
     ) {
-      const updatedtraducteurs = [...traducteurs];
+      TopEndAlert(
+        "error",
+        "Veuillez remplir tous les champs requis et sélectionner au moins une langue.",
+        "#fff"
+      );
+      return;
+    }
 
+    const payload = {
+      identite: formData.identite,
+      telephone: formData.telephone,
+      region: formData.region,
+      langue_ids: formData.langue_ids, 
+    };
+
+    try {
       if (formData.id) {
-        setSubmitted(false);
-        const index = findIndexById(formData.id);
-        updatedtraducteurs[index] = { ...formData } as traducteur;
-        await await updateTraducteur({
+        const updated = await updateTraducteur({
           id: formData.id,
-          data: updatedtraducteurs[index],
+          data: payload,
         }).unwrap();
-        resetForm();
-        TopEndAlert("success", "traducteur Modifée avec succès", "#fff");
-        setDialogVisible(false);
+
+        setTraducteurs((prev) =>
+          prev.map((t) =>
+            t.id === formData.id
+              ? { ...t, ...updated, langues: updated.langues }
+              : t
+          )
+        );
+
+        TopEndAlert("success", "Traducteur modifié avec succès", "#fff");
       } else {
-        const newtraducteur = {
-          ...formData,
-        } as traducteur;
+        const created = await saveTraducteur(payload).unwrap();
 
-        try {
-          await saveTraducteur(newtraducteur).unwrap();
-          setSubmitted(false);
+        setTraducteurs((prev) => [created, ...prev]);
 
-          if (SaveAnother) {
-            setDialogVisible(true);
-            resetForm();
-          }
-
-          TopEndAlert("success", "traducteur Ajouté avec succès", "#fff");
-        } catch (e) {
-          TopEndAlert("error", e, "#fff");
-        }
+        TopEndAlert("success", "Traducteur ajouté avec succès", "#fff");
       }
+
+      resetForm();
+      setSubmitted(false);
+
+      if (saveAnother) {
+        setDialogVisible(true);
+      } else {
+        setDialogVisible(false);
+      }
+    } catch (e: any) {
+      TopEndAlert(
+        "error",
+        e?.data?.message || "Une erreur est survenue",
+        "#fff"
+      );
+      setSubmitted(false);
     }
   };
 
-  const findIndexById = (id: number) => {
-    return traducteurs.findIndex((traducteur) => traducteur.id === id);
-  };
 
   const onInputChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -316,11 +351,8 @@ export function Traducteurs() {
           header="Région"
           body={(rowData) => getRegionLabel(rowData.region)}
         />
-        <Column
-          field="langue"
-          header="Langue"
-          body={(rowData) => rowData?.langue?.name}
-        />
+        <Column field="langue" header="Langues" body={languesBodyTemplate} />
+
         <Column
           body={actionBodyTemplate}
           exportable={false}
@@ -419,29 +451,30 @@ export function Traducteurs() {
         </div>
 
         <div className="field mt-4">
-          <div className="mb-1" id="langue">
+          <div id="languages" className="mb-1">
             Langues
           </div>
-
-          <Dropdown
-            id="langue"
-            value={formData.langue_id}
-            onChange={(e) => onDropdownChange(e, "langue_id")}
+          <MultiSelect
+            id="languages"
+            value={formData.langue_ids} // now holds an array of numbers
+            onChange={(e) => onDropdownChange(e, "langue_ids")}
             options={langues}
             optionLabel="name"
-            optionValue="id" // ← and here for languages
-            placeholder="Sélectionner une langue"
-            emptyMessage="Aucune langue disponible"
-            emptyFilterMessage="Aucune langue disponible"
-            className={classNames({
-              "p-invalid": submitted && !formData.langue_id,
-            })}
+            optionValue="id"
+            placeholder="Sélectionner des langues"
+            display="chip"
             filter
-            filterBy="name"
-            showClear
+            required
+            className={classNames({
+              "p-invalid": submitted && !formData.langue_ids?.length,
+            })}
           />
 
-          {submitted && !formData.langue_id && (
+          {submitted &&
+            (!formData.langue_ids || !formData.langue_ids.length) && (
+              <small className="p-error">Les langues sont requises.</small>
+            )}
+          {submitted && !formData.langue_ids && (
             <small className="p-error">langue requis.</small>
           )}
         </div>

@@ -17,9 +17,6 @@ return new class extends Migration
             // Primary key with auto-increment
             $table->id();
 
-            // langue (varchar(255)) - language field with UTF-8 support
-            $table->string('langue_id', 255)->collation('utf8mb4_unicode_ci');
-
             // identite (varchar(255)) - identity field, could be name or identifier
             $table->string('identite', 255)->collation('utf8mb4_unicode_ci');
             // region (varchar(255)) - region field, for geographical categorization
