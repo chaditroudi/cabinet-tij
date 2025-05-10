@@ -174,7 +174,7 @@ export function Langues() {
           <div>
             <FontAwesomeIcon icon={faPlusCircle} className="text-white" />
           </div>
-          <div className="text-white font-light">Ajouter Langue</div>
+          <div className="text-white font-normal">Ajouter Langue</div>
         </div>
       </button>
     </div>
@@ -211,7 +211,7 @@ export function Langues() {
         className="p-datatable-langues"
         emptyMessage="Aucune langue disponible"
       >
-        <Column field="name" header="Nom de la langue" sortable />
+        <Column field="name" header="Nom de la langue" />
         <Column
           body={actionBodyTemplate}
           exportable={false}

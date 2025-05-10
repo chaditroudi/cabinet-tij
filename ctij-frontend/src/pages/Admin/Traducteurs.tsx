@@ -12,7 +12,7 @@ import { classNames } from "primereact/utils";
 import Swal from "sweetalert2";
 import regions from "@/assets/js/regions.json";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlusCircle, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
+import { faPlusCircle, faSearch, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import { faEdit } from "@fortawesome/free-solid-svg-icons/faEdit";
 import useAuthContext from "@/context/AuthContext";
 import {
@@ -229,7 +229,7 @@ export function Traducteurs() {
     return (
       <div className="flex gap-4">
         <button onClick={() => edittraducteur(rowData)}>
-          <FontAwesomeIcon icon={faEdit} className="text-blue-600" />
+          <FontAwesomeIcon icon={faEdit} className="text-blue-900" />
         </button>
 
         <button onClick={() => deletetraducteur(rowData)}>
@@ -241,25 +241,29 @@ export function Traducteurs() {
 
   const header = (
     <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 p-4 bg-white rounded-md shadow-sm border mb-4">
-      <h2 className="text-2xl font-semibold text-gray-800">
+      <h2 className="text-2xl flex-1 font-semibold text-gray-800">
         Liste des Traducteurs
       </h2>
 
-      <div className="flex-1 md:max-w-sm">
+      <div className="relative md:max-w-sm w-full">
+        <FontAwesomeIcon
+          icon={faSearch}
+          className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+        />
         <InputText
           value={searchTerm}
           onChange={handleInputChange}
           placeholder="Rechercher par Identité"
-          className="w-full"
+          className="w-full h-[40px] pl-10"
         />
       </div>
 
       <button
         onClick={openNew}
-        className="bg-blue-700 hover:bg-blue-800 text-white px-4 py-2 rounded-md shadow-sm transition duration-150 flex items-center gap-2"
+        className="bg-blue-900 hover:bg-blue-800 text-white px-4 py-2 rounded-md shadow-sm transition duration-150 flex items-center gap-2"
       >
         <FontAwesomeIcon icon={faPlusCircle} />
-        <span className="font-medium">Ajouter Traducteur</span>
+        <span className="font-normal">Ajouter Traducteur</span>
       </button>
     </div>
   );
@@ -302,22 +306,19 @@ export function Traducteurs() {
         <Column
           field="identite"
           header="Identité"
-          sortable
           body={(rowData) => rowData.identite}
         />
 
-        <Column field="telephone" header="Numéro Tél" sortable />
+        <Column field="telephone" header="Numéro Tél" />
 
         <Column
           field="region"
           header="Région"
-          sortable
           body={(rowData) => getRegionLabel(rowData.region)}
         />
         <Column
           field="langue"
           header="Langue"
-          sortable
           body={(rowData) => rowData?.langue?.name}
         />
         <Column

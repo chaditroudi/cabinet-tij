@@ -204,7 +204,9 @@ export function Search() {
           <div className="flex flex-col gap-2">
             <div className="font-bold text-xl">Traducteurs</div>
             {!isFetchingStats ? (
-              data?.traducteurs?.total_trad
+              <div className="text-orange-500 font-semibold">
+                {data?.traducteurs?.total_trad}
+              </div>
             ) : (
               <Skeleton
                 animation="wave"
@@ -226,7 +228,9 @@ export function Search() {
             <div className="flex flex-col gap-2">
               <div className="font-bold text-xl">Langues</div>
               {!isFetchingStats ? (
-                data?.traducteurs?.total_language
+                <div className="text-teal-700 font-semibold">
+                  {data?.traducteurs?.total_language}
+                </div>
               ) : (
                 <Skeleton
                   animation="wave"
