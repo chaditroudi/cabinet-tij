@@ -24,8 +24,8 @@ interface TableData {
   telephone: string;
   region: string;
   langue: {
-    name:string,
-    id:string
+    name: string;
+    id: string;
   };
 }
 
@@ -136,6 +136,8 @@ export function Search() {
             optionLabel="name"
             optionValue="id"
             placeholder="Sélectionner une langue"
+            emptyMessage="Aucune option disponible"
+            emptyFilterMessage="Aucune option disponible"
             className="w-full"
             filter // Enable search
             filterBy="name" // Search by the 'name' field
@@ -157,7 +159,6 @@ export function Search() {
           />
         </div> */}
         <div>
-          
           <label className="block text-sm font-medium mb-1">Régions</label>
           <Dropdown
             value={selectedreg}
@@ -168,6 +169,8 @@ export function Search() {
             placeholder="Sélectionner une région"
             className="w-full"
             filter
+            emptyMessage="Aucune option disponible"
+            emptyFilterMessage="Aucune option disponible"
             filterPlaceholder="Recherche…"
             filterBy="region"
             filterMatchMode="contains"
@@ -199,10 +202,9 @@ export function Search() {
             </div>
           </div>
           <div className="flex flex-col gap-2">
+            <div className="font-bold text-xl">Traducteurs</div>
             {!isFetchingStats ? (
-              <div className="font-bold text-xl">
-                {data?.traducteurs?.total_trad} Traducteurs
-              </div>
+              data?.traducteurs?.total_trad
             ) : (
               <Skeleton
                 animation="wave"
@@ -221,8 +223,19 @@ export function Search() {
           </div>
 
           <div className="flex flex-col gap-2  justify-center">
-            <div className="font-bold text-xl">{data?.traducteurs?.total_language} Langues</div>
-          
+            <div className="flex flex-col gap-2">
+              <div className="font-bold text-xl">Langues</div>
+              {!isFetchingStats ? (
+                data?.traducteurs?.total_language
+              ) : (
+                <Skeleton
+                  animation="wave"
+                  height="10px"
+                  width="120px"
+                  className="bg-gray-300 rounded-full"
+                />
+              )}
+            </div>
           </div>
         </div>
       </div>

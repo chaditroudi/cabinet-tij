@@ -88,6 +88,15 @@ export function Traducteurs() {
     if (data) setTraducteurs(data.traducteurs);
   }, [data]);
 
+  const resetForm = () => {
+    setFormData({
+      id: null,
+      identite: "",
+      telephone: "",
+      region: "",
+      langue_id: "",
+    });
+  };
   const openNew = () => {
     setFormData({
       id: null,
@@ -128,7 +137,7 @@ export function Traducteurs() {
     });
   };
 
-  const savetraducteur = async () => {
+  const savetraducteur = async (SaveAnother: boolean) => {
     setSubmitted(true);
 
     if (
@@ -140,31 +149,35 @@ export function Traducteurs() {
       const updatedtraducteurs = [...traducteurs];
 
       if (formData.id) {
-        // Update existing traducteur
+        setSubmitted(false);
         const index = findIndexById(formData.id);
         updatedtraducteurs[index] = { ...formData } as traducteur;
         await await updateTraducteur({
           id: formData.id,
           data: updatedtraducteurs[index],
         }).unwrap();
-
+        resetForm();
         TopEndAlert("success", "traducteur Modifée avec succès", "#fff");
+        setDialogVisible(false);
       } else {
-        // Create new traducteur
         const newtraducteur = {
           ...formData,
         } as traducteur;
 
         try {
-          // Make API request with the FormData object
-          await await saveTraducteur(newtraducteur).unwrap();
+          await saveTraducteur(newtraducteur).unwrap();
+          setSubmitted(false);
+
+          if (SaveAnother) {
+            setDialogVisible(true);
+            resetForm();
+          }
 
           TopEndAlert("success", "traducteur Ajouté avec succès", "#fff");
         } catch (e) {
           TopEndAlert("error", e, "#fff");
         }
       }
-      setDialogVisible(false);
     }
   };
 
@@ -225,13 +238,19 @@ export function Traducteurs() {
 
   const dialogFooter = (
     <div className="flex justify-end gap-2 mt-4">
-      <Button
-        label="Cancel"
-        icon="fa-solid fa-times"
-        className="p-button-text"
+      <button
         onClick={hideDialog}
-      />
-      <Button label="Save" icon="fa-solid fa-check" onClick={savetraducteur} />
+        className="h-[40px]  bg-red-900 text-white hover:text-red-900 px-2 hover:bg-opacity-45 hover:shadow-lg  border-red-900 border rounded-md"
+      >
+        Annuler
+      </button>
+
+      <button
+        onClick={() => savetraducteur(true)}
+        className="h-[40px]  bg-blue-900 text-white hover:text-blue-900 px-2 hover:bg-opacity-45 hover:shadow-lg  border-blue-900 border rounded-md"
+      >
+        {formData.id ? "Ajouter & Continuer" : "Enregistrer"}
+      </button>
     </div>
   );
 
@@ -246,6 +265,7 @@ export function Traducteurs() {
         rowsPerPageOptions={[5, 10, 25]}
         dataKey="id"
         className="p-datatable-traducteurs"
+        emptyMessage="Aucun traducteur disponible"
       >
         <Column
           field="identite"
@@ -286,7 +306,9 @@ export function Traducteurs() {
       >
         <div className="flex flex-row gap-2">
           <div className="field mt-4">
-            <label htmlFor="identite">Nom & Prénom</label>
+            <div className="mb-1" id="identite">
+              Nom & Prénom
+            </div>
             <InputText
               id="identite"
               value={formData.identite}
@@ -295,6 +317,12 @@ export function Traducteurs() {
               className={classNames({
                 "p-invalid": submitted && !formData.identite,
               })}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  savetraducteur(true); 
+                }
+              }}
             />
             {submitted && !formData.identite && (
               <small className="p-error">Nom & Prénom requis.</small>
@@ -302,7 +330,9 @@ export function Traducteurs() {
           </div>
 
           <div className="field mt-4">
-            <label htmlFor="telephone">Num Téléphone</label>
+            <div id="telephone" className="mb-1">
+              Num Téléphone
+            </div>
             <InputText
               id="telephone"
               value={formData.telephone}
@@ -311,6 +341,13 @@ export function Traducteurs() {
               className={classNames({
                 "p-invalid": submitted && !formData.telephone,
               })}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  savetraducteur(true); 
+                }
+              }}
+              
             />
             {submitted && !formData.telephone && (
               <small className="p-error">Téléphone requis.</small>
@@ -319,9 +356,12 @@ export function Traducteurs() {
         </div>
 
         <div className="field mt-4">
-          <label htmlFor="region">Régions</label>
+          <div id="region" className="mb-1">
+            Régions
+          </div>
 
           <Dropdown
+          
             id="region"
             value={formData.region}
             onChange={(e) => onDropdownChange(e, "region")}
@@ -334,6 +374,8 @@ export function Traducteurs() {
             filterBy="label"
             filterMatchMode="contains"
             showClear
+            emptyMessage="Aucune option disponible"
+            emptyFilterMessage="Aucune option disponible"
             itemTemplate={(opt) => <div>{opt.region}</div>}
             className={classNames({
               "p-invalid": submitted && !formData.region,
@@ -346,7 +388,9 @@ export function Traducteurs() {
         </div>
 
         <div className="field mt-4">
-          <label htmlFor="langue">Langues</label>
+          <div className="mb-1" id="langue">
+            Langues
+          </div>
 
           <Dropdown
             id="langue"
@@ -356,6 +400,8 @@ export function Traducteurs() {
             optionLabel="name"
             optionValue="id" // ← and here for languages
             placeholder="Sélectionner une langue"
+            emptyMessage="Aucune langue disponible"
+            emptyFilterMessage="Aucune langue disponible"
             className={classNames({
               "p-invalid": submitted && !formData.langue_id,
             })}

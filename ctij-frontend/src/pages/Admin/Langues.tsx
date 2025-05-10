@@ -38,7 +38,6 @@ interface langue {
   name: string;
 }
 
-
 export function Langues() {
   const [langues, setlangues] = useState<FormData[]>([]);
   const [dialogVisible, setDialogVisible] = useState(false);
@@ -59,7 +58,7 @@ export function Langues() {
   const [submitted, setSubmitted] = useState(false);
 
   // Load mock data
-  
+
   useEffect(() => {
     if (data) setlangues(data.langues);
   }, [data]);
@@ -96,42 +95,42 @@ export function Langues() {
     }).then((result) => {
       if (result.isConfirmed) {
         deletelangue({ id }).unwrap();
-        TopEndAlert("error", "langue supprimé", "#fff");
+        TopEndAlert("error", "langue supprimée", "#fff");
       }
     });
   };
 
-  const handlesavelangue = async () => {
+  const handlesavelangue = async (addAnother: boolean = false) => {
     setSubmitted(true);
 
     if (formData.name.trim()) {
       const updatedlangues = [...langues];
+      setSubmitted(false);
 
       if (formData.id) {
-        // Update existing langue
         const index = findIndexById(formData.id);
-        updatedlangues[index] = { ...formData } as langue;
-        await await updatelangue({
+        updatedlangues[index] = { ...formData };
+        await updatelangue({
           id: formData.id,
           data: updatedlangues[index],
         }).unwrap();
-
-        TopEndAlert("success", "langue Modifée avec succès", "#fff");
+        setDialogVisible(false);
+        TopEndAlert("success", "Langue modifiée avec succès", "#fff");
       } else {
-        // Create new langue
-        const newlangue = {
-          ...formData,
-        } as any;
         try {
-          // Make API request with the FormData object
-          await await savelangue(newlangue).unwrap();
-
-          TopEndAlert("success", "langue Ajouté avec succès", "#fff");
+          await savelangue({ ...formData }).unwrap();
+          TopEndAlert("success", "Langue ajoutée avec succès", "#fff");
         } catch (e) {
           TopEndAlert("error", e, "#fff");
         }
       }
-      setDialogVisible(false);
+
+      if (addAnother) {
+        setFormData({ id: null, name: "" }); // reset for new entry
+        setSubmitted(false);
+      } else {
+        setDialogVisible(false);
+      }
     }
   };
 
@@ -184,17 +183,19 @@ export function Langues() {
 
   const dialogFooter = (
     <div className="flex justify-end gap-2 mt-4">
-      <Button
-        label="Cancel"
-        icon="fa-solid fa-times"
-        className="p-button-text"
+      <button
         onClick={hideDialog}
-      />
-      <Button
-        label="Save"
-        icon="fa-solid fa-check"
-        onClick={handlesavelangue}
-      />
+        className="h-[40px]  bg-red-900 text-white hover:text-red-900 px-2 hover:bg-opacity-45 hover:shadow-lg  border-red-900 border rounded-md"
+      >
+        Annuler
+      </button>
+
+      <button
+        onClick={() => handlesavelangue(true)}
+        className="h-[40px]  bg-blue-900 text-white hover:text-blue-900 px-2 hover:bg-opacity-45 hover:shadow-lg  border-blue-900 border rounded-md"
+      >
+        {formData.id ? "Ajouter & Continuer" : "Enregistrer"}
+      </button>
     </div>
   );
 
@@ -209,6 +210,7 @@ export function Langues() {
         rowsPerPageOptions={[5, 10, 25]}
         dataKey="id"
         className="p-datatable-langues"
+        emptyMessage="Aucune langue disponible"
       >
         <Column field="name" header="Nom de la langue" sortable />
         <Column
@@ -227,22 +229,26 @@ export function Langues() {
         footer={dialogFooter}
         onHide={hideDialog}
       >
-        <div className="flex flex-row gap-2">
-          <div className="field mt-4">
+        <div className="flex flex-col gap-2">
             <label htmlFor="identite">Nom de la langue</label>
             <InputText
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  handlesavelangue(true);
+                }
+              }}
               id="name"
               value={formData.name}
               onChange={(e) => onInputChange(e, "name")}
               required
-              className={classNames({
+              className={classNames("w-full", {
                 "p-invalid": submitted && !formData.name,
               })}
             />
             {submitted && !formData.name && (
               <small className="p-error">Nom requis.</small>
             )}
-          </div>
         </div>
       </Dialog>
     </div>
