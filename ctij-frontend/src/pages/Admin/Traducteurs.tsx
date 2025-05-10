@@ -2,7 +2,7 @@
 
 import type React from "react";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { Dialog } from "primereact/dialog";
@@ -22,6 +22,7 @@ import {
   useUpdateTraducteurMutation,
 } from "@/services/apis/traducteursApi";
 import { useGetAlllanguesQuery } from "@/services/apis/languesApi";
+import { debounce } from "lodash";
 
 export const traducteur_status = [
   { label: "Disponible", value: "1", color: "border-green-500" },
@@ -49,20 +50,30 @@ interface FormData {
 export function Traducteurs() {
   const [traducteurs, setTraducteurs] = useState<traducteur[]>([]);
   const [total, setTotal] = useState<any>();
+  const [searchTerm, setSearchTerm] = useState("");
   const [dialogVisible, setDialogVisible] = useState(false);
   const [updateTraducteur] = useUpdateTraducteurMutation();
   const [deleteTraducteur] = useDeleteTraducteurMutation();
   const [saveTraducteur] = useSaveTraducteurMutation();
+  const [debouncedKeyword, setDebouncedKeyword] = useState("");
+
   const getRegionLabel = (code: string) => {
     const found = regions.find((reg) => reg.code === code);
     return found ? `${found.code} - ${found.region}` : code;
   };
+
+  const debouncedSearch = useCallback(
+    debounce((value) => {
+      setDebouncedKeyword(value); // Set the debounced value after 300ms
+    }, 300),
+    []
+  );
   const [langues, setlangues] = useState<FormData[]>([]);
   const [page, setPage] = useState(1);
   const limit = 2;
 
   const { data: fetchedData, isLoading } = useGetAlllanguesQuery(
-    { page },
+    {},
     { refetchOnMountOrArgChange: true }
   );
 
@@ -73,7 +84,7 @@ export function Traducteurs() {
   const { TopEndAlert } = useAuthContext();
 
   const { data } = useGetAlltraducteursQuery(
-    { page },
+    { page, keyword: debouncedKeyword },
     { refetchOnMountOrArgChange: true }
   );
   const [formData, setFormData] = useState<FormData>({
@@ -85,13 +96,18 @@ export function Traducteurs() {
   });
   const [submitted, setSubmitted] = useState(false);
 
-  // Load mock data
   useEffect(() => {
-    if (data) {
+    if (data || searchTerm) {
       setTraducteurs(data?.traducteurs.data);
       setTotal(data?.traducteurs.total);
     }
-  }, [data]);
+  }, [data, searchTerm]);
+
+  const handleInputChange = (e: any) => {
+    const value = e.target.value;
+    setSearchTerm(value); // Update the local input state immediately
+    debouncedSearch(value); // Trigger the debounced API call
+  };
 
   const resetForm = () => {
     setFormData({
@@ -224,19 +240,26 @@ export function Traducteurs() {
   };
 
   const header = (
-    <div className="flex justify-between items-center">
-      <h2 className="text-xl font-semibold">Liste Traducteurs</h2>
+    <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 p-4 bg-white rounded-md shadow-sm border mb-4">
+      <h2 className="text-2xl font-semibold text-gray-800">
+        Liste des Traducteurs
+      </h2>
+
+      <div className="flex-1 md:max-w-sm">
+        <InputText
+          value={searchTerm}
+          onChange={handleInputChange}
+          placeholder="Rechercher par Identité"
+          className="w-full"
+        />
+      </div>
 
       <button
         onClick={openNew}
-        className="bg-blue-900 rounded-md p-2 hover:bg-opacity-80"
+        className="bg-blue-700 hover:bg-blue-800 text-white px-4 py-2 rounded-md shadow-sm transition duration-150 flex items-center gap-2"
       >
-        <div className="flex flex-row items-center gap-2">
-          <div>
-            <FontAwesomeIcon icon={faPlusCircle} className="text-white" />
-          </div>
-          <div className="text-white font-light">Ajouter Traducteur</div>
-        </div>
+        <FontAwesomeIcon icon={faPlusCircle} />
+        <span className="font-medium">Ajouter Traducteur</span>
       </button>
     </div>
   );

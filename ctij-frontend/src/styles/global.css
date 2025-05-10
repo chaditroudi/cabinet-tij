@@ -21,3 +21,6 @@
   top: 0;
   width: 100%;
 }
+.p-component-overlay{
+@apply bg-black  bg-opacity-5
+}

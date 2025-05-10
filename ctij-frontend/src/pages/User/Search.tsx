@@ -17,6 +17,8 @@ import {
 import { faUsers } from "@fortawesome/free-solid-svg-icons/faUsers";
 import { Skeleton } from "primereact/skeleton";
 import { useGetAlllanguesQuery } from "@/services/apis/languesApi";
+import { Column } from "primereact/column";
+import { DataTable } from "primereact/datatable";
 interface TableData {
   id: number;
   identite: string;
@@ -239,47 +241,21 @@ export function Search() {
         </div>
       </div>
       <div className="overflow-x-auto ">
-        <table className="min-w-full bg-white border border-gray-200 mb-10">
-          <thead>
-            <tr className="bg-gray-100">
-              <th className="py-2 px-4 border-b text-left">Langue</th>
-              <th className="py-2 px-4 border-b text-left">Identité</th>
-              <th className="py-2 px-4 border-b text-left">Téléphone</th>
-            </tr>
-          </thead>
-          <tbody>
-            {showSpinner ? (
-              <tr>
-                <td colSpan={4} className="py-4 text-center">
-                  <div className="m-2 bg-white h-full   shadow-sm ring-1 ring-gray-900/5 sm:rounded-md md:col-span-2 p-2">
-                    <div className="card p-fluid h-full">
-                      <div className="h-full gap-3 flex-col flex justify-center items-center">
-                        <ProgressSpinner />
-                        <div>Loading...</div>
-                      </div>
-                    </div>
-                  </div>{" "}
-                </td>
-              </tr>
-            ) : tableData.length > 0 ? (
-              tableData.map((item) => {
-                return (
-                  <tr key={item.id} className="hover:bg-gray-50">
-                    <td className="py-2 px-4 border-b">{item?.langue?.name}</td>
-                    <td className="py-2 px-4 border-b">{item.identite}</td>
-                    <td className="py-2 px-4 border-b">{item.telephone}</td>
-                  </tr>
-                );
-              })
-            ) : (
-              <tr>
-                <td colSpan={4} className="py-4 text-center">
-                  Aucun résultat trouvé
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
+        <DataTable
+          value={tableData}
+          loading={showSpinner}
+          emptyMessage="Aucun résultat trouvé"
+          className="mb-10"
+          responsiveLayout="scroll"
+        >
+          <Column
+            field="langue.name"
+            header="Langue"
+            body={(rowData) => rowData?.langue?.name}
+          />
+          <Column field="identite" header="Identité" />
+          <Column field="telephone" header="Téléphone" />
+        </DataTable>
       </div>
     </>
   );

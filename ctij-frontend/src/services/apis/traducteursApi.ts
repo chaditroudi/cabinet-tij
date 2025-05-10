@@ -19,11 +19,11 @@ export const traducteursApi = createApi({
       }),
     }),
     getAlltraducteurs: builder.query({
-      query: ({ page}) => `/interpretes/?page=${page}`,
+      query: ({ page=1,keyword=""}) => `/interpretes/?page=${page}&keyword=${keyword}`,
       transformResponse: (response: any) => ({
         traducteurs: response,
       }),
-      providesTags: ["traducteurs"], // <-- Add this
+      providesTags: ["traducteurs"], 
     }),
 
     getTradStats: builder.query({
@@ -31,7 +31,7 @@ export const traducteursApi = createApi({
       transformResponse: (response: any) => ({
         traducteurs: response,
       }),
-      providesTags: ["traducteurs"], // <-- Add this
+      providesTags: ["traducteurs"], 
     }),
 
     deleteTraducteur: builder.mutation({
@@ -39,7 +39,7 @@ export const traducteursApi = createApi({
         url: `/interpretes/${id}`,
         method: "DELETE",
       }),
-      invalidatesTags: ["traducteurs"], // <-- Add this
+      invalidatesTags: ["traducteurs"], 
     }),
     saveTraducteur: builder.mutation({
       query: (data) => ({

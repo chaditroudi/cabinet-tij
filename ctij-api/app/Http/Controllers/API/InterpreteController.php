@@ -12,8 +12,19 @@ class InterpreteController extends Controller
    
     public function index(Request $request)
     {
-        $interpretes = Interprete::paginate(20);
-        return response()->json($interpretes);
+        $query = Interprete::query();
+        $result = [];
+        $keyword = $request->input('keyword'); 
+        $query->where('identite', 'LIKE', '%' . $keyword . '%');
+        if($keyword==""){
+            $results = Interprete::paginate(20);
+        }  
+        else
+        {
+            $results = $query->with('langue')->paginate(20);
+        }      
+
+        return response()->json($results);
     }
     
 
