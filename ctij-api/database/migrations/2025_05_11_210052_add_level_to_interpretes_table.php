@@ -9,18 +9,20 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up()
+    public function up(): void
     {
         Schema::table('interpretes', function (Blueprint $table) {
-            $table->softDeletes();
+            $table->string('level')->nullable(); // or use appropriate type (e.g., integer, enum)
         });
     }
-    
-    public function down()
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
     {
         Schema::table('interpretes', function (Blueprint $table) {
-            $table->dropColumn('deleted_at');
+            $table->dropColumn('level');
         });
     }
-    
 };

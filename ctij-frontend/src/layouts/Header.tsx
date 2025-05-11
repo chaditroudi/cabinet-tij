@@ -2,6 +2,7 @@ import { useAppSelector } from "@/hooks";
 import { Menubar } from "primereact/menubar";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "@/assets/images/logo.png";
+import Swal from "sweetalert2";
 const Header = () => {
   const navigate = useNavigate();
   const { isAuthenticated } = useAppSelector(
@@ -24,6 +25,12 @@ const Header = () => {
           command: () => navigate("/traducteurs"), // navigate to admin dashboard
           className: "text-green-900", // Customize color for text
         },
+        {
+          label: "Déconnexion",
+          icon: "pi pi-sign-out",
+          command: () => handleLogout(), // navigate to admin dashboard
+          className: "text-green-900", // Customize color for text
+        },
       ]
     : [
         {
@@ -38,7 +45,22 @@ const Header = () => {
           command: () => navigate("/login"), // navigate to /login
         },
       ];
-
+  const handleLogout = () => {
+    Swal.fire({
+      title: "Êtes-vous sûr ?",
+      text: "Vous allez être déconnecté.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Oui, déconnecter",
+      cancelButtonText: "Annuler",
+    }).then((result: any) => {
+      if (result.isConfirmed) {
+        navigate("/logout");
+      }
+    });
+  };
   return (
     <header className="bg-white shadow-md fixed w-full z-50">
       <div className="mx-auto w-full">

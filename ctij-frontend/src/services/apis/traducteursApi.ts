@@ -10,20 +10,27 @@ export const traducteursApi = createApi({
   endpoints: (builder) => ({
     getTraducteurs: builder.query<
       { traducteurs: any[] },
-      { search: string; region: string; langue: string }
+      {
+        search: string;
+        region: string;
+        langue: string;
+        assermente: boolean;
+        expert: boolean;
+      }
     >({
-      query: ({ search, region, langue }) =>
-        `/interpretes/filter?keyword=${encodeURIComponent(search)}&region=${region}&langue=${langue}`,
+      query: ({ search, region, langue,assermente,expert }) =>
+        `/interpretes/filter?keyword=${encodeURIComponent(search)}&region=${region}&langue=${langue}&assermente=${assermente}&expert=${expert}`,
       transformResponse: (response: any) => ({
         traducteurs: response,
       }),
     }),
     getAlltraducteurs: builder.query({
-      query: ({ page=1,keyword=""}) => `/interpretes/?page=${page}&keyword=${keyword}`,
+      query: ({ page = 1, keyword = "" }) =>
+        `/interpretes/?page=${page}&keyword=${keyword}`,
       transformResponse: (response: any) => ({
         traducteurs: response,
       }),
-      providesTags: ["traducteurs"], 
+      providesTags: ["traducteurs"],
     }),
 
     getTradStats: builder.query({
@@ -31,7 +38,7 @@ export const traducteursApi = createApi({
       transformResponse: (response: any) => ({
         traducteurs: response,
       }),
-      providesTags: ["traducteurs"], 
+      providesTags: ["traducteurs"],
     }),
 
     deleteTraducteur: builder.mutation({
@@ -39,7 +46,7 @@ export const traducteursApi = createApi({
         url: `/interpretes/${id}`,
         method: "DELETE",
       }),
-      invalidatesTags: ["traducteurs"], 
+      invalidatesTags: ["traducteurs"],
     }),
     saveTraducteur: builder.mutation({
       query: (data) => ({

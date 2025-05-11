@@ -18,7 +18,8 @@ import { Skeleton } from "primereact/skeleton";
 import { useGetAlllanguesQuery } from "@/services/apis/languesApi";
 import { Column } from "primereact/column";
 import { DataTable } from "primereact/datatable";
-import { languesBodyTemplate } from "@/pages/Admin/Traducteurs";
+import { getLevelLabel, languesBodyTemplate } from "@/pages/Admin/Traducteurs";
+import { Tag } from "primereact/tag";
 interface TableData {
   id: number;
   identite: string;
@@ -36,6 +37,8 @@ export function Search() {
   const [tableData, setTableData] = useState<TableData[]>([]);
   const [selectedreg, setSelectedreg] = useState(null) as any;
   const [languages, setlangues] = useState(null) as any;
+  const [isExpert, setIsExpert] = useState(false);
+  const [isAssermente, setIsAssermente] = useState(false);
 
   const [triggerGettraducteurs, { isFetching, isLoading }] =
     useLazyGetTraducteursQuery();
@@ -53,6 +56,17 @@ export function Search() {
   useEffect(() => {
     if (fetchedLangues) setlangues(fetchedLangues.langues);
   }, [fetchedLangues]);
+  const onCheckboxChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    type: string
+  ) => {
+    if (type === "expert") {
+      setIsExpert(e.target.checked);
+    } else if (type === "assermente") {
+      setIsAssermente(e.target.checked);
+    }
+  };
+
   useEffect(() => {
     let delayTimer: NodeJS.Timeout;
     let minDisplayTimer: NodeJS.Timeout;
@@ -86,25 +100,36 @@ export function Search() {
       isFirstRender.current = false;
       return;
     }
+
     const fetchData = async () => {
       try {
         const result = await triggerGettraducteurs({
           search: searchTerm || "",
           region: selectedreg || "",
           langue: selectedLanguage || "",
+          expert: isExpert,
+          assermente: isAssermente,
         }).unwrap();
+
         setTableData(result.traducteurs || []);
       } catch (error) {
         console.error("Error fetching traducteurs:", error);
         setTableData([]);
       }
     };
-    if (searchTerm || selectedreg || selectedLanguage) {
+
+    if (
+      searchTerm ||
+      selectedreg ||
+      selectedLanguage ||
+      isExpert ||
+      isAssermente
+    ) {
       fetchData();
     } else {
       setTableData([]);
     }
-  }, [searchTerm, selectedreg, selectedLanguage]);
+  }, [searchTerm, selectedreg, selectedLanguage, isExpert, isAssermente]);
 
   // // 1️⃣ Build a new array once with a `label` property:
   // const optionsWithLabel = useMemo(
@@ -127,7 +152,7 @@ export function Search() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 ">
-        <div>
+        <div className="">
           <label className="block text-sm font-medium mb-1">Langue</label>
           <Dropdown
             value={selectedLanguage}
@@ -177,6 +202,35 @@ export function Search() {
             showClear
             itemTemplate={(opt) => <div>{opt.region}</div>}
           />
+        </div>
+        <div className="flex gap-4 items-center">
+          <div className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              className="expert-checkbox border-green-400 border-2 text-green-400 rounded-md w-[22px] h-[22px]"
+              value={1}
+              onChange={(e: any) => onCheckboxChange(e, "expert")}
+              checked={isExpert}
+            />
+
+            <label htmlFor="expert" className="text-sm">
+              Expert
+            </label>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              className="assermente-checkbox border-blue-400 border-2 text-blue-400 rounded-md w-[22px] h-[22px]"
+              id="assermente"
+              value={0}
+              onChange={(e: any) => onCheckboxChange(e, "assermente")}
+              checked={isAssermente}
+            />
+            <label htmlFor="assermente" className="text-sm">
+              Assermenté
+            </label>
+          </div>
         </div>
 
         <div>
@@ -256,7 +310,27 @@ export function Search() {
             header="Langue"
             body={languesBodyTemplate}
           />
-          <Column field="identite" header="Identité" />
+          <Column
+            field="identite"
+            header="Identité"
+            body={(rowData) => (
+              <div className="flex flex-row gap-2">
+                <div>{rowData.identite}</div>
+                {rowData.level && (
+                  <Tag
+                    value={getLevelLabel(rowData.level)}
+                    severity={
+                      rowData.level == "0"
+                        ? "info"
+                        : rowData.level == "1"
+                          ? "success"
+                          : "secondary"
+                    }
+                  />
+                )}
+              </div>
+            )}
+          />
           <Column field="telephone" header="Téléphone" />
         </DataTable>
       </div>

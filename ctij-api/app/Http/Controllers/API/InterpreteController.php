@@ -37,6 +37,8 @@ class InterpreteController extends Controller
         'identite' => $validated['identite'],
         'region' => $validated['region'],
         'telephone' => $validated['telephone'],
+        'level' => $request->input('level') ?? null, 
+
     ]);
 
     $interprete->langues()->attach($validated['langue_ids']);  
@@ -61,14 +63,23 @@ class InterpreteController extends Controller
             'telephone'    => 'required|string|max:20',
             'langue_ids'   => 'required|array|min:1',
             'langue_ids.*' => 'exists:langues,id',
+            'level'        => 'nullable|in:0,1', // optional level field
         ]);
     
         $interp = Interprete::findOrFail($id);
-        $interp->update($data);
+    
+        $interp->update([
+            'identite'  => $data['identite'],
+            'region'    => $data['region'],
+            'telephone' => $data['telephone'],
+            'level'     => $data['level'] ?? null, 
+        ]);
+    
         $interp->langues()->sync($data['langue_ids']);
     
         return response()->json($interp->load('langues'));
     }
+    
     
 
     public function destroy($id)
@@ -103,6 +114,21 @@ class InterpreteController extends Controller
             $query->with('langues');
         }
     
+        // Check if 'expert' is true and apply filter for level = 1
+        if ($request->filled('expert') && $request->expert == "true") {
+            $query->where('level', "1");
+        }
+    
+        // Check if 'assermente' is true and apply filter for level = 0
+        if ($request->filled('assermente') && $request->assermente == "true") {
+            // If 'expert' is also true, use 'orWhere' to allow both 1 and 0 levels
+            if ($request->filled('expert') && $request->expert == "true") {
+                $query->orWhere('level', "0");
+            } else {
+                $query->where('level', "0");
+            }
+        }
+    
         $results = $query->get();
     
         if ($results->isEmpty()) {
@@ -111,6 +137,7 @@ class InterpreteController extends Controller
     
         return response()->json($results);
     }
+    
     
     
     public function getTotals(Request $request)

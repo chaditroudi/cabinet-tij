@@ -83,7 +83,7 @@ class AuthController extends Controller
             'access_token' => $accessToken,
             'refresh_token' => $refreshToken->token, 
             'token_type' => 'Bearer',
-            'expires_in' => 3600,
+            'expires_in' => 86400 ,
             'user' => $user,
         ]);
     }
@@ -237,7 +237,7 @@ class AuthController extends Controller
                 'access_token' => $newAccessToken,
                 'refresh_token' => $newRefreshToken->token,
                 'token_type' => 'Bearer',
-                'expires_in' => 3600, // Access token expiry in seconds (1 hour)
+                'expires_in' => 86400 , // Access token expiry in seconds (1 hour)
                 'refresh_token_expires_at' => $newRefreshToken->expires_at,
                 'user' => [
                     'id' => $user->id,

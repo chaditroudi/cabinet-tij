@@ -28,6 +28,7 @@ import {
 import { useGetAlllanguesQuery } from "@/services/apis/languesApi";
 import { debounce } from "lodash";
 import { MultiSelect } from "primereact/multiselect";
+import { Tag } from "primereact/tag";
 
 export const traducteur_status = [
   { label: "Disponible", value: "1", color: "border-green-500" },
@@ -41,6 +42,7 @@ interface traducteur {
   identite: string;
   telephone: string;
   region: string;
+  level: string;
   langue_ids: [];
 }
 
@@ -49,14 +51,22 @@ interface FormData {
   identite: string;
   telephone: string;
   region: string;
+  level: string;
   langue_ids: [];
 }
 
-export const languesBodyTemplate = (rowData:any) => {
+export const languesBodyTemplate = (rowData: any) => {
   const langs = rowData.langues ?? [];
-  return langs.map((l:any) => l.name).join(", ");
+  return langs.map((l: any) => l.name).join(", ");
 };
-
+export function getLevelLabel(level: string) {
+  switch (level) {
+    case "0":
+      return "Assermenté";
+    case "1":
+      return "Expert";
+  }
+}
 export function Traducteurs() {
   const [traducteurs, setTraducteurs] = useState<traducteur[]>([]);
   const [total, setTotal] = useState<any>();
@@ -72,9 +82,15 @@ export function Traducteurs() {
     return found ? `${found.code} - ${found.region}` : code;
   };
 
+  const levelOptions = [
+    { label: "Assermenté", value: 0 },
+    { label: "Expert", value: 1 },
+  ];
+
+
   const debouncedSearch = useCallback(
     debounce((value) => {
-      setDebouncedKeyword(value); 
+      setDebouncedKeyword(value);
     }, 300),
     []
   );
@@ -102,6 +118,7 @@ export function Traducteurs() {
     identite: "",
     telephone: "",
     region: "",
+    level: "",
     langue_ids: [],
   });
   const [submitted, setSubmitted] = useState(false);
@@ -115,8 +132,8 @@ export function Traducteurs() {
 
   const handleInputChange = (e: any) => {
     const value = e.target.value;
-    setSearchTerm(value); 
-    debouncedSearch(value); 
+    setSearchTerm(value);
+    debouncedSearch(value);
   };
 
   const resetForm = () => {
@@ -125,6 +142,8 @@ export function Traducteurs() {
       identite: "",
       telephone: "",
       region: "",
+      level: "",
+
       langue_ids: [],
     });
   };
@@ -134,6 +153,8 @@ export function Traducteurs() {
       identite: "",
       telephone: "",
       region: "",
+      level: "",
+
       langue_ids: [],
     });
     setSubmitted(false);
@@ -151,7 +172,8 @@ export function Traducteurs() {
       identite: traducteur.identite,
       telephone: traducteur.telephone,
       region: traducteur.region,
-      langue_ids: traducteur.langues.map((l:any) => l.id), 
+      level: traducteur.level,
+      langue_ids: traducteur.langues.map((l: any) => l.id),
     });
     setSubmitted(false);
     setDialogVisible(true);
@@ -174,7 +196,7 @@ export function Traducteurs() {
       }
     });
   };
-  const savetraducteur = async (saveAnother: boolean) => {
+  const savetraducteur = async () => {
     setSubmitted(true);
 
     if (
@@ -195,7 +217,8 @@ export function Traducteurs() {
       identite: formData.identite,
       telephone: formData.telephone,
       region: formData.region,
-      langue_ids: formData.langue_ids, 
+      level: formData.level,
+      langue_ids: formData.langue_ids,
     };
 
     try {
@@ -212,24 +235,20 @@ export function Traducteurs() {
               : t
           )
         );
+        setDialogVisible(false);
 
         TopEndAlert("success", "Traducteur modifié avec succès", "#fff");
       } else {
         const created = await saveTraducteur(payload).unwrap();
 
         setTraducteurs((prev) => [created, ...prev]);
-
+        setDialogVisible(true);
         TopEndAlert("success", "Traducteur ajouté avec succès", "#fff");
       }
 
-      resetForm();
       setSubmitted(false);
 
-      if (saveAnother) {
-        setDialogVisible(true);
-      } else {
-        setDialogVisible(false);
-      }
+      resetForm();
     } catch (e: any) {
       TopEndAlert(
         "error",
@@ -239,7 +258,6 @@ export function Traducteurs() {
       setSubmitted(false);
     }
   };
-
 
   const onInputChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -313,10 +331,10 @@ export function Traducteurs() {
       </button>
 
       <button
-        onClick={() => savetraducteur(true)}
+        onClick={() => savetraducteur}
         className="h-[40px]  bg-blue-900 text-white hover:text-blue-900 px-2 hover:bg-opacity-45 hover:shadow-lg  border-blue-900 border rounded-md"
       >
-        {formData.id ? "Ajouter & Continuer" : "Enregistrer"}
+        {!formData.id ? "Ajouter & Continuer" : "Enregistrer"}
       </button>
     </div>
   );
@@ -341,7 +359,23 @@ export function Traducteurs() {
         <Column
           field="identite"
           header="Identité"
-          body={(rowData) => rowData.identite}
+          body={(rowData) => (
+            <div className="flex flex-row gap-2">
+              <div>{rowData.identite}</div>
+              {rowData.level && (
+                <Tag
+                  value={getLevelLabel(rowData.level)}
+                  severity={
+                    rowData.level == "0"
+                      ? "info"
+                      : rowData.level == "1"
+                        ? "success"
+                        : "secondary"
+                  }
+                />
+              )}
+            </div>
+          )}
         />
 
         <Column field="telephone" header="Numéro Tél" />
@@ -385,7 +419,7 @@ export function Traducteurs() {
               onKeyDown={(e) => {
                 if (e.key === "Enter") {
                   e.preventDefault();
-                  savetraducteur(true);
+                  savetraducteur;
                 }
               }}
             />
@@ -409,7 +443,7 @@ export function Traducteurs() {
               onKeyDown={(e) => {
                 if (e.key === "Enter") {
                   e.preventDefault();
-                  savetraducteur(true);
+                  savetraducteur;
                 }
               }}
             />
@@ -417,6 +451,25 @@ export function Traducteurs() {
               <small className="p-error">Téléphone requis.</small>
             )}
           </div>
+        </div>
+
+        <div className="field mt-4">
+          <div id="region" className="mb-1">
+            Niveau
+          </div>
+
+          <Dropdown
+            id="level"
+            value={parseInt(formData.level)}
+            onChange={(e) => onDropdownChange(e, "level")}
+            options={levelOptions}
+            optionLabel="label"
+            optionValue="value"
+            placeholder="Sélectionner le niveau"
+            showClear
+            emptyMessage="Aucune option disponible"
+            emptyFilterMessage="Aucune option disponible"
+          />
         </div>
 
         <div className="field mt-4">
