@@ -331,7 +331,7 @@ export function Traducteurs() {
       </button>
 
       <button
-        onClick={() => savetraducteur}
+        onClick={() => savetraducteur()}
         className="h-[40px]  bg-blue-900 text-white hover:text-blue-900 px-2 hover:bg-opacity-45 hover:shadow-lg  border-blue-900 border rounded-md"
       >
         {!formData.id ? "Ajouter & Continuer" : "Enregistrer"}
@@ -419,7 +419,7 @@ export function Traducteurs() {
               onKeyDown={(e) => {
                 if (e.key === "Enter") {
                   e.preventDefault();
-                  savetraducteur;
+                  savetraducteur();
                 }
               }}
             />
@@ -443,7 +443,7 @@ export function Traducteurs() {
               onKeyDown={(e) => {
                 if (e.key === "Enter") {
                   e.preventDefault();
-                  savetraducteur;
+                  savetraducteur();
                 }
               }}
             />
