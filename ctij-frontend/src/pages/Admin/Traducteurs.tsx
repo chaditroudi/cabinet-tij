@@ -365,12 +365,12 @@ export function Traducteurs() {
               {rowData.level && (
                 <Tag
                   value={getLevelLabel(rowData.level)}
-                  severity={
+                  className={
                     rowData.level == "0"
-                      ? "info"
+                      ? "bg-blue-500"
                       : rowData.level == "1"
-                        ? "success"
-                        : "secondary"
+                        ? "bg-red-500"
+                        : "bg-gray-500"
                   }
                 />
               )}

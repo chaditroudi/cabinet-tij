@@ -151,8 +151,8 @@ export function Search() {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 ">
-        <div className="">
+      <div className="flex flex-row gap-4 mb-6 ">
+        <div className="flex-1">
           <label className="block text-sm font-medium mb-1">Langue</label>
           <Dropdown
             value={selectedLanguage}
@@ -183,7 +183,7 @@ export function Search() {
             showClear // Show clear button to reset selection
           />
         </div> */}
-        <div>
+        <div className="flex-1">
           <label className="block text-sm font-medium mb-1">Régions</label>
           <Dropdown
             value={selectedreg}
@@ -203,37 +203,46 @@ export function Search() {
             itemTemplate={(opt) => <div>{opt.region}</div>}
           />
         </div>
-        <div className="flex gap-4 items-center">
-          <div className="flex items-center gap-2">
+        <div className="flex gap-4 items-center mt-[22px]">
+          {/* Expert */}
+          <div
+            className="flex cursor-pointer items-center hover:bg-opacity-30 gap-2 bg-red-400 bg-opacity-10 border-opacity-50 border-red-400 border h-[46px] px-2 rounded-md"
+            onClick={() =>
+              onCheckboxChange({ target: { checked: !isExpert } }, "expert")
+            }
+          >
             <input
               type="checkbox"
-              className="expert-checkbox border-green-400 border-2 text-green-400 rounded-md w-[22px] h-[22px]"
+              className="expert-checkbox cursor-pointer border-red-400 border-2 text-red-400 rounded-md w-[22px] h-[22px]"
               value={1}
-              onChange={(e: any) => onCheckboxChange(e, "expert")}
               checked={isExpert}
+              readOnly
             />
-
-            <label htmlFor="expert" className="text-sm">
-              Expert
-            </label>
+            <label className="text-sm cursor-pointer">Expert</label>
           </div>
 
-          <div className="flex items-center gap-2">
+          {/* Assermenté */}
+          <div
+            className="flex items-center cursor-pointer gap-2 hover:bg-opacity-30 bg-blue-400 bg-opacity-10 border-opacity-50 border-blue-400 border h-[46px] px-2 rounded-md"
+            onClick={() =>
+              onCheckboxChange(
+                { target: { checked: !isAssermente } },
+                "assermente"
+              )
+            }
+          >
             <input
               type="checkbox"
-              className="assermente-checkbox border-blue-400 border-2 text-blue-400 rounded-md w-[22px] h-[22px]"
-              id="assermente"
-              value={0}
-              onChange={(e: any) => onCheckboxChange(e, "assermente")}
+              className="assermente-checkbox cursor-pointer border-blue-400 border-2 text-blue-400 rounded-md w-[22px] h-[22px]"
+              value={1}
               checked={isAssermente}
+              readOnly
             />
-            <label htmlFor="assermente" className="text-sm">
-              Assermenté
-            </label>
+            <label className="text-sm cursor-pointer">Assermenté</label>
           </div>
         </div>
 
-        <div>
+        <div className="flex-1">
           <label className="block text-sm font-medium mb-1">Recherche</label>
           <div className="flex w-fi">
             <InputText
@@ -319,12 +328,12 @@ export function Search() {
                 {rowData.level && (
                   <Tag
                     value={getLevelLabel(rowData.level)}
-                    severity={
+                    className={
                       rowData.level == "0"
-                        ? "info"
+                        ? "bg-blue-500"
                         : rowData.level == "1"
-                          ? "success"
-                          : "secondary"
+                          ? "bg-red-500"
+                          : "bg-gray-500"
                     }
                   />
                 )}

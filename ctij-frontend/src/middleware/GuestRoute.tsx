@@ -17,7 +17,7 @@ export const GuestRoute = () => {
   //   return () => clearTimeout(timer);
   // }, []);
 
-  if (!isInitialized || loading) {
+  if (!isInitialized ) {
     return <LoadingPage />;
   }
 

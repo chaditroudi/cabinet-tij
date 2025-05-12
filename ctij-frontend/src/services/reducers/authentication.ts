@@ -81,7 +81,6 @@ export const verifyEmail = createAsyncThunk<
     const { access_token, refresh_token } = response.data;
     localStorage.setItem("accessToken", access_token);
     localStorage.setItem("refreshToken", refresh_token);
-    thunkAPI.dispatch(getAccount());
     return { access_token, refresh_token };
   } catch (error: any) {
     const status = error?.response?.status;
@@ -107,9 +106,6 @@ export const login = createAsyncThunk<
 
     localStorage.setItem("accessToken", access_token);
     localStorage.setItem("refreshToken", refresh_token);
-
-    thunkAPI.dispatch(getAccount());
-
     return {
       access_token,
       refresh_token: refresh_token.token,
