@@ -1,0 +1,31 @@
+[33m4fae787[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m HEAD@{0}: reset: moving to HEAD
+[33m4fae787[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m HEAD@{1}: reset: moving to HEAD
+[33m4fae787[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m HEAD@{2}: pull: Fast-forward
+[33mde599e3[m HEAD@{3}: pull: Fast-forward
+[33mceb6c90[m HEAD@{4}: reset: moving to HEAD
+[33mceb6c90[m HEAD@{5}: pull: Fast-forward
+[33m75a800c[m HEAD@{6}: pull: Fast-forward
+[33m426c8a7[m HEAD@{7}: commit: change default conf
+[33m7194612[m HEAD@{8}: commit: change default conf
+[33mc43fb11[m HEAD@{9}: commit: host
+[33madf8dc6[m HEAD@{10}: commit: remove sonar
+[33m73cf031[m HEAD@{11}: commit: remove sonar
+[33m64a97af[m HEAD@{12}: commit (merge): fix
+[33m6534511[m HEAD@{13}: commit: fix
+[33m21b23c8[m HEAD@{14}: commit (merge): WIP: temporary local work
+[33m9c61a22[m HEAD@{15}: commit (merge): WIP: temporary local work
+[33maee52b7[m HEAD@{16}: commit: WIP: temporary local work
+[33mfe762c5[m HEAD@{17}: pull: Fast-forward
+[33m7b9c230[m HEAD@{18}: commit: add sonarqube server to scan test analyse code and make quality etc
+[33ma70eb0c[m HEAD@{19}: commit: testing step
+[33m222d206[m HEAD@{20}: pull: Fast-forward
+[33m733c390[m HEAD@{21}: pull: Fast-forward
+[33mfc3fe2b[m HEAD@{22}: pull: Fast-forward
+[33mac31a5f[m HEAD@{23}: pull: Fast-forward
+[33m69591bb[m HEAD@{24}: commit: change logic login
+[33mc751c8c[m HEAD@{25}: pull: Fast-forward
+[33m0c087f8[m HEAD@{26}: commit: fix session
+[33m599fe36[m HEAD@{27}: pull: Fast-forward
+[33m31499fc[m HEAD@{28}: reset: moving to HEAD
+[33m31499fc[m HEAD@{29}: commit: add encryption to docker compose
+[33m2cc34ee[m HEAD@{30}: clone: from https://github.com/chaditroudi/cabinet-tij.git

@@ -1,6 +1,0 @@
-projectKey=Cabinettij
-serverUrl=http://localhost:9000
-serverVersion=25.5.0.107428
-dashboardUrl=http://localhost:9000/dashboard?id=Cabinettij
-ceTaskId=ae9d12ee-e297-4cf8-a577-f7c13991add4
-ceTaskUrl=http://localhost:9000/api/ce/task?id=ae9d12ee-e297-4cf8-a577-f7c13991add4
