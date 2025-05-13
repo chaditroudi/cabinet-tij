@@ -1,0 +1,15 @@
+[0;1;31m×[0m nginx.service - The nginx HTTP and reverse proxy server
+     Loaded: loaded (]8;;file://my-vps/usr/lib/systemd/system/nginx.service/usr/lib/systemd/system/nginx.service]8;;; [0;1;38;5;185mdisabled[0m; preset: [0;1;38;5;185mdisabled[0m)
+    Drop-In: /etc/systemd/system/nginx.service.d
+             └─]8;;file://my-vps/etc/systemd/system/nginx.service.d/php-fpm.confphp-fpm.conf]8;;
+     Active: [0;1;31mfailed[0m (Result: exit-code) since Tue 2025-05-13 22:51:13 UTC; 14s ago
+    Process: 143446 ExecStartPre=/usr/bin/rm -f /run/nginx.pid (code=exited, status=0/SUCCESS)
+    Process: 143449 ExecStartPre=/usr/sbin/nginx -t [0;1;31m(code=exited, status=1/FAILURE)[0m
+        CPU: 22ms
+
+May 13 22:51:13 my-vps systemd[1]: Starting The nginx HTTP and reverse proxy server...
+May 13 22:51:13 my-vps nginx[143449]: nginx: [emerg] "user" directive is duplicate in /etc/nginx/nginx.conf:89
+May 13 22:51:13 my-vps nginx[143449]: nginx: configuration file /etc/nginx/nginx.conf test failed
+May 13 22:51:13 my-vps systemd[1]: [0;1;39m[0;1;31m[0;1;39mnginx.service: Control process exited, code=exited, status=1/FAILURE[0m
+May 13 22:51:13 my-vps systemd[1]: [0;1;38;5;185m[0;1;39m[0;1;38;5;185mnginx.service: Failed with result 'exit-code'.[0m
+May 13 22:51:13 my-vps systemd[1]: [0;1;31m[0;1;39m[0;1;31mFailed to start The nginx HTTP and reverse proxy server.[0m
