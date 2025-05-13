@@ -142,16 +142,16 @@ export function Search() {
   // );
   return (
     <>
-      <div className="bg-gradient-to-r from-teal-400 to-blue-500 p-6 rounded-lg shadow-lg mb-8">
-        <h1 className="text-3xl font-semibold text-white">
+      <div className="bg-gradient-to-r from-teal-400 to-blue-500 p-3 lg:p-6 rounded-lg shadow-lg mb-8">
+        <h1 className="text-md lg:text-3xl font-semibold text-white">
           Recherche de Traducteur
         </h1>
-        <p className="text-lg text-white mt-2">
+        <p className="text-sm lg:text-lg text-white mt-2">
           Trouvez rapidement des traducteurs qualifiés selon vos besoins.
         </p>
       </div>
 
-      <div className="flex flex-row gap-4 mb-6 ">
+      <div className="flex flex-row gap-4 mb-6  flex-wrap">
         <div className="flex-1">
           <label className="block text-sm font-medium mb-1">Langue</label>
           <Dropdown
@@ -255,17 +255,17 @@ export function Search() {
         </div>
       </div>
       <div className="flex flex-row gap-20 mt-10 mb-10  shadow-ann-card p-1 px-4 py-4 rounded-sm">
-        <div className="flex flex-row gap-4 flex-1 flex-wrap items-center">
+        <div className="flex flex-row gap-4 flex-1 items-cente flex-nowrap">
           <div className="flex items-center ">
-            <div className="rounded-full flex items-center justify-center bg-orange-500 w-[80px] h-[80px] ">
+            <div className="rounded-full flex items-center justify-center bg-orange-500 w-[50px] h-[50px] lg:h-[80px] lg:w-[80px]">
               <FontAwesomeIcon
                 icon={faUsers}
-                className="text-white text-4xl "
+                className="text-white text-xl lg:text-4xl"
               />
             </div>
           </div>
-          <div className="flex flex-col gap-2">
-            <div className="font-bold text-xl">Traducteurs</div>
+          <div className="flex flex-col gap-1 lg:gap-2 ">
+            <div className="font-bold text-md lg:xl">Traducteurs</div>
             {!isFetchingStats ? (
               <div className="text-orange-500 font-semibold">
                 {data?.traducteurs?.total_trad}
@@ -282,14 +282,17 @@ export function Search() {
         </div>
         <div className="flex flex-row gap-4 flex-1">
           <div className="flex items-center">
-            <div className="rounded-full flex items-center justify-center bg-teal-700 w-[80px] h-[80px] ">
-              <FontAwesomeIcon icon={faFlag} className="text-white text-4xl" />
+            <div className="rounded-full flex items-center justify-center bg-teal-700 w-[50px] h-[50px] lg:h-[80px] lg:w-[80px]">
+              <FontAwesomeIcon
+                icon={faFlag}
+                className="text-white text-xl lg:text-4xl"
+              />
             </div>
           </div>
 
-          <div className="flex flex-col gap-2  justify-center">
-            <div className="flex flex-col gap-2">
-              <div className="font-bold text-xl">Langues</div>
+          <div className="flex flex-row gap-4 flex-1 items-cente flex-nowrap">
+            <div className="flex flex-col gap-1 lg:gap-2 ">
+              <div className="font-bold text-md lg:xl">Langues</div>
               {!isFetchingStats ? (
                 <div className="text-teal-700 font-semibold">
                   {data?.traducteurs?.total_language}

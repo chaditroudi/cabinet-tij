@@ -28,21 +28,18 @@ const AdminLayout = () => {
   };
   return (
     <div className="flex h-screen bg-gray-100">
-  <Sidebar
-  collapsed={collapsed}
-  onLogout={handleLogout}
-/>
+      <Sidebar collapsed={collapsed} onLogout={handleLogout} />
       <div className="flex-1 overflow-auto">
         <header className="bg-white shadow-sm h-16 flex items-center px-6">
           <button
             onClick={() => setCollapsed(!collapsed)}
-            className="text-gray-500 focus:outline-none"
+            className="text-gray-500 lg:flex-auto flex-1 focus:outline-none"
           >
             <i
               className={`fa-solid ${collapsed ? "fa-bars" : "fa-times"} mr-2`}
             ></i>
           </button>
-          <h1 className="text-xl font-semibold text-gray-800">
+          <h1 className="text-xl font-semibold text-gray-800 ">
             <Link to="/" className="flex flex-row items-center gap-2">
               <FontAwesomeIcon icon={faChevronCircleLeft} />
               Retour Accueil
