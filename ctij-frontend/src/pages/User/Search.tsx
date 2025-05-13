@@ -183,7 +183,18 @@ export function Search() {
             showClear // Show clear button to reset selection
           />
         </div> */}
-        <div className="flex-1  order-2 md:order-2">
+        <div className="flex-1 order-3 lg:order-3">
+          <label className="block text-sm font-medium mb-1">Recherche</label>
+          <div className="flex w-fi">
+            <InputText
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              placeholder="Rechercher par Nom, Prénom..."
+              className="w-full lg:w-auto"
+            />
+          </div>
+        </div>
+        <div className="flex-1 ">
           <label className="block text-sm font-medium mb-1">Régions</label>
           <Dropdown
             value={selectedreg}
@@ -203,7 +214,7 @@ export function Search() {
             itemTemplate={(opt) => <div>{opt.region}</div>}
           />
         </div>
-        <div className="flex gap-4 items-center mt-[22px]  order-4 md:order-3">
+        <div className="flex gap-4 items-center mt-[5px] lg:mt-[22px]  order-4 md:order-3">
           {/* Expert */}
           <div
             className="flex cursor-pointer items-center hover:bg-opacity-30 gap-2 bg-red-400 bg-opacity-10 border-opacity-50 border-red-400 border h-[46px] px-2 rounded-md"
@@ -239,18 +250,6 @@ export function Search() {
               readOnly
             />
             <label className="text-sm cursor-pointer">Assermenté</label>
-          </div>
-        </div>
-
-        <div className="flex-1 order-3 lg:order-4">
-          <label className="block text-sm font-medium mb-1">Recherche</label>
-          <div className="flex w-fi">
-            <InputText
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              placeholder="Rechercher par Nom, Prénom..."
-              className="w-full lg:w-auto"
-            />
           </div>
         </div>
       </div>
