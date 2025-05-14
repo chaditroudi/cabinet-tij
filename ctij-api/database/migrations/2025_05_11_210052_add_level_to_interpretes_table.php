@@ -21,8 +21,11 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('interpretes', function (Blueprint $table) {
-            $table->dropColumn('level');
-        });
+        if (Schema::hasTable('interpretes')) {
+    Schema::table('interpretes', function (Blueprint $table) {
+        $table->dropColumn('level');
+    });
+}
+
     }
 };
