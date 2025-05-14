@@ -32,7 +32,6 @@ const Footer = () => {
             <li>Traduction</li>
             <li>Traduction assermentée</li>
             <li>Services aux entreprises</li>
-            <li>Particuliers</li>
           </ul>
         </div>
 
