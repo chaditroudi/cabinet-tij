@@ -40,7 +40,7 @@ const Header = () => {
         },
 
         {
-          label: "Connexion",
+          label: "Connexionn",
           icon: "pi pi-key",
           command: () => navigate("/login"), // navigate to /login
         },
