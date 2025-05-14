@@ -1,10 +1,51 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8
+    container_name: ctij_mysql
+    restart: always
+    networks:
+      - app-network
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: ctij_db
+      MYSQL_USER: ctij_user
+      MYSQL_PASSWORD: secret
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  laravel:
+    build: ./ctij-api
+    container_name: laravel_api
+    restart: always
+    depends_on:
+      - mysql
+    networks:
+      - app-network
+    volumes:
+      - ./ctij-api:/var/www
+    working_dir: /var/www
+    command: php artisan serve --host=0.0.0.0 --port=8000
+    ports:
+      - "8000:8000"
+    environment:
+      - APP_ENV=production
+      - APP_KEY=base64:cZVpFAEhx0ateTGy6ae+bIzFsZQF2Qe6HwQhnUbNkP8=
+      - DB_CONNECTION=mysql
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_DATABASE=ctij_db
+      - DB_USERNAME=root
+      - DB_PASSWORD=root
+
   frontend:
     build: ./ctij-frontend
     container_name: react_frontend
     restart: always
     networks:
       - app-network
-    # REMOVE this line to let Docker use the built image:
+    # Make sure there is no volume overwriting dist
     # volumes:
     #   - ./ctij-frontend/dist:/usr/share/nginx/html:ro
 
@@ -21,4 +62,14 @@
       - "80:80"
       - "443:443"
     volumes:
-      - ./nginx/default.conf:/etc/nginx/conf.d
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - /etc/letsencrypt:/etc/letsencrypt:ro
+      # Ensure Nginx reads the built app from the correct place
+      - ./ctij-frontend/dist:/usr/share/nginx/html:ro
+
+volumes:
+  mysql_data:
+
+networks:
+  app-network:
+    driver: bridge
