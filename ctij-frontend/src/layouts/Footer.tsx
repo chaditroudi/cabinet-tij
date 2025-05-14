@@ -8,10 +8,10 @@ const Footer = () => {
         <div>
           <img src={logo} alt="Cabinet TIJ Logo" className="h-16 mb-4" />
           <div className="flex space-x-3 mt-4">
-            <img src="/icons/maps.png" alt="Maps" className="h-6" />
-            <img src="/icons/linkedin.png" alt="LinkedIn" className="h-6" />
-            <img src="/icons/facebook.png" alt="Facebook" className="h-6" />
-            <img src="/icons/instagram.png" alt="Instagram" className="h-6" />
+            <img src="https://img.icons8.com/fluency/48/google-maps-new.png" alt="Maps" className="h-6" />
+            <img src="https://img.icons8.com/color/48/linkedin.png" alt="LinkedIn" className="h-6" />
+            <img src="https://img.icons8.com/color/48/facebook-new.png" alt="Facebook" className="h-6" />
+            <img src="https://img.icons8.com/color/48/instagram-new--v1.png" alt="Instagram" className="h-6" />
           </div>
         </div>
 

@@ -45,7 +45,7 @@ services:
     networks:
       - app-network
     volumes:
-      - ./ctij-frontend/dist:/usr/share/nginx/html:ro  # Ensure this matches your build folder
+      - ./ctij-frontend/dist:/usr/share/nginx/html  # Ensure this matches your build folder
 
   nginx:
     image: nginx:alpine

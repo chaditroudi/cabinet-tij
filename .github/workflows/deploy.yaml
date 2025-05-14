@@ -3,29 +3,42 @@ name: Deploy to Production
 on:
   push:
     branches:
-      - main  # Remplace par la branche que tu veux utiliser (ex: main, master)
+      - main
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-    # Checkout du code source
-    - name: Checkout repository
-      uses: actions/checkout@v2
+      # Checkout the code
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
-    # Set up SSH agent
-    - name: Set up SSH
-      uses: webfactory/ssh-agent@v0.5.3
-      with:
-        ssh-private-key: ${{ secrets.VPS_SSH_KEY }}
+      # Set up SSH agent with your VPS private key
+      - name: Set up SSH
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.VPS_SSH_KEY }}
 
-    # Connect to VPS via SSH et préparer le serveur
-    - name: Deploy to VPS
-      run: |
-        ssh -o StrictHostKeyChecking=no root@${{ secrets.VPS_HOST }} << 'EOF'
-          cd /var/www/cabinet-tij  # Remplace par le chemin de ton projet sur le VPS
-          git pull origin main  # Récupérer la dernière version du code
-          docker-compose -f docker-compose.prod.yml down  # Arrêter les conteneurs existants
-          docker-compose -f docker-compose.prod.yml up -d --build  # Redémarrer avec la nouvelle version
-        EOF
+      # Deploy to VPS via SSH
+      - name: Deploy to VPS
+        run: |
+          ssh -o StrictHostKeyChecking=no root@${{ secrets.VPS_HOST }} << 'EOF'
+            set -e
+
+            echo ">>> Pulling latest code..."
+            cd /var/www/cabinet-tij
+            git pull origin main
+
+            echo ">>> Building frontend..."
+            cd ctij-frontend
+            npm install
+            npm run build
+            cd ..
+
+            echo ">>> Rebuilding Docker containers..."
+            docker-compose -f docker-compose.prod.yml down
+            docker-compose -f docker-compose.prod.yml up -d --build
+
+            echo ">>> Deployment complete!"
+          EOF
