@@ -1,0 +1,42 @@
+name: Deploy to Staging
+
+on:
+  push:
+    branches:
+      - staging
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up SSH
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.VPS_SSH_KEY }}
+
+      - name: Deploy to VPS (Staging)
+        run: |
+          ssh -o StrictHostKeyChecking=no root@${{ secrets.VPS_HOST }} << 'EOF'
+            set -e
+
+            echo ">>> Deploying STAGING"
+            cd /var/www/cabinet-tij-staging
+            git pull origin staging
+
+            echo ">>> Building frontend..."
+            cd ctij-frontend
+            npm install
+            npm run build
+            cd ..
+
+            echo ">>> Rebuilding Docker containers (STAGING)..."
+            docker-compose -f docker-compose.staging.yml down
+            docker-compose -f docker-compose.staging.yml up -d --build
+
+            echo ">>> Staging deployment complete!"
+          EOF

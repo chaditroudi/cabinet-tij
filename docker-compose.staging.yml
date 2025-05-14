@@ -1,0 +1,55 @@
+# docker-compose.staging.yml
+
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: ./ctij-frontend
+    ports:
+      - "3001:80"  # Different port than prod
+    networks:
+      - ctij-staging
+
+  backend:
+    build:
+      context: ./ctij-api
+    env_file:
+      - ./ctij-api/.env.staging
+    depends_on:
+      - mysql
+    ports:
+      - "8001:8000"
+    networks:
+      - ctij-staging
+
+  mysql:
+    image: mysql:8
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: ctij_staging
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    ports:
+      - "3308:3306" # Different port
+    volumes:
+      - mysql_staging_data:/var/lib/mysql
+    networks:
+      - ctij-staging
+
+  nginx:
+    build:
+      context: ./nginx
+    ports:
+      - "8081:80"
+    depends_on:
+      - frontend
+      - backend
+    networks:
+      - ctij-staging
+
+networks:
+  ctij-staging:
+
+volumes:
+  mysql_staging_data:

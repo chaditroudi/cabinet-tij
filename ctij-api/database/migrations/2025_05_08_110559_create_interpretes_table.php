@@ -24,6 +24,8 @@ return new class extends Migration
 
             // telephone (varchar(20)) - phone number field
             $table->string('telephone', 20)->collation('utf8mb4_unicode_ci');
+            $table->string('level')->nullable(); // or use appropriate type (e.g., integer, enum)
+
 
             // created_at and updated_at timestamps
             $table->timestamps(0); // By default, Laravel will manage these fields with NULL as the default value
