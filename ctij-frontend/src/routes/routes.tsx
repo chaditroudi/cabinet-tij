@@ -35,6 +35,7 @@ export default function AppRoutes() {
         </Route>
 
         <Route element={<UserLayout pd />}>
+        
           <Route path="/" element={<Search />} />
         </Route>
         <Route element={<PrivateRoute />}>
