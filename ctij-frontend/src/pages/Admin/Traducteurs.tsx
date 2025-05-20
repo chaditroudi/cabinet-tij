@@ -276,6 +276,21 @@ export function Traducteurs() {
     }));
   };
 
+  const handlePostalCodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const raw = e.target.value.replace(/\D/g, "").substring(0, 5);
+    const formatted =
+      raw.length <= 2 ? raw : `${raw.slice(0, 2)} ${raw.slice(2)}`;
+    const syntheticEvent = {
+      ...e,
+      target: {
+        ...e.target,
+        value: formatted,
+      },
+    } as React.ChangeEvent<HTMLInputElement>;
+
+    onInputChange(syntheticEvent, "code_postal");
+  };
+
   const onDropdownChange = (e: { value: any }, name: string) => {
     const val = e.value;
     setFormData((prevState) => ({
@@ -466,16 +481,34 @@ export function Traducteurs() {
           <InputText
             id="codepostal"
             value={formData.code_postal}
-            onChange={(e) => onInputChange(e, "code_postal")}
+            onChange={handlePostalCodeChange}
+            maxLength={6}
             required
             onKeyDown={(e) => {
+              const allowedKeys = [
+                "Backspace",
+                "Tab",
+                "ArrowLeft",
+                "ArrowRight",
+                "Delete",
+              ];
+              if (!/^\d$/.test(e.key) && !allowedKeys.includes(e.key)) {
+                e.preventDefault();
+              }
               if (e.key === "Enter") {
                 e.preventDefault();
                 savetraducteur();
               }
             }}
+            onPaste={(e) => {
+              const pasted = e.clipboardData.getData("Text");
+              if (!/^\d+$/.test(pasted)) {
+                e.preventDefault();
+              }
+            }}
           />
         </div>
+
         <div className="field mt-4">
           <div id="region" className="mb-1">
             Niveau
