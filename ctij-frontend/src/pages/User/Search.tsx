@@ -40,6 +40,11 @@ export function Search() {
   const [isExpert, setIsExpert] = useState(false);
   const [isAssermente, setIsAssermente] = useState(false);
 
+  //start Raoua new updates
+  const [first, setFirst] = useState(0); 
+  const [rows, setRows] = useState(10); 
+  // and Raoua new updates
+
   const [triggerGettraducteurs, { isFetching, isLoading }] =
     useLazyGetTraducteursQuery();
   const isFirstRender = useRef(true);
@@ -95,34 +100,35 @@ export function Search() {
     };
   }, [isFetching, isLoading, showSpinner]);
 
- useEffect(() => {
-  const fetchData = async () => {
-    try {
-      const result = await triggerGettraducteurs({
-        search: searchTerm || "",
-        region: selectedreg || "",
-        langue: selectedLanguage || "",
-        expert: isExpert,
-        assermente: isAssermente,
-      }).unwrap();
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const result = await triggerGettraducteurs({
+          search: searchTerm || "",
+          region: selectedreg || "",
+          langue: selectedLanguage || "",
+          expert: isExpert,
+          assermente: isAssermente,
+        }).unwrap();
 
-      setTableData(result.traducteurs || []);
-    } catch (error) {
-      console.error("Error fetching traducteurs:", error);
-      setTableData([]);
-    }
+        setTableData(result.traducteurs || []);
+        setFirst(0); // reset to first page on new filter
+      } catch (error) {
+        console.error("Error fetching traducteurs:", error);
+        setTableData([]);
+      }
+    };
+
+    fetchData(); // always call fetchData on filters change
+  }, [searchTerm, selectedreg, selectedLanguage, isExpert, isAssermente]);
+
+  const handleResetFilters = () => {
+    setSelectedLanguage(null);
+    setSearchTerm("");
+    setSelectedreg(null);
+    setIsExpert(false);
+    setIsAssermente(false);
   };
-
-  fetchData(); // always call fetchData on filters change
-}, [searchTerm, selectedreg, selectedLanguage, isExpert, isAssermente]);
-
-const handleResetFilters = () => {
-  setSelectedLanguage(null);
-  setSearchTerm("");
-  setSelectedreg(null);
-  setIsExpert(false);
-  setIsAssermente(false);
-};
 
   // // 1️⃣ Build a new array once with a `label` property:
   // const optionsWithLabel = useMemo(
@@ -138,10 +144,11 @@ const handleResetFilters = () => {
       <div className="bg-gradient-to-r from-teal-400 to-blue-500 p-3 lg:p-6 rounded-lg shadow-lg mb-8">
         <h1 className="text-md lg:text-3xl font-semibold text-white">
           Recherche de Traducteur / Interprète
-
         </h1>
         <p className="text-sm lg:text-lg text-white mt-2">
-Des experts linguistiques accessibles selon vos besoins et votre localisation.        </p>
+          Des experts linguistiques accessibles selon vos besoins et
+          votre localisation.{" "}
+        </p>
       </div>
 
       <div className="flex lg:flex-row flex-col gap-4 mb-6 ">
@@ -212,7 +219,10 @@ Des experts linguistiques accessibles selon vos besoins et votre localisation. 
           <div
             className="flex cursor-pointer items-center hover:bg-opacity-30 gap-2 bg-red-400 bg-opacity-10 border-opacity-50 border-red-400 border h-[46px] px-2 rounded-md"
             onClick={() =>
-              onCheckboxChange({ target: { checked: !isExpert } }, "Expert assermenté")
+              onCheckboxChange(
+                { target: { checked: !isExpert } },
+                "Expert assermenté"
+              )
             }
           >
             <input
@@ -229,10 +239,7 @@ Des experts linguistiques accessibles selon vos besoins et votre localisation. 
           <div
             className="flex items-center cursor-pointer gap-2 hover:bg-opacity-30 bg-blue-400 bg-opacity-10 border-opacity-50 border-blue-400 border h-[46px] px-2 rounded-md"
             onClick={() =>
-              onCheckboxChange(
-                { target: { checked: !isAssermente } },
-                "CESEDA"
-              )
+              onCheckboxChange({ target: { checked: !isAssermente } }, "CESEDA")
             }
           >
             <input
@@ -245,16 +252,14 @@ Des experts linguistiques accessibles selon vos besoins et votre localisation. 
             <label className="text-sm cursor-pointer">Assermenté</label>
           </div>
           <div>
-  <button
-    onClick={handleResetFilters}
-            className="flex items-center cursor-pointer gap-2 hover:bg-opacity-30 bg-grey-400 bg-opacity-10 border-opacity-50 border-grey-400 border h-[46px] px-2 rounded-md"
-  >
-    Réinitialiser les filtres
-  </button>
-
+            <button
+              onClick={handleResetFilters}
+              className="flex items-center cursor-pointer gap-2 hover:bg-opacity-30 bg-grey-400 bg-opacity-10 border-opacity-50 border-grey-400 border h-[46px] px-2 rounded-md"
+            >
+              Réinitialiser les filtres
+            </button>
           </div>
         </div>
-        
       </div>
       <div className="flex flex-row gap-3 flex-wrap md:gap-20 mt-10 mb-10  shadow-ann-card p-1 px-4 py-4 rounded-sm">
         <div className="flex flex-row gap-4 flex-1 items-cente flex-nowrap">
@@ -267,7 +272,9 @@ Des experts linguistiques accessibles selon vos besoins et votre localisation. 
             </div>
           </div>
           <div className="flex flex-col gap-1 lg:gap-2 ">
-            <div className="font-bold text-md lg:xl">Traducteurs & Interprètes</div>
+            <div className="font-bold text-md lg:xl">
+              Traducteurs & Interprètes
+            </div>
             {!isFetchingStats ? (
               <div className="text-orange-500 font-semibold">
                 {data?.traducteurs?.total_trad}
@@ -313,11 +320,17 @@ Des experts linguistiques accessibles selon vos besoins et votre localisation. 
       </div>
       <div className="overflow-x-auto ">
         <DataTable
-          value={tableData}
           loading={showSpinner}
           emptyMessage="Aucun résultat trouvé"
           className="mb-10"
           responsiveLayout="scroll"
+          value={tableData.slice(first, first + rows)} // manual pagination
+          paginator
+          rows={rows}
+          first={first}
+          onPage={(e) => setFirst(e.first)}
+          totalRecords={tableData.length}
+          lazy
         >
           <Column
             field="langue.name"
