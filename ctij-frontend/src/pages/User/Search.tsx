@@ -60,9 +60,9 @@ export function Search() {
     e: React.ChangeEvent<HTMLInputElement>,
     type: string
   ) => {
-    if (type === "expert") {
+    if (type === "Expert assermenté") {
       setIsExpert(e.target.checked);
-    } else if (type === "assermente") {
+    } else if (type === "CESEDA") {
       setIsAssermente(e.target.checked);
     }
   };
@@ -144,11 +144,11 @@ export function Search() {
     <>
       <div className="bg-gradient-to-r from-teal-400 to-blue-500 p-3 lg:p-6 rounded-lg shadow-lg mb-8">
         <h1 className="text-md lg:text-3xl font-semibold text-white">
-          Recherche de Traducteur
+          Recherche de Traducteur / Interprète
+
         </h1>
         <p className="text-sm lg:text-lg text-white mt-2">
-          Trouvez rapidement des traducteurs qualifiés selon vos besoins.
-        </p>
+Des experts linguistiques accessibles selon vos besoins et votre localisation.        </p>
       </div>
 
       <div className="flex lg:flex-row flex-col gap-4 mb-6 ">
@@ -219,7 +219,7 @@ export function Search() {
           <div
             className="flex cursor-pointer items-center hover:bg-opacity-30 gap-2 bg-red-400 bg-opacity-10 border-opacity-50 border-red-400 border h-[46px] px-2 rounded-md"
             onClick={() =>
-              onCheckboxChange({ target: { checked: !isExpert } }, "expert")
+              onCheckboxChange({ target: { checked: !isExpert } }, "Expert assermenté")
             }
           >
             <input
@@ -238,7 +238,7 @@ export function Search() {
             onClick={() =>
               onCheckboxChange(
                 { target: { checked: !isAssermente } },
-                "assermente"
+                "CESEDA"
               )
             }
           >
@@ -264,7 +264,7 @@ export function Search() {
             </div>
           </div>
           <div className="flex flex-col gap-1 lg:gap-2 ">
-            <div className="font-bold text-md lg:xl">Traducteurs</div>
+            <div className="font-bold text-md lg:xl">Traducteurs & Interprètes</div>
             {!isFetchingStats ? (
               <div className="text-orange-500 font-semibold">
                 {data?.traducteurs?.total_trad}
