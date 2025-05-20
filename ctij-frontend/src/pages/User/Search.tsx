@@ -95,41 +95,34 @@ export function Search() {
     };
   }, [isFetching, isLoading, showSpinner]);
 
-  useEffect(() => {
-    if (isFirstRender.current) {
-      isFirstRender.current = false;
-      return;
-    }
+ useEffect(() => {
+  const fetchData = async () => {
+    try {
+      const result = await triggerGettraducteurs({
+        search: searchTerm || "",
+        region: selectedreg || "",
+        langue: selectedLanguage || "",
+        expert: isExpert,
+        assermente: isAssermente,
+      }).unwrap();
 
-    const fetchData = async () => {
-      try {
-        const result = await triggerGettraducteurs({
-          search: searchTerm || "",
-          region: selectedreg || "",
-          langue: selectedLanguage || "",
-          expert: isExpert,
-          assermente: isAssermente,
-        }).unwrap();
-
-        setTableData(result.traducteurs || []);
-      } catch (error) {
-        console.error("Error fetching traducteurs:", error);
-        setTableData([]);
-      }
-    };
-
-    if (
-      searchTerm ||
-      selectedreg ||
-      selectedLanguage ||
-      isExpert ||
-      isAssermente
-    ) {
-      fetchData();
-    } else {
+      setTableData(result.traducteurs || []);
+    } catch (error) {
+      console.error("Error fetching traducteurs:", error);
       setTableData([]);
     }
-  }, [searchTerm, selectedreg, selectedLanguage, isExpert, isAssermente]);
+  };
+
+  fetchData(); // always call fetchData on filters change
+}, [searchTerm, selectedreg, selectedLanguage, isExpert, isAssermente]);
+
+const handleResetFilters = () => {
+  setSelectedLanguage(null);
+  setSearchTerm("");
+  setSelectedreg(null);
+  setIsExpert(false);
+  setIsAssermente(false);
+};
 
   // // 1️⃣ Build a new array once with a `label` property:
   // const optionsWithLabel = useMemo(
@@ -251,7 +244,17 @@ Des experts linguistiques accessibles selon vos besoins et votre localisation. 
             />
             <label className="text-sm cursor-pointer">Assermenté</label>
           </div>
+          <div>
+  <button
+    onClick={handleResetFilters}
+            className="flex items-center cursor-pointer gap-2 hover:bg-opacity-30 bg-grey-400 bg-opacity-10 border-opacity-50 border-grey-400 border h-[46px] px-2 rounded-md"
+  >
+    Réinitialiser les filtres
+  </button>
+
+          </div>
         </div>
+        
       </div>
       <div className="flex flex-row gap-3 flex-wrap md:gap-20 mt-10 mb-10  shadow-ann-card p-1 px-4 py-4 rounded-sm">
         <div className="flex flex-row gap-4 flex-1 items-cente flex-nowrap">
