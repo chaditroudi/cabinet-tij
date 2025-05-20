@@ -9,7 +9,7 @@ use App\Models\Langue;
 class Interprete extends Model
 {    
     use HasFactory;
-    protected $fillable = [ 'identite', 'telephone','region','level'];
+protected $fillable = ['identite', 'telephone', 'region', 'level', 'code_postal'];
 
     protected static function booted()
     {
