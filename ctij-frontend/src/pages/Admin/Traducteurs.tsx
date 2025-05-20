@@ -43,6 +43,7 @@ interface traducteur {
   telephone: string;
   region: string;
   level: string;
+  code_postal: string;
   langue_ids: [];
 }
 
@@ -52,6 +53,7 @@ interface FormData {
   telephone: string;
   region: string;
   level: string;
+  code_postal: string;
   langue_ids: [];
 }
 
@@ -87,7 +89,6 @@ export function Traducteurs() {
     { label: "Expert", value: 1 },
   ];
 
-
   const debouncedSearch = useCallback(
     debounce((value) => {
       setDebouncedKeyword(value);
@@ -119,6 +120,8 @@ export function Traducteurs() {
     telephone: "",
     region: "",
     level: "",
+    code_postal: "",
+
     langue_ids: [],
   });
   const [submitted, setSubmitted] = useState(false);
@@ -143,7 +146,7 @@ export function Traducteurs() {
       telephone: "",
       region: "",
       level: "",
-
+      code_postal: "",
       langue_ids: [],
     });
   };
@@ -154,6 +157,7 @@ export function Traducteurs() {
       telephone: "",
       region: "",
       level: "",
+      code_postal: "",
 
       langue_ids: [],
     });
@@ -173,6 +177,7 @@ export function Traducteurs() {
       telephone: traducteur.telephone,
       region: traducteur.region,
       level: traducteur.level,
+      code_postal: traducteur.code_postal,
       langue_ids: traducteur.langues.map((l: any) => l.id),
     });
     setSubmitted(false);
@@ -218,6 +223,7 @@ export function Traducteurs() {
       telephone: formData.telephone,
       region: formData.region,
       level: formData.level,
+      code_postal: formData.code_postal,
       langue_ids: formData.langue_ids,
     };
 
@@ -379,6 +385,7 @@ export function Traducteurs() {
         />
 
         <Column field="telephone" header="Numéro Tél" />
+        <Column field="code_postal" header="Code postal" />
 
         <Column
           field="region"
@@ -452,7 +459,23 @@ export function Traducteurs() {
             )}
           </div>
         </div>
-
+        <div className="field mt-4">
+          <div id="telephone" className="mb-1">
+            Code Postal
+          </div>
+          <InputText
+            id="codepostal"
+            value={formData.code_postal}
+            onChange={(e) => onInputChange(e, "code_postal")}
+            required
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+                savetraducteur();
+              }
+            }}
+          />
+        </div>
         <div className="field mt-4">
           <div id="region" className="mb-1">
             Niveau

@@ -79,7 +79,7 @@ class InterpreteController extends Controller
             'region'    => $data['region'],
             'telephone' => $data['telephone'],
             'level'     => $data['level'] ?? null,
-                'code_postal' => 'nullable|string|max:10',
+            'code_postal' => $data['code_postal'],
 
         ]);
 
