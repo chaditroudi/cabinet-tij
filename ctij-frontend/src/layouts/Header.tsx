@@ -103,12 +103,9 @@ const Header = () => {
                 <div className="flex flex-col">
                   <span>Cabinet TIJ</span>
                   <div className="text-xs text-gray-500">
-<<<<<<< HEAD
-Annuaire des traducteurs et interprètes professionnels en France                  </div>
-=======
+
                     Annuaire des traducteurs et interprètes professionnels en France
                   </div>
->>>>>>> 06f5d7d67e138312b0243ff121edf56d330b929e
                 </div>
               </Link>
             </div>
