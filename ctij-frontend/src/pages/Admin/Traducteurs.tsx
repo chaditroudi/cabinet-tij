@@ -62,9 +62,9 @@ export const languesBodyTemplate = (rowData: any) => {
 export function getLevelLabel(level: string) {
   switch (level) {
     case "0":
-      return "Assermenté";
+      return "CESEDA";
     case "1":
-      return "Expert";
+      return "Expert assermenté";
   }
 }
 export function Traducteurs() {

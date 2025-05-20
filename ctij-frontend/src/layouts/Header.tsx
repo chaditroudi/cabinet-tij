@@ -190,8 +190,7 @@ const Header = () => {
                 <div className="flex flex-col">
                   <span>Cabinet TIJ</span>
                   <div className="text-xs text-gray-500">
-                    Annuaire des Traducteurs professionnels et indépendants
-                  </div>
+Annuaire des traducteurs et interprètes professionnels en France                  </div>
                 </div>
               </Link>
             </div>
