@@ -1,3 +1,4 @@
+
 import { useAppSelector } from "@/hooks";
 import { Menubar } from "primereact/menubar";
 import { Link, useNavigate } from "react-router-dom";
@@ -10,6 +11,8 @@ const Header = () => {
     (state) => state.authentication
   ) as any;
 
+  // Menu items
+  
   const handleLogout = () => {
     Swal.fire({
       title: "Êtes-vous sûr ?",
