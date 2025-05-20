@@ -55,22 +55,6 @@ const Footer = () => {
 
         {/* À propos */}
         <div>
-<<<<<<< HEAD
-          <h3 className="text-lg font-bold mb-2">→ À propos</h3>
-          <p>
-            Cabinet TIJ est un cabinet de traduction et d’interprétariat spécialisé dans les prestations à forte valeur ajoutée: administratives, techniques et judiciaires.
-
-Nous fédérons un réseau de professionnels qualifiés, expérimentés et indépendants, mobilisables sur l’ensemble du territoire national.
-          </p>
-        </div>
-
- 
-
-        {/* Informations */}
-        <div>
-          <h3 className="text-lg font-bold mb-2">→ Informations</h3>
-        
-=======
           <h3 className="text-lg font-semibold text-gray-900 mb-4">À propos</h3>
           <p className="text-gray-800 leading-relaxed text-justify">
             Cabinet TIJ est un cabinet de traduction et d’interprétariat spécialisé dans les prestations à forte valeur ajoutée : administratives, techniques et judiciaires.
@@ -96,7 +80,6 @@ Nous fédérons un réseau de professionnels qualifiés, expérimentés et indé
             <br />
             <span className="font-bold">contact@cabinet-tij.com</span>
           </p>
->>>>>>> 06f5d7d67e138312b0243ff121edf56d330b929e
         </div>
       </div>
 
