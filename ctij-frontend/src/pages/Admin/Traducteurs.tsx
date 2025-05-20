@@ -97,7 +97,7 @@ export function Traducteurs() {
   );
   const [langues, setlangues] = useState<FormData[]>([]);
   const [page, setPage] = useState(1);
-  const limit = 2;
+  const limit = 20;
 
   const { data: fetchedData, isLoading } = useGetAlllanguesQuery(
     {},
@@ -356,7 +356,7 @@ export function Traducteurs() {
         className="p-datatable-traducteurs"
         emptyMessage="Aucun traducteur disponible"
         paginator
-        rows={20}
+        rows={limit}
         totalRecords={total || 0}
         loading={isLoading}
         first={(page - 1) * limit}
