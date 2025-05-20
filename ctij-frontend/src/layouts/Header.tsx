@@ -40,10 +40,30 @@ const Header = () => {
         },
 
         {
-          label: "Connexionn",
+          label: "Connexion",
           icon: "pi pi-key",
           command: () => navigate("/login"), // navigate to /login
         },
+      
+{
+  template: () => (
+    <button
+      onClick={() =>
+        window.open(
+          "https://www.forbes.fr/brandvoice/cabinet-tij-la-confidentialite-et-lhumain-au-coeur-de-la-linguistique/",
+          "_blank",
+          "noopener,noreferrer"
+        )
+      }
+      className="px-4 py-2 bg-gradient-to-r from-yellow-400 to-red-400 text-white rounded-full flex items-center gap-2 transition duration-300 hover:scale-105 hover:shadow-lg"
+    >
+      <span className="text-xl animate-bounce">🔥</span>
+      <span className="font-bold text-sm">Vu sur Forbes</span>
+    </button>
+  )
+}
+
+
       ];
   const handleLogout = () => {
     Swal.fire({

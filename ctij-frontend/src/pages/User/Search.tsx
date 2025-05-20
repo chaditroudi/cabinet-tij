@@ -144,10 +144,10 @@ export function Search() {
     <>
       <div className="bg-gradient-to-r from-teal-400 to-blue-500 p-3 lg:p-6 rounded-lg shadow-lg mb-8">
         <h1 className="text-md lg:text-3xl font-semibold text-white">
-          Recherche de Traducteur
+          Chercher un Interprète / Traducteur
         </h1>
         <p className="text-sm lg:text-lg text-white mt-2">
-          Trouvez rapidement des traducteurs qualifiés selon vos besoins.
+          Trouvez rapidement des Interprètes ou des traducteurs qualifiés selon vos besoins.
         </p>
       </div>
 

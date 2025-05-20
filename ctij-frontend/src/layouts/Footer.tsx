@@ -2,70 +2,59 @@ import logo from "@/assets/images/logo.png";
 
 const Footer = () => {
   return (
-    <footer className="bg-[#fdf5f5] text-black py-12 text-sm">
-      <div className="container mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-8">
-        {/* Logo + Socials */}
-        <div>
+    <footer className="bg-slate-100 py-16">
+      <div className="max-w-5xl mx-auto px-6">
+        {/* Card */}
+        <div className=" rounded-3xl  p-10 flex flex-col items-center text-center">
+          {/* Logo */}
           <img src={logo} alt="Cabinet TIJ Logo" className="h-16 mb-4" />
-          <div className="flex space-x-3 mt-4">
-            <img src="https://img.icons8.com/fluency/48/google-maps-new.png" alt="Maps" className="h-6" />
-            <img src="https://img.icons8.com/color/48/linkedin.png" alt="LinkedIn" className="h-6" />
-            <img src="https://img.icons8.com/color/48/facebook-new.png" alt="Facebook" className="h-6" />
-            <img src="https://img.icons8.com/color/48/instagram-new--v1.png" alt="Instagram" className="h-6" />
-          </div>
-        </div>
 
-        {/* À propos */}
-        <div>
-          <h3 className="text-lg font-bold mb-2">→ À propos</h3>
-          <p>
-            Nous sommes un Cabinet de traduction et d’interprétariat spécialisé
-            dans les traductions administratives, techniques et judiciaires.
+          {/* Short Description */}
+          <p className="text-gray-600 max-w-md mb-6">
+            Cabinet TIJ vous accompagne avec expertise et innovation dans vos démarches juridiques et stratégiques.
           </p>
-        </div>
 
-        {/* Services */}
-        <div>
-          <h3 className="text-lg font-bold mb-2">→ Services</h3>
-          <ul className="space-y-1">
-            <li>Interprétariat</li>
-            <li>Traduction</li>
-            <li>Traduction assermentée</li>
-            <li>Services aux entreprises</li>
-          </ul>
-        </div>
-
-        {/* Informations */}
-        <div>
-          <h3 className="text-lg font-bold mb-2">→ Informations</h3>
-          <ul className="space-y-1">
-            <li>contact@cabinet-tij.com</li>
-            <li>+33 1 53 67 44 72</li>
-            <li>+33 6 99 08 64 91</li>
-            <li>
-              42 Avenue Montaigne, <br />
-              75008 Paris.
-            </li>
-          </ul>
-        </div>
-      </div>
-
-      {/* Help & bottom line */}
-      <div className="container mx-auto px-6 mt-10">
-        <div className="flex flex-col md:flex-row justify-between items-center text-center text-xs text-gray-700 border-t border-gray-300 pt-6">
-          <div className="mb-2 md:mb-0">
-            <span className="font-bold">→ Aide</span> : Contactez-nous
-          </div>
-          <div className="flex space-x-2">
-            <a href="#" className="hover:underline">
-              Mentions légales
+          {/* Social Icons */}
+          <div className="flex justify-center space-x-5 mb-6">
+            <a
+              href="https://goo.gl/maps/7SrAawYYk3GdMg2u6"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:scale-110 transition-transform"
+            >
+              <img
+                src="https://img.icons8.com/fluency/48/google-maps-new.png"
+                alt="Google Maps"
+                className="h-6"
+              />
             </a>
-            <span>|</span>
-            <a href="#" className="hover:underline">
-              Politique de Confidentialité
+            <a href="https://www.linkedin.com/company/cabinet-tij" className="hover:scale-110 transition-transform">
+              <img
+                src="https://img.icons8.com/color/48/linkedin.png"
+                alt="LinkedIn"
+                className="h-6"
+              />
+            </a>
+            <a href="#" className="hover:scale-110 transition-transform">
+              <img
+                src="https://img.icons8.com/color/48/facebook-new.png"
+                alt="Facebook"
+                className="h-6"
+              />
+            </a>
+            <a href="#" className="hover:scale-110 transition-transform">
+              <img
+                src="https://img.icons8.com/color/48/instagram-new--v1.png"
+                alt="Instagram"
+                className="h-6"
+              />
             </a>
           </div>
-          <div>&copy; {new Date().getFullYear()} Tous droits © réservés</div>
+
+          {/* Optional Footer Info */}
+          <div className="text-xs text-gray-400">
+            <p>&copy; {new Date().getFullYear()} Cabinet TIJ. Tous droits réservés.</p>
+          </div>
         </div>
       </div>
     </footer>
