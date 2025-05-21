@@ -232,7 +232,7 @@ export function Search() {
               checked={isExpert}
               readOnly
             />
-            <label className="text-sm cursor-pointer">Expert</label>
+            <label className="text-sm cursor-pointer">Expert assermenté</label>
           </div>
 
           {/* Assermenté */}
@@ -249,7 +249,7 @@ export function Search() {
               checked={isAssermente}
               readOnly
             />
-            <label className="text-sm cursor-pointer">Assermenté</label>
+            <label className="text-sm cursor-pointer">CESEDA</label>
           </div>
           <div>
             <button

@@ -1,4 +1,3 @@
-
 import { useAppSelector } from "@/hooks";
 import { Menubar } from "primereact/menubar";
 import { Link, useNavigate } from "react-router-dom";
@@ -11,8 +10,6 @@ const Header = () => {
     (state) => state.authentication
   ) as any;
 
-  // Menu items
-  
   const handleLogout = () => {
     Swal.fire({
       title: "Êtes-vous sûr ?",
@@ -31,25 +28,25 @@ const Header = () => {
   };
 
   // Élément commun "Vu sur Forbes"
-  const commonItems = [
-    {
-      template: () => (
-        <button
-          onClick={() =>
-            window.open(
-              "https://www.forbes.fr/brandvoice/cabinet-tij-la-confidentialite-et-lhumain-au-coeur-de-la-linguistique/",
-              "_blank",
-              "noopener,noreferrer"
-            )
-          }
-          className="px-4 py-2 bg-gradient-to-r from-yellow-400 to-red-400 text-white rounded-full flex items-center gap-2 transition duration-300 hover:scale-105 hover:shadow-lg"
-        >
-          <span className="text-xl animate-bounce">🔥</span>
-          <span className="font-bold text-sm">Vu sur Forbes</span>
-        </button>
-      ),
-    },
-  ];
+  // const commonItems = [
+  //   {
+  //     template: () => (
+  //       <button
+  //         onClick={() =>
+  //           window.open(
+  //             "https://www.forbes.fr/brandvoice/cabinet-tij-la-confidentialite-et-lhumain-au-coeur-de-la-linguistique/",
+  //             "_blank",
+  //             "noopener,noreferrer"
+  //           )
+  //         }
+  //         className="px-4 py-2 bg-gradient-to-r from-yellow-400 to-red-400 text-white rounded-full flex items-center gap-2 transition duration-300 hover:scale-105 hover:shadow-lg"
+  //       >
+  //         <span className="text-xl animate-bounce">🔥</span>
+  //         <span className="font-bold text-sm">Vu sur Forbes</span>
+  //       </button>
+  //     ),
+  //   },
+  // ];
 
   const items = isAuthenticated
     ? [
@@ -71,7 +68,6 @@ const Header = () => {
           command: () => handleLogout(),
           className: "text-green-900",
         },
-        ...commonItems,
       ]
     : [
         {
@@ -84,7 +80,6 @@ const Header = () => {
           icon: "pi pi-key",
           command: () => navigate("/login"),
         },
-        ...commonItems,
       ];
 
   return (
