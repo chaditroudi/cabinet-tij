@@ -277,19 +277,18 @@ export function Traducteurs() {
   };
 
   const handlePostalCodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const raw = e.target.value.replace(/\D/g, "").substring(0, 5);
-    const formatted =
-      raw.length <= 2 ? raw : `${raw.slice(0, 2)} ${raw.slice(2)}`;
-    const syntheticEvent = {
-      ...e,
-      target: {
-        ...e.target,
-        value: formatted,
-      },
-    } as React.ChangeEvent<HTMLInputElement>;
+  const value = e.target.value.replace(/\D/g, "").substring(0, 5); // Only digits, max 5
 
-    onInputChange(syntheticEvent, "code_postal");
-  };
+  const syntheticEvent = {
+    ...e,
+    target: {
+      ...e.target,
+      value, // direct number string
+    },
+  } as React.ChangeEvent<HTMLInputElement>;
+
+  onInputChange(syntheticEvent, "code_postal");
+};
 
   const onDropdownChange = (e: { value: any }, name: string) => {
     const val = e.value;
