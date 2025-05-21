@@ -361,6 +361,7 @@ export function Search() {
             )}
           />
           <Column field="telephone" header="Téléphone" />
+          
         </DataTable>
       </div>
     </>
