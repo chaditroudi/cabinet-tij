@@ -85,11 +85,7 @@ const Footer = () => {
       <div className="container mx-auto px-6 mt-12">
         <div className="flex flex-col md:flex-row justify-between items-center border-t pt-6 text-xs text-gray-600 space-y-2 md:space-y-0">
           <p>&copy; {new Date().getFullYear()} Cabinet TIJ. Tous droits réservés.</p>
-          <div className="flex space-x-4">
-            <a href="#" className="hover:underline transition-colors">Mentions légales</a>
-            <span>|</span>
-            <a href="#" className="hover:underline transition-colors">Confidentialité</a>
-          </div>
+        
         </div>
       </div>
     </footer>
