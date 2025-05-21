@@ -277,7 +277,8 @@ export function Traducteurs() {
   };
 
   const handlePostalCodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  const value = e.target.value.replace(/\D/g, "").substring(0, 5); // Only digits, max 5
+
+    const value = e.target.value.replace(/\D/g, "").substring(0, 5); // Only digits, max 5
 
   const syntheticEvent = {
     ...e,
@@ -367,6 +368,8 @@ export function Traducteurs() {
         resizableColumns
         lazy
         dataKey="id"
+        scrollable
+        scrollHeight="flex" // or set to "400px" or "100%"
         className="p-datatable-traducteurs"
         emptyMessage="Aucun traducteur disponible"
         paginator
@@ -374,7 +377,7 @@ export function Traducteurs() {
         totalRecords={total || 0}
         loading={isLoading}
         first={(page - 1) * limit}
-        onPage={(e: any) => setPage(e.page + 1)} // PrimeReact uses 0-based page
+        onPage={(e: any) => setPage(e.page + 1)}
       >
         <Column
           field="identite"
@@ -397,21 +400,31 @@ export function Traducteurs() {
             </div>
           )}
         />
-
         <Column field="telephone" header="Numéro Tél" />
         <Column field="code_postal" header="Code postal" />
-
         <Column
           field="region"
           header="Région"
           body={(rowData) => getRegionLabel(rowData.region)}
         />
-        <Column field="langue" header="Langues" body={languesBodyTemplate} />
-
         <Column
+          field="langue"
+          header="Langues"
+          body={(rowData) => (
+            <div className="bg-orange-600 text-white px-2 w-fit rounded-md mr-1">
+              {languesBodyTemplate(rowData)}
+            </div>
+          )}
+        />
+
+        {/* Fixed column on the right */}
+        <Column
+          header="Action"
           body={actionBodyTemplate}
           exportable={false}
-          style={{ width: "50px" }}
+          frozen
+          alignFrozen="right"
+          style={{ width: "80px", textAlign: "center" }}
         />
       </DataTable>
 
