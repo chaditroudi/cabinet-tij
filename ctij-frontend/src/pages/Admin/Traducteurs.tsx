@@ -410,7 +410,7 @@ export function Traducteurs() {
           field="langue"
           header="Langues"
           body={(rowData) => (
-            <div className="bg-orange-600 text-white px-2 w-fit rounded-md">
+            <div className="bg-orange-600 text-white px-2 w-fit rounded-md mr-1">
               {languesBodyTemplate(rowData)}
             </div>
           )}
