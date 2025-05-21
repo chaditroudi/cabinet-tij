@@ -61,10 +61,9 @@ const Footer = () => {
 
         {/* Contact & Join */}
         <div>
-          <h3 className="text-base font-semibold mb-4 text-gray-900">Professionnels linguistiques</h3>
+          <h3 className="text-base font-semibold mb-4 text-gray-900">Vous êtes un professionnel linguistique ?</h3>
 
           <div className="mb-4">
-            <p className="font-medium text-sm">Vous êtes un professionnel linguistique ?</p>
             <p className="text-sm">
               Rejoignez notre réseau : <br />
               <span className="font-bold">annuaire@cabinet-tij.fr</span>
