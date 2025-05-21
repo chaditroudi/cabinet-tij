@@ -43,6 +43,7 @@ interface traducteur {
   telephone: string;
   region: string;
   level: string;
+  code_postal: string;
   langue_ids: [];
 }
 
@@ -52,6 +53,7 @@ interface FormData {
   telephone: string;
   region: string;
   level: string;
+  code_postal: string;
   langue_ids: [];
 }
 
@@ -87,7 +89,6 @@ export function Traducteurs() {
     { label: "Expert", value: 1 },
   ];
 
-
   const debouncedSearch = useCallback(
     debounce((value) => {
       setDebouncedKeyword(value);
@@ -96,7 +97,7 @@ export function Traducteurs() {
   );
   const [langues, setlangues] = useState<FormData[]>([]);
   const [page, setPage] = useState(1);
-  const limit = 2;
+  const limit = 20;
 
   const { data: fetchedData, isLoading } = useGetAlllanguesQuery(
     {},
@@ -119,6 +120,8 @@ export function Traducteurs() {
     telephone: "",
     region: "",
     level: "",
+    code_postal: "",
+
     langue_ids: [],
   });
   const [submitted, setSubmitted] = useState(false);
@@ -143,7 +146,7 @@ export function Traducteurs() {
       telephone: "",
       region: "",
       level: "",
-
+      code_postal: "",
       langue_ids: [],
     });
   };
@@ -154,6 +157,7 @@ export function Traducteurs() {
       telephone: "",
       region: "",
       level: "",
+      code_postal: "",
 
       langue_ids: [],
     });
@@ -173,6 +177,7 @@ export function Traducteurs() {
       telephone: traducteur.telephone,
       region: traducteur.region,
       level: traducteur.level,
+      code_postal: traducteur.code_postal,
       langue_ids: traducteur.langues.map((l: any) => l.id),
     });
     setSubmitted(false);
@@ -218,6 +223,7 @@ export function Traducteurs() {
       telephone: formData.telephone,
       region: formData.region,
       level: formData.level,
+      code_postal: formData.code_postal,
       langue_ids: formData.langue_ids,
     };
 
@@ -268,6 +274,21 @@ export function Traducteurs() {
       ...prevState,
       [name]: val,
     }));
+  };
+
+  const handlePostalCodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const raw = e.target.value.replace(/\D/g, "").substring(0, 5);
+    const formatted =
+      raw.length <= 2 ? raw : `${raw.slice(0, 2)} ${raw.slice(2)}`;
+    const syntheticEvent = {
+      ...e,
+      target: {
+        ...e.target,
+        value: formatted,
+      },
+    } as React.ChangeEvent<HTMLInputElement>;
+
+    onInputChange(syntheticEvent, "code_postal");
   };
 
   const onDropdownChange = (e: { value: any }, name: string) => {
@@ -350,7 +371,7 @@ export function Traducteurs() {
         className="p-datatable-traducteurs"
         emptyMessage="Aucun traducteur disponible"
         paginator
-        rows={20}
+        rows={limit}
         totalRecords={total || 0}
         loading={isLoading}
         first={(page - 1) * limit}
@@ -379,6 +400,7 @@ export function Traducteurs() {
         />
 
         <Column field="telephone" header="Numéro Tél" />
+        <Column field="code_postal" header="Code postal" />
 
         <Column
           field="region"
@@ -451,6 +473,40 @@ export function Traducteurs() {
               <small className="p-error">Téléphone requis.</small>
             )}
           </div>
+        </div>
+        <div className="field mt-4">
+          <div id="telephone" className="mb-1">
+            Code Postal
+          </div>
+          <InputText
+            id="codepostal"
+            value={formData.code_postal}
+            onChange={handlePostalCodeChange}
+            maxLength={6}
+            required
+            onKeyDown={(e) => {
+              const allowedKeys = [
+                "Backspace",
+                "Tab",
+                "ArrowLeft",
+                "ArrowRight",
+                "Delete",
+              ];
+              if (!/^\d$/.test(e.key) && !allowedKeys.includes(e.key)) {
+                e.preventDefault();
+              }
+              if (e.key === "Enter") {
+                e.preventDefault();
+                savetraducteur();
+              }
+            }}
+            onPaste={(e) => {
+              const pasted = e.clipboardData.getData("Text");
+              if (!/^\d+$/.test(pasted)) {
+                e.preventDefault();
+              }
+            }}
+          />
         </div>
 
         <div className="field mt-4">
