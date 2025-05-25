@@ -85,8 +85,8 @@ export function Traducteurs() {
   };
 
   const levelOptions = [
-    { label: "Assermenté", value: 0 },
-    { label: "Expert", value: 1 },
+    { label: "CESEDA", value: 0 },
+    { label: "Expert assermenté", value: 1 },
   ];
 
   const debouncedSearch = useCallback(

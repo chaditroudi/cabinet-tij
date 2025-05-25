@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
+import Footer from "./Footer";
 
 const AdminLayout = () => {
   const [collapsed, setCollapsed] = useState(false);
@@ -50,6 +51,7 @@ const AdminLayout = () => {
           <Outlet />
         </main>
       </div>
+
     </div>
   );
 };
