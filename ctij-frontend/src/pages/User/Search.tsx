@@ -152,13 +152,24 @@ export function Search() {
   // );
   return (
     <>
-      <div className="bg-gradient-to-r from-teal-400 to-blue-500 p-3 md:p-4 lg:p-6 rounded-lg shadow-lg mb-8">
-        <h1 className="text-base md:text-xl lg:text-3xl font-semibold text-white">
-          Recherche de Traducteur / Interprète
-        </h1>
-        <p className="text-sm md:text-base lg:text-lg text-white mt-2">
-          Des experts linguistiques accessibles selon vos besoins et votre localisation.
-        </p>
+      <div className="bg-gradient-to-r from-teal-400 to-blue-500 p-3 md:p-4 lg:p-6 rounded-lg shadow-lg mb-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <div>
+          <h1 className="text-base md:text-xl lg:text-3xl font-semibold text-white">
+            Recherche de Traducteur / Interprète
+          </h1>
+          <p className="text-sm md:text-base lg:text-lg text-white mt-2">
+            Des experts linguistiques accessibles selon vos besoins et votre localisation.
+          </p>
+        </div>
+        <a
+          href="https://tally.so/r/XxLkAP"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="shrink-0 inline-flex items-center justify-center gap-2 bg-white text-teal-600 font-semibold text-sm md:text-base px-5 py-3 rounded-full shadow-md hover:shadow-lg hover:scale-105 transition duration-300 whitespace-nowrap"
+        >
+          <FontAwesomeIcon icon={faUserPlus} />
+          <span>Vous êtes interprète ? Référencez-vous</span>
+        </a>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6 items-end">
