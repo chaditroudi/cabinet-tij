@@ -8,7 +8,7 @@ import "primereact/resources/themes/lara-light-indigo/theme.css";
 import "primeicons/primeicons.css";
 import regions from "@/assets/js/regions.json";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFlag } from "@fortawesome/free-solid-svg-icons";
+import { faFlag, faUserPlus } from "@fortawesome/free-solid-svg-icons";
 import {
   useGetTradStatsQuery,
   useLazyGetTraducteursQuery,
