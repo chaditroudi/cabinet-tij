@@ -192,9 +192,6 @@ export function Search() {
                 className="ml-1 text-sm transition-transform duration-300 group-hover:translate-x-1"
               />
             </a>
-            <span className="text-center md:text-right text-xs text-white/70">
-              Inscription en ligne à l'annuaire
-            </span>
           </div>
         </div>
       </div>
