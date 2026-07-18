@@ -8,7 +8,7 @@ import "primereact/resources/themes/lara-light-indigo/theme.css";
 import "primeicons/primeicons.css";
 import regions from "@/assets/js/regions.json";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFlag, faUserPlus } from "@fortawesome/free-solid-svg-icons";
+import { faFlag, faUserPlus, faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import {
   useGetTradStatsQuery,
   useLazyGetTraducteursQuery,
@@ -152,24 +152,51 @@ export function Search() {
   // );
   return (
     <>
-      <div className="bg-gradient-to-r from-teal-400 to-blue-500 p-3 md:p-4 lg:p-6 rounded-lg shadow-lg mb-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-        <div>
-          <h1 className="text-base md:text-xl lg:text-3xl font-semibold text-white">
-            Recherche de Traducteur / Interprète
-          </h1>
-          <p className="text-sm md:text-base lg:text-lg text-white mt-2">
-            Des experts linguistiques accessibles selon vos besoins et votre localisation.
-          </p>
+      <div className="relative overflow-hidden rounded-2xl shadow-xl mb-8 bg-gradient-to-br from-teal-500 via-cyan-500 to-blue-600">
+        {/* decorative glows */}
+        <div className="pointer-events-none absolute -top-16 -right-10 h-56 w-56 rounded-full bg-white/10 blur-3xl" />
+        <div className="pointer-events-none absolute -bottom-24 -left-10 h-64 w-64 rounded-full bg-blue-300/20 blur-3xl" />
+
+        <div className="relative flex flex-col gap-6 p-6 md:p-8 lg:p-10 md:flex-row md:items-center md:justify-between">
+          <div className="max-w-2xl">
+            <span className="inline-flex items-center gap-2 rounded-full bg-white/15 px-3 py-1 text-xs font-medium text-white ring-1 ring-white/25 backdrop-blur">
+              <FontAwesomeIcon icon={faFlag} className="text-[10px]" />
+              Annuaire des traducteurs &amp; interprètes professionnels
+            </span>
+            <h1 className="mt-4 text-2xl md:text-3xl lg:text-4xl font-bold leading-tight tracking-tight text-white">
+              Recherche de Traducteur / Interprète
+            </h1>
+            <p className="mt-3 text-sm md:text-base lg:text-lg text-white/85">
+              Des experts linguistiques accessibles selon vos besoins et votre localisation.
+            </p>
+          </div>
+
+          <div className="flex shrink-0 flex-col items-stretch gap-2 md:items-end">
+            <a
+              href="https://tally.so/r/XxLkAP"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group inline-flex items-center justify-center gap-3 rounded-full bg-white px-6 py-3 text-teal-700 shadow-lg ring-1 ring-black/5 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-2xl"
+            >
+              <span className="flex h-9 w-9 items-center justify-center rounded-full bg-teal-100 text-teal-600 transition-colors duration-300 group-hover:bg-teal-600 group-hover:text-white">
+                <FontAwesomeIcon icon={faUserPlus} />
+              </span>
+              <span className="flex flex-col text-left leading-tight">
+                <span className="text-[11px] font-medium text-teal-500/90">
+                  Vous êtes interprète ?
+                </span>
+                <span className="text-base font-bold">Référencez-vous</span>
+              </span>
+              <FontAwesomeIcon
+                icon={faArrowRight}
+                className="ml-1 text-sm transition-transform duration-300 group-hover:translate-x-1"
+              />
+            </a>
+            <span className="text-center md:text-right text-xs text-white/70">
+              Inscription en ligne à l'annuaire
+            </span>
+          </div>
         </div>
-        <a
-          href="https://tally.so/r/XxLkAP"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="shrink-0 inline-flex items-center justify-center gap-2 bg-white text-teal-600 font-semibold text-sm md:text-base px-5 py-3 rounded-full shadow-md hover:shadow-lg hover:scale-105 transition duration-300 whitespace-nowrap"
-        >
-          <FontAwesomeIcon icon={faUserPlus} />
-          <span>Vous êtes interprète ? Référencez-vous</span>
-        </a>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6 items-end">
