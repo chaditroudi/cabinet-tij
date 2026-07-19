@@ -333,25 +333,25 @@ export function Search() {
           </div>
         </div>
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mt-8 mb-10">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6 mb-6">
         {/* Traducteurs & Interprètes */}
-        <div className="flex items-center gap-4 lg:gap-5 rounded-2xl border border-paper-border bg-white p-5 lg:p-6 shadow-soft transition-all duration-300 hover:-translate-y-0.5 hover:shadow-soft-lg">
-          <div className="flex h-16 w-16 lg:h-[70px] lg:w-[70px] shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-navy-800 to-navy-900 shadow-soft">
-            <FontAwesomeIcon icon={faUsers} className="text-white text-2xl lg:text-3xl" />
+        <div className="flex items-center gap-3 rounded-xl border border-paper-border bg-white p-3.5 shadow-soft transition-all duration-300 hover:-translate-y-0.5 hover:shadow-soft-lg">
+          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-navy-800 to-navy-900 shadow-soft">
+            <FontAwesomeIcon icon={faUsers} className="text-white text-base" />
           </div>
           <div className="flex min-w-0 flex-col">
-            <span className="text-sm font-medium text-muted">
+            <span className="text-xs font-medium text-muted">
               Traducteurs &amp; Interprètes
             </span>
             {!isFetchingStats ? (
-              <span className="mt-0.5 text-3xl lg:text-4xl font-bold leading-none text-navy-900 tabular-nums">
+              <span className="text-2xl font-bold leading-none text-navy-900 tabular-nums">
                 {data?.traducteurs?.total_trad}
               </span>
             ) : (
               <Skeleton
                 animation="wave"
-                height="36px"
-                width="100px"
+                height="28px"
+                width="80px"
                 className="bg-navy-50 rounded-md mt-1"
               />
             )}
@@ -359,21 +359,21 @@ export function Search() {
         </div>
 
         {/* Langues */}
-        <div className="flex items-center gap-4 lg:gap-5 rounded-2xl border border-paper-border bg-white p-5 lg:p-6 shadow-soft transition-all duration-300 hover:-translate-y-0.5 hover:shadow-soft-lg">
-          <div className="flex h-16 w-16 lg:h-[70px] lg:w-[70px] shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-gold-500 to-gold-600 shadow-soft">
-            <FontAwesomeIcon icon={faFlag} className="text-navy-900 text-2xl lg:text-3xl" />
+        <div className="flex items-center gap-3 rounded-xl border border-paper-border bg-white p-3.5 shadow-soft transition-all duration-300 hover:-translate-y-0.5 hover:shadow-soft-lg">
+          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-gold-500 to-gold-600 shadow-soft">
+            <FontAwesomeIcon icon={faFlag} className="text-navy-900 text-base" />
           </div>
           <div className="flex min-w-0 flex-col">
-            <span className="text-sm font-medium text-muted">Langues</span>
+            <span className="text-xs font-medium text-muted">Langues</span>
             {!isFetchingStats ? (
-              <span className="mt-0.5 text-3xl lg:text-4xl font-bold leading-none text-navy-900 tabular-nums">
+              <span className="text-2xl font-bold leading-none text-navy-900 tabular-nums">
                 {data?.traducteurs?.total_language}
               </span>
             ) : (
               <Skeleton
                 animation="wave"
-                height="36px"
-                width="100px"
+                height="28px"
+                width="80px"
                 className="bg-navy-50 rounded-md mt-1"
               />
             )}
