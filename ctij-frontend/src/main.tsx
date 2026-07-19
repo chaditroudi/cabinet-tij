@@ -21,8 +21,8 @@ function MainApp() {
           <AuthProvider>
               <PrimeReactProvider value={{ unstyled: false }}>
                 <Helmet>
-                  <html lang="en" translate="no" />
-                  <meta name="theme-color" content="#003b3b" />
+                  <html lang="fr" translate="no" />
+                  <meta name="theme-color" content="#14213d" />
                   <title>{metaTitle}</title>
                   <meta name="description" content={metaDescription} />
                 </Helmet>

@@ -15,6 +15,7 @@ import {
   faFilter,
   faRotateLeft,
   faCheck,
+  faMagnifyingGlass,
 } from "@fortawesome/free-solid-svg-icons";
 import {
   useGetTradStatsQuery,
@@ -393,45 +394,70 @@ export function Search() {
         </div>
       </div>
 
-      <div className="overflow-x-auto max-w-full">
-        <DataTable
-          loading={showSpinner}
-          emptyMessage="Aucun résultat trouvé"
-          className="mb-10"
-          responsiveLayout="scroll"
-          value={tableData.slice(first, first + rows)}
-          paginator
-          rows={rows}
-          first={first}
-          onPage={(e) => setFirst(e.first)}
-          totalRecords={tableData.length}
-          lazy
-        >
-          <Column field="langue.name" header="Langue" body={languesBodyTemplate} />
-          <Column
-            field="identite"
-            header="Identité"
-            body={(rowData) => (
-              <div className="flex gap-2 items-center">
-                <span>{rowData.identite}</span>
-                {rowData.level && (
-                  <Tag
-                    value={getLevelLabel(rowData.level)}
-                    className={
-                      rowData.level === "0"
-                        ? "bg-blue-500"
-                        : rowData.level === "1"
-                          ? "bg-red-500"
-                          : "bg-gray-500"
-                    }
-                  />
-                )}
+      <div className="mb-10 overflow-hidden rounded-2xl border border-paper-border bg-white shadow-soft">
+        <div className="max-w-full overflow-x-auto">
+          <DataTable
+            loading={showSpinner}
+            emptyMessage={
+              <div className="flex flex-col items-center justify-center gap-2 py-12 text-center">
+                <span className="flex h-12 w-12 items-center justify-center rounded-full bg-navy-50 text-navy-600">
+                  <FontAwesomeIcon icon={faMagnifyingGlass} />
+                </span>
+                <span className="text-sm font-semibold text-navy-900">
+                  Aucun résultat trouvé
+                </span>
+                <span className="text-xs text-muted">
+                  Ajustez vos filtres ou lancez une nouvelle recherche.
+                </span>
               </div>
-            )}
-          />
-          <Column field="telephone" header="Téléphone" />
-          <Column field="code_postal" header="Code Postal" />
-        </DataTable>
+            }
+            responsiveLayout="scroll"
+            value={tableData.slice(first, first + rows)}
+            paginator
+            rows={rows}
+            first={first}
+            onPage={(e) => setFirst(e.first)}
+            totalRecords={tableData.length}
+            lazy
+          >
+            <Column
+              field="langue.name"
+              header="Langue"
+              body={(rowData) => (
+                <span className="inline-flex rounded-md bg-navy-50 px-2.5 py-1 text-xs font-semibold text-navy-800">
+                  {languesBodyTemplate(rowData)}
+                </span>
+              )}
+            />
+            <Column
+              field="identite"
+              header="Identité"
+              body={(rowData) => (
+                <div className="flex gap-2 items-center">
+                  <span className="font-medium text-navy-900">
+                    {rowData.identite}
+                  </span>
+                  {rowData.level && (
+                    <Tag
+                      value={getLevelLabel(rowData.level)}
+                      style={{
+                        backgroundColor:
+                          rowData.level === "0"
+                            ? "#1B2A4A"
+                            : rowData.level === "1"
+                              ? "#B23A48"
+                              : "#6B7280",
+                        color: "#ffffff",
+                      }}
+                    />
+                  )}
+                </div>
+              )}
+            />
+            <Column field="telephone" header="Téléphone" />
+            <Column field="code_postal" header="Code Postal" />
+          </DataTable>
+        </div>
       </div>
     </>
   );
