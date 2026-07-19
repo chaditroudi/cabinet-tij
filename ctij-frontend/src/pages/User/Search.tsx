@@ -295,56 +295,56 @@ export function Search() {
       >
         Réinitialiser les filtres
       </button>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-10 mb-10 shadow-ann-card p-4 rounded-md">
-        <div className="flex items-center w-full p-4 bg-white rounded-2xl shadow-md hover:shadow-lg transition-shadow duration-300">
-          <div className="flex items-center justify-center w-16 h-16 lg:w-20 lg:h-20 rounded-xl bg-gradient-to-br from-orange-400 to-orange-600">
-            <FontAwesomeIcon
-              icon={faUsers}
-              className="text-white text-2xl lg:text-4xl"
-            />
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mt-8 mb-10">
+        {/* Traducteurs & Interprètes */}
+        <div className="flex items-center gap-4 lg:gap-5 rounded-2xl border border-paper-border bg-white p-5 lg:p-6 shadow-soft transition-all duration-300 hover:-translate-y-0.5 hover:shadow-soft-lg">
+          <div className="flex h-16 w-16 lg:h-[70px] lg:w-[70px] shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-navy-800 to-navy-900 shadow-soft">
+            <FontAwesomeIcon icon={faUsers} className="text-white text-2xl lg:text-3xl" />
           </div>
-          <div className="flex flex-col ml-4">
-            <span className="text-sm lg:text-base text-gray-500">Traducteurs & Interprètes</span>
+          <div className="flex min-w-0 flex-col">
+            <span className="text-sm font-medium text-muted">
+              Traducteurs &amp; Interprètes
+            </span>
             {!isFetchingStats ? (
-              <span className="text-2xl lg:text-3xl font-bold text-gray-800">
+              <span className="mt-0.5 text-3xl lg:text-4xl font-bold leading-none text-navy-900 tabular-nums">
                 {data?.traducteurs?.total_trad}
               </span>
             ) : (
               <Skeleton
                 animation="wave"
-                height="24px"
-                width="120px"
-                className="bg-gray-300 rounded-full mt-1"
+                height="36px"
+                width="100px"
+                className="bg-navy-50 rounded-md mt-1"
               />
             )}
+            <span className="mt-1.5 text-xs text-muted">
+              Professionnels référencés
+            </span>
           </div>
         </div>
 
-
-        <div className="flex items-center w-full sm:w-[48%] p-4 bg-white rounded-2xl shadow-md hover:shadow-lg transition-shadow duration-300">
-          <div className="flex items-center justify-center w-16 h-16 lg:w-20 lg:h-20 rounded-xl bg-gradient-to-br from-teal-500 to-teal-700">
-            <FontAwesomeIcon
-              icon={faFlag}
-              className="text-white text-2xl lg:text-4xl"
-            />
+        {/* Langues */}
+        <div className="flex items-center gap-4 lg:gap-5 rounded-2xl border border-paper-border bg-white p-5 lg:p-6 shadow-soft transition-all duration-300 hover:-translate-y-0.5 hover:shadow-soft-lg">
+          <div className="flex h-16 w-16 lg:h-[70px] lg:w-[70px] shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-gold-500 to-gold-600 shadow-soft">
+            <FontAwesomeIcon icon={faFlag} className="text-navy-900 text-2xl lg:text-3xl" />
           </div>
-          <div className="flex flex-col ml-4">
-            <span className="text-sm lg:text-base text-gray-500">Langues</span>
+          <div className="flex min-w-0 flex-col">
+            <span className="text-sm font-medium text-muted">Langues</span>
             {!isFetchingStats ? (
-              <span className="text-2xl lg:text-3xl font-bold text-gray-800">
+              <span className="mt-0.5 text-3xl lg:text-4xl font-bold leading-none text-navy-900 tabular-nums">
                 {data?.traducteurs?.total_language}
               </span>
             ) : (
               <Skeleton
                 animation="wave"
-                height="24px"
-                width="120px"
-                className="bg-gray-300 rounded-full mt-1"
+                height="36px"
+                width="100px"
+                className="bg-navy-50 rounded-md mt-1"
               />
             )}
+            <span className="mt-1.5 text-xs text-muted">Langues couvertes</span>
           </div>
         </div>
-
       </div>
 
       <div className="overflow-x-auto max-w-full">
