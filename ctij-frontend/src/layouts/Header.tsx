@@ -6,12 +6,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faHouse,
   faRightToBracket,
-  faUserPlus,
   faGear,
   faRightFromBracket,
 } from "@fortawesome/free-solid-svg-icons";
-
-const TALLY_URL = "https://tally.so/r/XxLkAP";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -90,17 +87,6 @@ const Header = () => {
               <span className="hidden sm:inline">Connexion</span>
             </Link>
           )}
-
-          <a
-            href={TALLY_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="ml-1 inline-flex items-center gap-2 rounded-lg bg-navy-900 px-3 py-2 text-sm font-semibold text-white shadow-soft transition-all hover:-translate-y-0.5 hover:bg-navy-800 md:px-4"
-          >
-            <FontAwesomeIcon icon={faUserPlus} className="text-gold-500" />
-            <span className="hidden md:inline">Référencez-vous</span>
-            <span className="md:hidden">Inscription</span>
-          </a>
         </nav>
       </div>
     </header>
