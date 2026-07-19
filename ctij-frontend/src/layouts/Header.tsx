@@ -51,7 +51,7 @@ const Header = () => {
           />
           <span className="hidden items-center gap-3 lg:flex">
             <span className="h-8 w-px bg-paper-border" />
-            <span className="max-w-[190px] text-[11px] font-medium uppercase leading-tight tracking-[0.14em] text-muted">
+            <span className="max-w-[220px] text-xs font-medium leading-snug text-muted">
               Annuaire des traducteurs &amp; interprètes professionnels
             </span>
           </span>
