@@ -195,12 +195,7 @@ export function Search() {
               <span className="flex h-9 w-9 items-center justify-center rounded-full bg-navy-50 text-navy-700 transition-colors duration-300 group-hover:bg-navy-900 group-hover:text-gold-500">
                 <FontAwesomeIcon icon={faUserPlus} />
               </span>
-              <span className="flex flex-col text-left leading-tight">
-                <span className="text-[11px] font-medium text-muted">
-                  Vous êtes interprète ?
-                </span>
-                <span className="text-base font-bold">Référencez-vous</span>
-              </span>
+              <span className="text-base font-bold">Référencez-vous</span>
               <FontAwesomeIcon
                 icon={faArrowRight}
                 className="ml-1 text-sm transition-transform duration-300 group-hover:translate-x-1"
@@ -364,9 +359,6 @@ export function Search() {
                 className="bg-navy-50 rounded-md mt-1"
               />
             )}
-            <span className="mt-1.5 text-xs text-muted">
-              Professionnels référencés
-            </span>
           </div>
         </div>
 
@@ -389,7 +381,6 @@ export function Search() {
                 className="bg-navy-50 rounded-md mt-1"
               />
             )}
-            <span className="mt-1.5 text-xs text-muted">Langues couvertes</span>
           </div>
         </div>
       </div>
