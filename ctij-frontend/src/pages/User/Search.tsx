@@ -8,7 +8,14 @@ import "primereact/resources/themes/lara-light-indigo/theme.css";
 import "primeicons/primeicons.css";
 import regions from "@/assets/js/regions.json";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFlag, faUserPlus, faArrowRight } from "@fortawesome/free-solid-svg-icons";
+import {
+  faFlag,
+  faUserPlus,
+  faArrowRight,
+  faFilter,
+  faRotateLeft,
+  faCheck,
+} from "@fortawesome/free-solid-svg-icons";
 import {
   useGetTradStatsQuery,
   useLazyGetTraducteursQuery,
@@ -202,99 +209,138 @@ export function Search() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6 items-end">
-        <div className="w-full">
-          <label className="block text-sm font-medium mb-1">Langue</label>
-          <Dropdown
-            value={selectedLanguage}
-            onChange={(e) => setSelectedLanguage(e.value)}
-            options={languages}
-            optionLabel="name"
-            optionValue="id"
-            placeholder="Sélectionner une langue"
-            emptyMessage="Aucune option disponible"
-            emptyFilterMessage="Aucune option disponible"
-            className="w-full"
-            filter
-            filterBy="name"
-            showClear
-          />
-        </div>
-
-        <div className="w-full">
-          <label className="block text-sm font-medium mb-1">Recherche</label>
-          <InputText
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            placeholder="Rechercher par Nom, Prénom..."
-            className="w-full"
-          />
-        </div>
-
-        <div className="w-full">
-          <label className="block text-sm font-medium mb-1">Régions</label>
-          <Dropdown
-            value={selectedreg}
-            onChange={(e) => setSelectedreg(e.value)}
-            options={regions}
-            optionLabel="region"
-            optionValue="code"
-            placeholder="Sélectionner une région"
-            className="w-full"
-            filter
-            emptyMessage="Aucune option disponible"
-            emptyFilterMessage="Aucune option disponible"
-            filterPlaceholder="Recherche…"
-            filterBy="region"
-            filterMatchMode="contains"
-            showClear
-            itemTemplate={(opt) => <div>{opt.region}</div>}
-          />
-        </div>
-
-        <div className="w-full flex flex-wrap gap-2 items-center mt-1">
-
-          <div
-            className="flex items-center cursor-pointer gap-2 bg-red-400 bg-opacity-10 border border-red-400 border-opacity-50 h-[46px] px-2 rounded-md"
-            onClick={() =>
-              onCheckboxChange({ target: { checked: !isExpert } }, "Expert assermenté")
-            }
+      <div className="mb-8 rounded-2xl border border-paper-border bg-white p-5 md:p-6 shadow-soft">
+        <div className="mb-4 flex items-center justify-between gap-3">
+          <h2 className="flex items-center gap-2 text-sm font-semibold text-navy-900">
+            <FontAwesomeIcon icon={faFilter} className="text-gold-600" />
+            Filtrer l'annuaire
+          </h2>
+          <button
+            onClick={handleResetFilters}
+            className="inline-flex items-center gap-2 rounded-lg border border-paper-border px-3 py-1.5 text-xs font-medium text-navy-700 transition-colors hover:border-navy-700 hover:bg-navy-50 hover:text-navy-900"
           >
-            <input
-              type="checkbox"
-              className="cursor-pointer border-red-400 border-2 text-red-400 rounded-md w-[22px] h-[22px]"
-              value={1}
-              checked={isExpert}
-              readOnly
+            <FontAwesomeIcon icon={faRotateLeft} className="text-[11px]" />
+            Réinitialiser
+          </button>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="w-full">
+            <label className="mb-1.5 block text-xs font-semibold text-muted">
+              Langue
+            </label>
+            <Dropdown
+              value={selectedLanguage}
+              onChange={(e) => setSelectedLanguage(e.value)}
+              options={languages}
+              optionLabel="name"
+              optionValue="id"
+              placeholder="Sélectionner une langue"
+              emptyMessage="Aucune option disponible"
+              emptyFilterMessage="Aucune option disponible"
+              className="w-full"
+              filter
+              filterBy="name"
+              showClear
             />
-            <label className="text-sm cursor-pointer">Expert assermenté</label>
           </div>
 
-          <div
-            className="flex items-center cursor-pointer gap-2 bg-blue-400 bg-opacity-10 border border-blue-400 border-opacity-50 h-[46px] px-2 rounded-md"
-            onClick={() =>
-              onCheckboxChange({ target: { checked: !isAssermente } }, "CESEDA")
-            }
-          >
-            <input
-              type="checkbox"
-              className="cursor-pointer border-blue-400 border-2 text-blue-400 rounded-md w-[22px] h-[22px]"
-              value={1}
-              checked={isAssermente}
-              readOnly
+          <div className="w-full">
+            <label className="mb-1.5 block text-xs font-semibold text-muted">
+              Recherche
+            </label>
+            <InputText
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              placeholder="Rechercher par Nom, Prénom..."
+              className="w-full"
             />
-            <label className="text-sm cursor-pointer">CESEDA</label>
           </div>
 
+          <div className="w-full">
+            <label className="mb-1.5 block text-xs font-semibold text-muted">
+              Région
+            </label>
+            <Dropdown
+              value={selectedreg}
+              onChange={(e) => setSelectedreg(e.value)}
+              options={regions}
+              optionLabel="region"
+              optionValue="code"
+              placeholder="Sélectionner une région"
+              className="w-full"
+              filter
+              emptyMessage="Aucune option disponible"
+              emptyFilterMessage="Aucune option disponible"
+              filterPlaceholder="Recherche…"
+              filterBy="region"
+              filterMatchMode="contains"
+              showClear
+              itemTemplate={(opt) => <div>{opt.region}</div>}
+            />
+          </div>
+        </div>
 
+        <div className="mt-5 flex flex-wrap items-center gap-2 border-t border-paper-border pt-4">
+          <span className="mr-1 text-xs font-semibold text-muted">
+            Certification
+          </span>
+
+          <button
+            type="button"
+            onClick={() =>
+              onCheckboxChange(
+                { target: { checked: !isExpert } },
+                "Expert assermenté"
+              )
+            }
+            aria-pressed={isExpert}
+            className={`inline-flex items-center gap-2 rounded-full border px-3.5 py-2 text-sm font-medium transition-all ${
+              isExpert
+                ? "border-sang-500 bg-sang-500 text-white shadow-soft"
+                : "border-paper-border bg-white text-navy-700 hover:border-sang-500 hover:text-sang-500"
+            }`}
+          >
+            <span
+              className={`flex h-4 w-4 items-center justify-center rounded-full border ${
+                isExpert ? "border-white/70 bg-white/20" : "border-current"
+              }`}
+            >
+              {isExpert && (
+                <FontAwesomeIcon icon={faCheck} className="text-[9px]" />
+              )}
+            </span>
+            Expert assermenté
+          </button>
+
+          <button
+            type="button"
+            onClick={() =>
+              onCheckboxChange(
+                { target: { checked: !isAssermente } },
+                "CESEDA"
+              )
+            }
+            aria-pressed={isAssermente}
+            className={`inline-flex items-center gap-2 rounded-full border px-3.5 py-2 text-sm font-medium transition-all ${
+              isAssermente
+                ? "border-navy-800 bg-navy-800 text-white shadow-soft"
+                : "border-paper-border bg-white text-navy-700 hover:border-navy-700 hover:text-navy-900"
+            }`}
+          >
+            <span
+              className={`flex h-4 w-4 items-center justify-center rounded-full border ${
+                isAssermente ? "border-white/70 bg-white/20" : "border-current"
+              }`}
+            >
+              {isAssermente && (
+                <FontAwesomeIcon icon={faCheck} className="text-[9px]" />
+              )}
+            </span>
+            CESEDA
+          </button>
         </div>
       </div>
-      <button
-        onClick={handleResetFilters}
-        className="flex items-center  px-2 rounded-md text-sm whitespace-nowrap overflow-hidden text-ellipsis"
-      >
-        Réinitialiser les filtres
-      </button>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mt-8 mb-10">
         {/* Traducteurs & Interprètes */}
         <div className="flex items-center gap-4 lg:gap-5 rounded-2xl border border-paper-border bg-white p-5 lg:p-6 shadow-soft transition-all duration-300 hover:-translate-y-0.5 hover:shadow-soft-lg">
