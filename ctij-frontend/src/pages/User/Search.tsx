@@ -220,8 +220,8 @@ export function Search() {
           </button>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="w-full">
+        <div className="flex flex-col gap-4 lg:flex-row lg:flex-wrap lg:items-end">
+          <div className="w-full lg:flex-1 lg:min-w-[200px]">
             <label className="mb-1.5 block text-xs font-semibold text-muted">
               Langue
             </label>
@@ -241,7 +241,7 @@ export function Search() {
             />
           </div>
 
-          <div className="w-full">
+          <div className="w-full lg:flex-1 lg:min-w-[200px]">
             <label className="mb-1.5 block text-xs font-semibold text-muted">
               Recherche
             </label>
@@ -253,7 +253,7 @@ export function Search() {
             />
           </div>
 
-          <div className="w-full">
+          <div className="w-full lg:flex-1 lg:min-w-[200px]">
             <label className="mb-1.5 block text-xs font-semibold text-muted">
               Région
             </label>
@@ -275,66 +275,62 @@ export function Search() {
               itemTemplate={(opt) => <div>{opt.region}</div>}
             />
           </div>
-        </div>
 
-        <div className="mt-5 flex flex-wrap items-center gap-2 border-t border-paper-border pt-4">
-          <span className="mr-1 text-xs font-semibold text-muted">
-            Certification
-          </span>
-
-          <button
-            type="button"
-            onClick={() =>
-              onCheckboxChange(
-                { target: { checked: !isExpert } },
-                "Expert assermenté"
-              )
-            }
-            aria-pressed={isExpert}
-            className={`inline-flex items-center gap-2 rounded-full border px-3.5 py-2 text-sm font-medium transition-all ${
-              isExpert
-                ? "border-sang-500 bg-sang-500 text-white shadow-soft"
-                : "border-paper-border bg-white text-navy-700 hover:border-sang-500 hover:text-sang-500"
-            }`}
-          >
-            <span
-              className={`flex h-4 w-4 items-center justify-center rounded-full border ${
-                isExpert ? "border-white/70 bg-white/20" : "border-current"
+          <div className="flex shrink-0 flex-wrap items-center gap-2">
+            <button
+              type="button"
+              onClick={() =>
+                onCheckboxChange(
+                  { target: { checked: !isExpert } },
+                  "Expert assermenté"
+                )
+              }
+              aria-pressed={isExpert}
+              className={`inline-flex items-center gap-2 rounded-lg border px-3.5 py-2.5 text-sm font-medium transition-all ${
+                isExpert
+                  ? "border-sang-500 bg-sang-500 text-white shadow-soft"
+                  : "border-paper-border bg-white text-navy-700 hover:border-sang-500 hover:text-sang-500"
               }`}
             >
-              {isExpert && (
-                <FontAwesomeIcon icon={faCheck} className="text-[9px]" />
-              )}
-            </span>
-            Expert assermenté
-          </button>
+              <span
+                className={`flex h-4 w-4 items-center justify-center rounded-full border ${
+                  isExpert ? "border-white/70 bg-white/20" : "border-current"
+                }`}
+              >
+                {isExpert && (
+                  <FontAwesomeIcon icon={faCheck} className="text-[9px]" />
+                )}
+              </span>
+              Expert assermenté
+            </button>
 
-          <button
-            type="button"
-            onClick={() =>
-              onCheckboxChange(
-                { target: { checked: !isAssermente } },
-                "CESEDA"
-              )
-            }
-            aria-pressed={isAssermente}
-            className={`inline-flex items-center gap-2 rounded-full border px-3.5 py-2 text-sm font-medium transition-all ${
-              isAssermente
-                ? "border-navy-800 bg-navy-800 text-white shadow-soft"
-                : "border-paper-border bg-white text-navy-700 hover:border-navy-700 hover:text-navy-900"
-            }`}
-          >
-            <span
-              className={`flex h-4 w-4 items-center justify-center rounded-full border ${
-                isAssermente ? "border-white/70 bg-white/20" : "border-current"
+            <button
+              type="button"
+              onClick={() =>
+                onCheckboxChange(
+                  { target: { checked: !isAssermente } },
+                  "CESEDA"
+                )
+              }
+              aria-pressed={isAssermente}
+              className={`inline-flex items-center gap-2 rounded-lg border px-3.5 py-2.5 text-sm font-medium transition-all ${
+                isAssermente
+                  ? "border-navy-800 bg-navy-800 text-white shadow-soft"
+                  : "border-paper-border bg-white text-navy-700 hover:border-navy-700 hover:text-navy-900"
               }`}
             >
-              {isAssermente && (
-                <FontAwesomeIcon icon={faCheck} className="text-[9px]" />
-              )}
-            </span>
-            CESEDA
-          </button>
+              <span
+                className={`flex h-4 w-4 items-center justify-center rounded-full border ${
+                  isAssermente ? "border-white/70 bg-white/20" : "border-current"
+                }`}
+              >
+                {isAssermente && (
+                  <FontAwesomeIcon icon={faCheck} className="text-[9px]" />
+                )}
+              </span>
+              CESEDA
+            </button>
+          </div>
         </div>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mt-8 mb-10">
