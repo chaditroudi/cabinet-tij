@@ -29,6 +29,7 @@ import { DataTable } from "primereact/datatable";
 import {
   getLevelLabel,
   getTelephone,
+  isPermanenceLevel,
   languesBodyTemplate,
 } from "@/pages/Admin/Traducteurs";
 import { Tag } from "primereact/tag";
@@ -51,7 +52,6 @@ export function Search() {
   const [languages, setlangues] = useState(null) as any;
   const [isExpert, setIsExpert] = useState(false);
   const [isAssermente, setIsAssermente] = useState(false);
-  const [isPermanence, setIsPermanence] = useState(false);
 
   //start Raoua new updates
   const [first, setFirst] = useState(0);
@@ -82,8 +82,6 @@ export function Search() {
       setIsExpert(e.target.checked);
     } else if (type === "CESEDA") {
       setIsAssermente(e.target.checked);
-    } else if (type === "Permanence") {
-      setIsPermanence(e.target.checked);
     }
   };
 
@@ -124,7 +122,7 @@ export function Search() {
           langue: selectedLanguage || "",
           expert: isExpert,
           assermente: isAssermente,
-          permanence: isPermanence,
+          permanence: false,
         }).unwrap();
 
         setTableData(result.traducteurs || []);
@@ -140,8 +138,7 @@ export function Search() {
       selectedreg ||
       selectedLanguage ||
       isExpert ||
-      isAssermente ||
-      isPermanence;
+      isAssermente;
 
     if (hasAnyFilter) {
       fetchData();
@@ -154,7 +151,6 @@ export function Search() {
     selectedLanguage,
     isExpert,
     isAssermente,
-    isPermanence,
   ]);
 
   const handleResetFilters = () => {
@@ -163,7 +159,6 @@ export function Search() {
     setSelectedreg(null);
     setIsExpert(false);
     setIsAssermente(false);
-    setIsPermanence(false);
   };
 
   // // 1️⃣ Build a new array once with a `label` property:
@@ -177,53 +172,9 @@ export function Search() {
   // );
   return (
     <>
-      <div className="relative overflow-hidden rounded-2xl shadow-soft-lg mb-8 bg-navy-900">
-        {/* background photo — international flags */}
-        <div
-          className="pointer-events-none absolute inset-0 bg-cover bg-center opacity-50"
-          style={{ backgroundImage: "url('/hero-flags.jpg')" }}
-        />
-        {/* navy brand overlay for contrast */}
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-navy-900/95 via-navy-900/80 to-navy-800/55" />
-        {/* subtle gold accent glow */}
-        <div className="pointer-events-none absolute -top-16 -right-10 h-56 w-56 rounded-full bg-gold-500/10 blur-3xl" />
-
-        <div className="relative flex flex-col gap-6 p-6 md:p-8 lg:p-10 md:flex-row md:items-center md:justify-between">
-          <div className="max-w-2xl">
-            <span className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs font-medium text-white ring-1 ring-white/20 backdrop-blur">
-              <FontAwesomeIcon icon={faFlag} className="text-[10px] text-gold-500" />
-              Annuaire des traducteurs &amp; interprètes professionnels
-            </span>
-            <h1 className="mt-4 text-2xl md:text-3xl lg:text-4xl font-bold leading-tight tracking-tight text-white">
-              Recherche de Traducteur / Interprète
-            </h1>
-            <p className="mt-3 text-sm md:text-base lg:text-lg text-white/80">
-              Des experts linguistiques accessibles selon vos besoins et votre localisation.
-            </p>
-          </div>
-
-          <div className="flex shrink-0 flex-col items-stretch gap-2 md:items-end">
-            <span className="text-sm font-medium text-white/90 md:text-right">
-              Interprètes &amp; Traducteurs judiciaires
-            </span>
-            <a
-              href="https://tally.so/r/XxLkAP"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group inline-flex items-center justify-center gap-3 rounded-full bg-white px-6 py-3 text-navy-900 shadow-soft ring-1 ring-black/5 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-soft-lg"
-            >
-              <span className="flex h-9 w-9 items-center justify-center rounded-full bg-navy-50 text-navy-700 transition-colors duration-300 group-hover:bg-navy-900 group-hover:text-gold-500">
-                <FontAwesomeIcon icon={faUserPlus} />
-              </span>
-              <span className="text-base font-bold">Rejoignez-nous</span>
-              <FontAwesomeIcon
-                icon={faArrowRight}
-                className="ml-1 text-sm transition-transform duration-300 group-hover:translate-x-1"
-              />
-            </a>
-          </div>
-        </div>
-      </div>
+      <h1 className="mb-6 text-2xl md:text-3xl font-bold tracking-tight text-navy-900">
+        Recherche de Traducteur / Interprète
+      </h1>
 
       <div className="mb-8 rounded-2xl border border-paper-border bg-white p-5 md:p-6 shadow-soft">
         <div className="mb-4 flex items-center justify-between gap-3">
@@ -350,33 +301,6 @@ export function Search() {
               </span>
               CESEDA
             </button>
-
-            <button
-              type="button"
-              onClick={() =>
-                onCheckboxChange(
-                  { target: { checked: !isPermanence } },
-                  "Permanence"
-                )
-              }
-              aria-pressed={isPermanence}
-              className={`inline-flex items-center gap-2 rounded-lg border px-3.5 py-2.5 text-sm font-medium transition-all ${
-                isPermanence
-                  ? "border-amber-600 bg-amber-600 text-white shadow-soft"
-                  : "border-paper-border bg-white text-navy-700 hover:border-amber-600 hover:text-amber-700"
-              }`}
-            >
-              <span
-                className={`flex h-4 w-4 items-center justify-center rounded-full border ${
-                  isPermanence ? "border-white/70 bg-white/20" : "border-current"
-                }`}
-              >
-                {isPermanence && (
-                  <FontAwesomeIcon icon={faCheck} className="text-[9px]" />
-                )}
-              </span>
-              Permanence
-            </button>
           </div>
         </div>
       </div>
@@ -428,7 +352,7 @@ export function Search() {
         </div>
       </div>
 
-      <div className="mb-10 overflow-hidden rounded-2xl border border-paper-border bg-white shadow-soft">
+      <div className="mb-8 overflow-hidden rounded-2xl border border-paper-border bg-white shadow-soft">
         <div className="max-w-full overflow-x-auto">
           <DataTable
             loading={showSpinner}
@@ -471,7 +395,7 @@ export function Search() {
                   <span className="font-medium text-navy-900">
                     {rowData.identite}
                   </span>
-                  {rowData.level && (
+                  {rowData.level && !isPermanenceLevel(rowData.level) && (
                     <Tag
                       value={getLevelLabel(rowData.level)}
                       style={{
@@ -480,9 +404,7 @@ export function Search() {
                             ? "#1B2A4A"
                             : rowData.level === "1"
                               ? "#B23A48"
-                              : rowData.level === "2"
-                                ? "#B7791F"
-                                : "#6B7280",
+                              : "#6B7280",
                         color: "#ffffff",
                       }}
                     />
@@ -493,6 +415,51 @@ export function Search() {
             <Column field="telephone" header="Téléphone" body={getTelephone} />
             <Column field="code_postal" header="Code Postal" />
           </DataTable>
+        </div>
+      </div>
+
+      <div className="relative overflow-hidden rounded-2xl shadow-soft-lg mb-10 bg-navy-900">
+        <div
+          className="pointer-events-none absolute inset-0 bg-cover bg-center opacity-50"
+          style={{ backgroundImage: "url('/hero-flags.jpg')" }}
+        />
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-navy-900/95 via-navy-900/80 to-navy-800/55" />
+        <div className="pointer-events-none absolute -top-16 -right-10 h-56 w-56 rounded-full bg-gold-500/10 blur-3xl" />
+
+        <div className="relative flex flex-col gap-6 p-6 md:p-8 lg:p-10 md:flex-row md:items-center md:justify-between">
+          <div className="max-w-2xl">
+            <span className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs font-medium text-white ring-1 ring-white/20 backdrop-blur">
+              <FontAwesomeIcon icon={faFlag} className="text-[10px] text-gold-500" />
+              Annuaire des traducteurs &amp; interprètes professionnels
+            </span>
+            <h2 className="mt-4 text-2xl md:text-3xl lg:text-4xl font-bold leading-tight tracking-tight text-white">
+              Recherche de Traducteur / Interprète
+            </h2>
+            <p className="mt-3 text-sm md:text-base lg:text-lg text-white/80">
+              Des experts linguistiques accessibles selon vos besoins et votre localisation.
+            </p>
+          </div>
+
+          <div className="flex shrink-0 flex-col items-stretch gap-2 md:items-end">
+            <span className="text-sm font-medium text-white/90 md:text-right">
+              Interprètes &amp; Traducteurs judiciaires
+            </span>
+            <a
+              href="https://tally.so/r/XxLkAP"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group inline-flex items-center justify-center gap-3 rounded-full bg-white px-6 py-3 text-navy-900 shadow-soft ring-1 ring-black/5 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-soft-lg"
+            >
+              <span className="flex h-9 w-9 items-center justify-center rounded-full bg-navy-50 text-navy-700 transition-colors duration-300 group-hover:bg-navy-900 group-hover:text-gold-500">
+                <FontAwesomeIcon icon={faUserPlus} />
+              </span>
+              <span className="text-base font-bold">Rejoignez-nous</span>
+              <FontAwesomeIcon
+                icon={faArrowRight}
+                className="ml-1 text-sm transition-transform duration-300 group-hover:translate-x-1"
+              />
+            </a>
+          </div>
         </div>
       </div>
     </>

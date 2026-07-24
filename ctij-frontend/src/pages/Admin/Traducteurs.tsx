@@ -13,6 +13,7 @@ import Swal from "sweetalert2";
 import regions from "@/assets/js/regions.json";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
+  faCheck,
   faPlusCircle,
   faSearch,
   faTrashAlt,
@@ -63,6 +64,10 @@ export const languesBodyTemplate = (rowData: any) => {
 };
 export const PERMANENCE_PHONE = "06 22 40 52 39";
 
+export function isPermanenceLevel(level: unknown) {
+  return String(level) === "2";
+}
+
 export function getLevelLabel(level: string) {
   switch (level) {
     case "0":
@@ -74,9 +79,32 @@ export function getLevelLabel(level: string) {
   }
 }
 
+/** Compact orange badge for permanence interpreters (phone 06 22 40 52 39). */
+export function PermBadge() {
+  return (
+    <span
+      className="inline-flex items-center gap-1.5 rounded-full bg-amber-600 px-2.5 py-1 text-xs font-semibold text-white shadow-soft"
+      title="Permanence"
+    >
+      <span className="flex h-3.5 w-3.5 items-center justify-center rounded-full border border-white/70">
+        <FontAwesomeIcon icon={faCheck} className="text-[8px]" />
+      </span>
+      PERM
+    </span>
+  );
+}
+
 // Les traducteurs de permanence sont joignables sur le numéro unique de la permanence
 export function getTelephone(rowData: any) {
-  return String(rowData.level) === "2" ? PERMANENCE_PHONE : rowData.telephone;
+  if (isPermanenceLevel(rowData.level)) {
+    return (
+      <span className="inline-flex items-center gap-2">
+        <span>{PERMANENCE_PHONE}</span>
+        <PermBadge />
+      </span>
+    );
+  }
+  return rowData.telephone;
 }
 export function Traducteurs() {
   const [traducteurs, setTraducteurs] = useState<traducteur[]>([]);
@@ -393,22 +421,23 @@ export function Traducteurs() {
           field="identite"
           header="Identité"
           body={(rowData) => (
-            <div className="flex flex-row gap-2">
+            <div className="flex flex-row gap-2 items-center">
               <div>{rowData.identite}</div>
-              {rowData.level && (
-                <Tag
-                  value={getLevelLabel(rowData.level)}
-                  className={
-                    rowData.level == "0"
-                      ? "bg-blue-500"
-                      : rowData.level == "1"
-                        ? "bg-red-500"
-                        : rowData.level == "2"
-                          ? "bg-amber-600"
+              {rowData.level !== undefined &&
+                rowData.level !== null &&
+                rowData.level !== "" &&
+                !isPermanenceLevel(rowData.level) && (
+                  <Tag
+                    value={getLevelLabel(String(rowData.level))}
+                    className={
+                      String(rowData.level) === "0"
+                        ? "bg-blue-500"
+                        : String(rowData.level) === "1"
+                          ? "bg-red-500"
                           : "bg-gray-500"
-                  }
-                />
-              )}
+                    }
+                  />
+                )}
             </div>
           )}
         />
