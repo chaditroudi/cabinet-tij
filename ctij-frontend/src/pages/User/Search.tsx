@@ -31,6 +31,7 @@ import {
   IdentiteBadges,
   languesBodyTemplate,
 } from "@/pages/Admin/Traducteurs";
+import { AnnuaireHero } from "@/pages/User/AnnuaireHero";
 interface TableData {
   id: number;
   identite: string;
@@ -159,22 +160,22 @@ export function Search() {
     setIsAssermente(false);
   };
 
-  // // 1️⃣ Build a new array once with a `label` property:
-  // const optionsWithLabel = useMemo(
-  //   () =>
-  //     region.map((d) => ({
-  //       ...d,
-  //       label: `${d.code} - ${d.name}`, // exactly what shows in the UI
-  //     })),
-  //   [region]
-  // );
+  const scrollToFilters = () => {
+    document
+      .getElementById("annuaire-filters")
+      ?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
   return (
     <>
-      <h1 className="mb-6 text-2xl md:text-3xl font-bold tracking-tight text-navy-900">
-        Recherche de Traducteur / Interprète
-      </h1>
+      <AnnuaireHero onSearchClick={scrollToFilters} />
 
-      <div className="mb-8 rounded-2xl border border-paper-border bg-white p-5 md:p-6 shadow-soft">
+      <h1 className="sr-only">Recherche de Traducteur / Interprète</h1>
+
+      <div
+        id="annuaire-filters"
+        className="mb-8 scroll-mt-28 rounded-2xl border border-paper-border bg-white p-5 md:p-6 shadow-soft"
+      >
         <div className="mb-4 flex items-center justify-between gap-3">
           <h2 className="flex items-center gap-2 text-sm font-semibold text-navy-900">
             <FontAwesomeIcon icon={faFilter} className="text-gold-600" />
