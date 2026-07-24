@@ -29,8 +29,8 @@ import { DataTable } from "primereact/datatable";
 import {
   getLevelLabel,
   getTelephone,
-  isPermanenceRow,
   languesBodyTemplate,
+  shouldShowLevelTag,
 } from "@/pages/Admin/Traducteurs";
 import { Tag } from "primereact/tag";
 interface TableData {
@@ -391,20 +391,16 @@ export function Search() {
               field="identite"
               header="Identité"
               body={(rowData) => (
-                <div className="flex gap-2 items-center">
+                <div className="flex gap-2 items-center flex-wrap">
                   <span className="font-medium text-navy-900">
                     {rowData.identite}
                   </span>
-                  {rowData.level && !isPermanenceRow(rowData) && (
+                  {shouldShowLevelTag(rowData.level) && (
                     <Tag
                       value={getLevelLabel(rowData.level)}
                       style={{
                         backgroundColor:
-                          rowData.level === "0"
-                            ? "#1B2A4A"
-                            : rowData.level === "1"
-                              ? "#B23A48"
-                              : "#6B7280",
+                          rowData.level === "0" ? "#1B2A4A" : "#B23A48",
                         color: "#ffffff",
                       }}
                     />
