@@ -53,7 +53,7 @@ interface FormData {
   identite: string;
   telephone: string;
   region: string;
-  level: string;
+  level: number[];
   code_postal: string;
   langue_ids: [];
 }
@@ -64,6 +64,38 @@ export const languesBodyTemplate = (rowData: any) => {
 };
 export const PERMANENCE_PHONE = "06 22 40 52 39";
 
+/** Parse single or multi levels: "0", "0,1,2", [0,1], '["0","1"]'. */
+export function parseLevels(level: unknown): string[] {
+  if (level == null || level === "") return [];
+  if (Array.isArray(level)) {
+    return level.map(String).filter((v) => v === "0" || v === "1" || v === "2");
+  }
+  const raw = String(level).trim();
+  if (raw.startsWith("[")) {
+    try {
+      const parsed = JSON.parse(raw);
+      return Array.isArray(parsed)
+        ? parsed.map(String).filter((v) => v === "0" || v === "1" || v === "2")
+        : [];
+    } catch {
+      return [];
+    }
+  }
+  return raw
+    .split(",")
+    .map((v) => v.trim())
+    .filter((v) => v === "0" || v === "1" || v === "2");
+}
+
+export function encodeLevels(levels: Array<string | number> | null | undefined) {
+  const normalized = parseLevels(levels ?? []);
+  return normalized.length ? normalized.join(",") : null;
+}
+
+export function hasLevel(level: unknown, value: string | number) {
+  return parseLevels(level).includes(String(value));
+}
+
 export function normalizePhone(phone: unknown) {
   return String(phone ?? "").replace(/\D/g, "");
 }
@@ -73,7 +105,7 @@ export function isPermanencePhone(phone: unknown) {
 }
 
 export function isPermanenceLevel(level: unknown) {
-  return String(level) === "2";
+  return hasLevel(level, "2");
 }
 
 export function isPermanenceRow(rowData: { level?: unknown; telephone?: unknown }) {
@@ -116,17 +148,9 @@ export function getTelephone(rowData: any) {
   return getDisplayTelephone(rowData);
 }
 
-/** Level tag only for CESEDA / Expert — Permanence uses the PERM badge instead. */
-export function shouldShowLevelTag(level: unknown) {
-  const value = String(level ?? "");
-  return value === "0" || value === "1";
-}
-
-/** CESEDA / Expert + optional PERM badges shown beside the name. */
+/** CESEDA / Expert + optional PERM badges shown beside the name (multi-niveau). */
 export function IdentiteBadges({
   rowData,
-  levelTagClassName,
-  levelTagStyle,
 }: {
   rowData: { level?: unknown; telephone?: unknown };
   levelTagClassName?: string;
@@ -134,11 +158,14 @@ export function IdentiteBadges({
 }) {
   return (
     <>
-      {shouldShowLevelTag(rowData.level) && (
+      {hasLevel(rowData.level, "0") && (
+        <Tag value="CESEDA" className="bg-blue-500" style={{ backgroundColor: "#1B2A4A", color: "#fff" }} />
+      )}
+      {hasLevel(rowData.level, "1") && (
         <Tag
-          value={getLevelLabel(String(rowData.level))}
-          className={levelTagClassName}
-          style={levelTagStyle}
+          value="Expert assermenté"
+          className="bg-red-500"
+          style={{ backgroundColor: "#B23A48", color: "#fff" }}
         />
       )}
       {isPermanenceRow(rowData) && <PermBadge />}
@@ -196,7 +223,7 @@ export function Traducteurs() {
     identite: "",
     telephone: "",
     region: "",
-    level: "",
+    level: [],
     code_postal: "",
 
     langue_ids: [],
@@ -222,7 +249,7 @@ export function Traducteurs() {
       identite: "",
       telephone: "",
       region: "",
-      level: "",
+      level: [],
       code_postal: "",
       langue_ids: [],
     });
@@ -233,7 +260,7 @@ export function Traducteurs() {
       identite: "",
       telephone: "",
       region: "",
-      level: "",
+      level: [],
       code_postal: "",
 
       langue_ids: [],
@@ -253,7 +280,7 @@ export function Traducteurs() {
       identite: traducteur.identite,
       telephone: traducteur.telephone,
       region: traducteur.region,
-      level: traducteur.level,
+      level: parseLevels(traducteur.level).map(Number),
       code_postal: traducteur.code_postal,
       langue_ids: traducteur.langues.map((l: any) => l.id),
     });
@@ -299,7 +326,7 @@ export function Traducteurs() {
       identite: formData.identite,
       telephone: formData.telephone,
       region: formData.region,
-      level: formData.level,
+      level: encodeLevels(formData.level),
       code_postal: formData.code_postal,
       langue_ids: formData.langue_ids,
     };
@@ -369,7 +396,8 @@ export function Traducteurs() {
 };
 
   const onDropdownChange = (e: { value: any }, name: string) => {
-    const val = e.value;
+    const val =
+      name === "level" || name === "langue_ids" ? e.value ?? [] : e.value;
     setFormData((prevState) => ({
       ...prevState,
       [name]: val,
@@ -462,12 +490,7 @@ export function Traducteurs() {
           body={(rowData) => (
             <div className="flex flex-row gap-2 items-center flex-wrap">
               <div>{rowData.identite}</div>
-              <IdentiteBadges
-                rowData={rowData}
-                levelTagClassName={
-                  String(rowData.level) === "0" ? "bg-blue-500" : "bg-red-500"
-                }
-              />
+              <IdentiteBadges rowData={rowData} />
             </div>
           )}
         />
@@ -593,22 +616,26 @@ export function Traducteurs() {
         </div>
 
         <div className="field mt-4">
-          <div id="region" className="mb-1">
+          <div id="level" className="mb-1">
             Niveau
           </div>
 
-          <Dropdown
+          <MultiSelect
             id="level"
-            value={parseInt(formData.level)}
+            value={formData.level}
             onChange={(e) => onDropdownChange(e, "level")}
             options={levelOptions}
             optionLabel="label"
             optionValue="value"
-            placeholder="Sélectionner le niveau"
+            placeholder="Sélectionner un ou plusieurs niveaux"
+            display="chip"
             showClear
             emptyMessage="Aucune option disponible"
             emptyFilterMessage="Aucune option disponible"
           />
+          <small className="mt-1 block text-xs text-gray-500">
+            Un traducteur peut cumuler CESEDA, Expert assermenté et Permanence.
+          </small>
         </div>
 
         <div className="field mt-4">

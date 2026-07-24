@@ -9,6 +9,39 @@ use Illuminate\Http\Request;
 
 class InterpreteController extends Controller
 {
+    /**
+     * Normalize levels to a sorted comma-separated string (e.g. "0,1,2").
+     * Accepts a single value, array, JSON array string, or comma-separated string.
+     */
+    private function normalizeLevel(mixed $level): ?string
+    {
+        if ($level === null || $level === '') {
+            return null;
+        }
+
+        if (is_string($level)) {
+            $trimmed = trim($level);
+            if (str_starts_with($trimmed, '[')) {
+                $decoded = json_decode($trimmed, true);
+                $level = is_array($decoded) ? $decoded : [];
+            } else {
+                $level = explode(',', $trimmed);
+            }
+        }
+
+        if (! is_array($level)) {
+            $level = [$level];
+        }
+
+        $allowed = ['0', '1', '2'];
+        $normalized = array_values(array_unique(array_filter(
+            array_map(static fn ($v) => (string) $v, $level),
+            static fn ($v) => in_array($v, $allowed, true)
+        )));
+        sort($normalized, SORT_STRING);
+
+        return empty($normalized) ? null : implode(',', $normalized);
+    }
 
     public function index(Request $request)
     {
@@ -32,17 +65,15 @@ class InterpreteController extends Controller
             'region' => 'required|string',
             'telephone' => 'required|string|max:20',
             'code_postal' => 'nullable|string|max:10',
-
+            'level' => 'nullable',
         ]);
 
         $interprete = Interprete::create([
             'identite' => $validated['identite'],
             'region' => $validated['region'],
             'telephone' => $validated['telephone'],
-            'level' => $request->input('level') ?? null,
-                'code_postal' => $validated['code_postal'] ?? null,
-
-
+            'level' => $this->normalizeLevel($request->input('level')),
+            'code_postal' => $validated['code_postal'] ?? null,
         ]);
 
         $interprete->langues()->attach($validated['langue_ids']);
@@ -67,9 +98,8 @@ class InterpreteController extends Controller
             'telephone'    => 'required|string|max:20',
             'langue_ids'   => 'required|array|min:1',
             'langue_ids.*' => 'exists:langues,id',
-            'level'        => 'nullable|in:0,1,2', // optional level field
-                'code_postal' => 'nullable|string|max:10',
-
+            'level'        => 'nullable',
+            'code_postal' => 'nullable|string|max:10',
         ]);
 
         $interp = Interprete::findOrFail($id);
@@ -78,9 +108,8 @@ class InterpreteController extends Controller
             'identite'  => $data['identite'],
             'region'    => $data['region'],
             'telephone' => $data['telephone'],
-            'level'     => $data['level'] ?? null,
+            'level'     => $this->normalizeLevel($data['level'] ?? null),
             'code_postal' => $data['code_postal'],
-
         ]);
 
         $interp->langues()->sync($data['langue_ids']);
@@ -123,23 +152,27 @@ class InterpreteController extends Controller
         }
 
         // Combine level filters: CESEDA (0), Expert assermenté (1), Permanence (2)
+        // Match single legacy values and multi-select comma-separated levels.
         $levels = [];
 
         if ($request->filled('assermente') && $request->assermente == "true") {
-            $levels[] = 0;
+            $levels[] = '0';
         }
 
         if ($request->filled('expert') && $request->expert == "true") {
-            $levels[] = 1;
+            $levels[] = '1';
         }
 
         if ($request->filled('permanence') && $request->permanence == "true") {
-            $levels[] = 2;
+            $levels[] = '2';
         }
 
-        // No level selected: no level restriction
         if (! empty($levels)) {
-            $query->whereIn('level', $levels);
+            $query->where(function ($q) use ($levels) {
+                foreach ($levels as $level) {
+                    $q->orWhereRaw('FIND_IN_SET(?, REPLACE(COALESCE(level, ""), " ", ""))', [$level]);
+                }
+            });
         }
 
         $results = $query->get();

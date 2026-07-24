@@ -404,14 +404,7 @@ export function Search() {
                   <span className="font-medium text-navy-900">
                     {rowData.identite}
                   </span>
-                  <IdentiteBadges
-                    rowData={rowData}
-                    levelTagStyle={{
-                      backgroundColor:
-                        String(rowData.level) === "0" ? "#1B2A4A" : "#B23A48",
-                      color: "#ffffff",
-                    }}
-                  />
+                  <IdentiteBadges rowData={rowData} />
                 </div>
               )}
             />
