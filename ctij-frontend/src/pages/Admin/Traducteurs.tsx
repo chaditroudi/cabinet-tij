@@ -64,8 +64,20 @@ export const languesBodyTemplate = (rowData: any) => {
 };
 export const PERMANENCE_PHONE = "06 22 40 52 39";
 
+export function normalizePhone(phone: unknown) {
+  return String(phone ?? "").replace(/\D/g, "");
+}
+
+export function isPermanencePhone(phone: unknown) {
+  return normalizePhone(phone) === normalizePhone(PERMANENCE_PHONE);
+}
+
 export function isPermanenceLevel(level: unknown) {
   return String(level) === "2";
+}
+
+export function isPermanenceRow(rowData: { level?: unknown; telephone?: unknown }) {
+  return isPermanenceLevel(rowData?.level) || isPermanencePhone(rowData?.telephone);
 }
 
 export function getLevelLabel(level: string) {
@@ -96,9 +108,9 @@ export function PermBadge() {
 
 // Les traducteurs de permanence sont joignables sur le numéro unique de la permanence
 export function getTelephone(rowData: any) {
-  if (isPermanenceLevel(rowData.level)) {
+  if (isPermanenceRow(rowData)) {
     return (
-      <span className="inline-flex items-center gap-2">
+      <span className="inline-flex items-center gap-2 whitespace-nowrap">
         <span>{PERMANENCE_PHONE}</span>
         <PermBadge />
       </span>
@@ -426,7 +438,7 @@ export function Traducteurs() {
               {rowData.level !== undefined &&
                 rowData.level !== null &&
                 rowData.level !== "" &&
-                !isPermanenceLevel(rowData.level) && (
+                !isPermanenceRow(rowData) && (
                   <Tag
                     value={getLevelLabel(String(rowData.level))}
                     className={

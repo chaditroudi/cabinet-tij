@@ -29,7 +29,7 @@ import { DataTable } from "primereact/datatable";
 import {
   getLevelLabel,
   getTelephone,
-  isPermanenceLevel,
+  isPermanenceRow,
   languesBodyTemplate,
 } from "@/pages/Admin/Traducteurs";
 import { Tag } from "primereact/tag";
@@ -395,7 +395,7 @@ export function Search() {
                   <span className="font-medium text-navy-900">
                     {rowData.identite}
                   </span>
-                  {rowData.level && !isPermanenceLevel(rowData.level) && (
+                  {rowData.level && !isPermanenceRow(rowData) && (
                     <Tag
                       value={getLevelLabel(rowData.level)}
                       style={{
