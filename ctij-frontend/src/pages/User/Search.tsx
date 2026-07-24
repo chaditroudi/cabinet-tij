@@ -27,12 +27,10 @@ import { useGetAlllanguesQuery } from "@/services/apis/languesApi";
 import { Column } from "primereact/column";
 import { DataTable } from "primereact/datatable";
 import {
-  getLevelLabel,
   getTelephone,
+  IdentiteBadges,
   languesBodyTemplate,
-  shouldShowLevelTag,
 } from "@/pages/Admin/Traducteurs";
-import { Tag } from "primereact/tag";
 interface TableData {
   id: number;
   identite: string;
@@ -395,16 +393,14 @@ export function Search() {
                   <span className="font-medium text-navy-900">
                     {rowData.identite}
                   </span>
-                  {shouldShowLevelTag(rowData.level) && (
-                    <Tag
-                      value={getLevelLabel(rowData.level)}
-                      style={{
-                        backgroundColor:
-                          rowData.level === "0" ? "#1B2A4A" : "#B23A48",
-                        color: "#ffffff",
-                      }}
-                    />
-                  )}
+                  <IdentiteBadges
+                    rowData={rowData}
+                    levelTagStyle={{
+                      backgroundColor:
+                        String(rowData.level) === "0" ? "#1B2A4A" : "#B23A48",
+                      color: "#ffffff",
+                    }}
+                  />
                 </div>
               )}
             />

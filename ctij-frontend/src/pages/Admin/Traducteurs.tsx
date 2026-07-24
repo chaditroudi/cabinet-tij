@@ -107,28 +107,43 @@ export function PermBadge() {
 }
 
 // Les traducteurs de permanence sont joignables sur le numéro unique de la permanence.
-// PERM is additive: CESEDA / Expert badges stay visible when the permanence number is used.
+export function getDisplayTelephone(rowData: { level?: unknown; telephone?: unknown }) {
+  return isPermanenceLevel(rowData.level) ? PERMANENCE_PHONE : rowData.telephone;
+}
+
+/** Phone column: number only (PERM badge sits beside CESEDA / Expert on Identité). */
 export function getTelephone(rowData: any) {
-  const displayPhone = isPermanenceLevel(rowData.level)
-    ? PERMANENCE_PHONE
-    : rowData.telephone;
-
-  if (isPermanenceRow(rowData)) {
-    return (
-      <span className="inline-flex items-center gap-2 whitespace-nowrap">
-        <span>{displayPhone}</span>
-        <PermBadge />
-      </span>
-    );
-  }
-
-  return displayPhone;
+  return getDisplayTelephone(rowData);
 }
 
 /** Level tag only for CESEDA / Expert — Permanence uses the PERM badge instead. */
 export function shouldShowLevelTag(level: unknown) {
   const value = String(level ?? "");
   return value === "0" || value === "1";
+}
+
+/** CESEDA / Expert + optional PERM badges shown beside the name. */
+export function IdentiteBadges({
+  rowData,
+  levelTagClassName,
+  levelTagStyle,
+}: {
+  rowData: { level?: unknown; telephone?: unknown };
+  levelTagClassName?: string;
+  levelTagStyle?: React.CSSProperties;
+}) {
+  return (
+    <>
+      {shouldShowLevelTag(rowData.level) && (
+        <Tag
+          value={getLevelLabel(String(rowData.level))}
+          className={levelTagClassName}
+          style={levelTagStyle}
+        />
+      )}
+      {isPermanenceRow(rowData) && <PermBadge />}
+    </>
+  );
 }
 export function Traducteurs() {
   const [traducteurs, setTraducteurs] = useState<traducteur[]>([]);
@@ -447,16 +462,12 @@ export function Traducteurs() {
           body={(rowData) => (
             <div className="flex flex-row gap-2 items-center flex-wrap">
               <div>{rowData.identite}</div>
-              {shouldShowLevelTag(rowData.level) && (
-                <Tag
-                  value={getLevelLabel(String(rowData.level))}
-                  className={
-                    String(rowData.level) === "0"
-                      ? "bg-blue-500"
-                      : "bg-red-500"
-                  }
-                />
-              )}
+              <IdentiteBadges
+                rowData={rowData}
+                levelTagClassName={
+                  String(rowData.level) === "0" ? "bg-blue-500" : "bg-red-500"
+                }
+              />
             </div>
           )}
         />
