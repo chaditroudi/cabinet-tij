@@ -7,8 +7,6 @@ import {
   faPhone,
 } from "@fortawesome/free-solid-svg-icons";
 
-const JOIN_URL = "https://tally.so/r/XxLkAP";
-
 const WELCOME_WORDS = [
   "Bienvenue",
   "Welcome",
@@ -30,9 +28,10 @@ const WELCOME_WORDS = [
 
 type AnnuaireHeroProps = {
   onSearchClick?: () => void;
+  onJoinClick?: () => void;
 };
 
-export function AnnuaireHero({ onSearchClick }: AnnuaireHeroProps) {
+export function AnnuaireHero({ onSearchClick, onJoinClick }: AnnuaireHeroProps) {
   const pattern = Array.from({ length: 48 }, (_, i) => WELCOME_WORDS[i % WELCOME_WORDS.length]);
 
   return (
@@ -118,15 +117,14 @@ export function AnnuaireHero({ onSearchClick }: AnnuaireHeroProps) {
           <p className="mt-2 max-w-xs text-sm text-navy-700/80 md:ml-auto">
             Rejoignez le réseau Cabinet TIJ et proposez vos compétences.
           </p>
-          <a
-            href={JOIN_URL}
-            target="_blank"
-            rel="noopener noreferrer"
+          <button
+            type="button"
+            onClick={onJoinClick}
             className="mt-5 inline-flex items-center justify-center gap-2 rounded-md bg-sang-500 px-5 py-3 text-sm font-semibold text-white shadow-soft transition-all hover:-translate-y-0.5 hover:bg-sang-600 hover:shadow-soft-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sang-500"
           >
             <FontAwesomeIcon icon={faUserPlus} className="text-xs" />
             Je propose mes services
-          </a>
+          </button>
         </div>
       </div>
     </section>

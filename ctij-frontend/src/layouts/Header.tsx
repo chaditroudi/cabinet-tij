@@ -1,5 +1,6 @@
 import { useAppSelector } from "@/hooks";
 import { Link, useNavigate } from "react-router-dom";
+import type { MouseEvent } from "react";
 import logo from "@/assets/images/logo.png";
 import Swal from "sweetalert2";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -12,8 +13,6 @@ import {
 
 const PUBLICATIONS_URL =
   "https://www.linkedin.com/company/cabinet-tij/posts/?feedView=all";
-const DEVIS_URL =
-  "mailto:contact@cabinet-tij.com?subject=Demande%20de%20devis%20-%20traduction%20asserment%C3%A9e";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -34,6 +33,22 @@ const Header = () => {
     }).then((result: any) => {
       if (result.isConfirmed) navigate("/logout");
     });
+  };
+
+  const scrollToDevis = (e: MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    if (window.location.pathname !== "/") {
+      navigate("/");
+      window.setTimeout(() => {
+        document
+          .getElementById("obtenir-devis")
+          ?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 100);
+      return;
+    }
+    document
+      .getElementById("obtenir-devis")
+      ?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
   const navLinkClass =
@@ -57,7 +72,7 @@ const Header = () => {
         </Link>
 
         <nav
-          className="flex max-w-[65%] flex-wrap items-center justify-end gap-0.5 sm:max-w-none sm:gap-1"
+          className="flex items-center justify-end gap-0.5 sm:gap-1"
           aria-label="Navigation principale"
         >
           <a
@@ -71,24 +86,16 @@ const Header = () => {
           </a>
 
           <a
-            href={DEVIS_URL}
-            className={`${navLinkClass} max-w-[11rem] sm:max-w-none`}
+            href="#obtenir-devis"
+            onClick={scrollToDevis}
+            className={navLinkClass}
             title="Besoin d'une traduction assermentée (obtenir un devis)"
           >
             <FontAwesomeIcon
               icon={faFileSignature}
               className="text-xs shrink-0"
             />
-            <span className="truncate sm:hidden">Obtenir un devis</span>
-            <span className="hidden sm:inline md:hidden">
-              Traduction assermentée
-            </span>
-            <span className="hidden md:inline lg:hidden">
-              Traduction assermentée (devis)
-            </span>
-            <span className="hidden lg:inline">
-              Besoin d&apos;une traduction assermentée (obtenir un devis)
-            </span>
+            <span className="hidden sm:inline">Obtenir un devis</span>
           </a>
 
           {isAuthenticated && (

@@ -32,6 +32,7 @@ import {
   languesBodyTemplate,
 } from "@/pages/Admin/Traducteurs";
 import { AnnuaireHero } from "@/pages/User/AnnuaireHero";
+import { DevisSection } from "@/pages/User/DevisSection";
 interface TableData {
   id: number;
   identite: string;
@@ -166,9 +167,18 @@ export function Search() {
       ?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
+  const scrollToJoin = () => {
+    document
+      .getElementById("rejoignez-nous")
+      ?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
   return (
     <>
-      <AnnuaireHero onSearchClick={scrollToFilters} />
+      <AnnuaireHero
+        onSearchClick={scrollToFilters}
+        onJoinClick={scrollToJoin}
+      />
 
       <h1 className="sr-only">Recherche de Traducteur / Interprète</h1>
 
@@ -411,7 +421,12 @@ export function Search() {
         </div>
       </div>
 
-      <div className="relative overflow-hidden rounded-2xl shadow-soft-lg mb-10 bg-navy-900">
+      <DevisSection />
+
+      <div
+        id="rejoignez-nous"
+        className="relative mb-10 scroll-mt-28 overflow-hidden rounded-2xl bg-navy-900 shadow-soft-lg"
+      >
         <div
           className="pointer-events-none absolute inset-0 bg-cover bg-center opacity-50"
           style={{ backgroundImage: "url('/hero-flags.jpg')" }}
