@@ -26,7 +26,11 @@ import { Skeleton } from "primereact/skeleton";
 import { useGetAlllanguesQuery } from "@/services/apis/languesApi";
 import { Column } from "primereact/column";
 import { DataTable } from "primereact/datatable";
-import { getLevelLabel, languesBodyTemplate } from "@/pages/Admin/Traducteurs";
+import {
+  getLevelLabel,
+  getTelephone,
+  languesBodyTemplate,
+} from "@/pages/Admin/Traducteurs";
 import { Tag } from "primereact/tag";
 interface TableData {
   id: number;
@@ -47,6 +51,7 @@ export function Search() {
   const [languages, setlangues] = useState(null) as any;
   const [isExpert, setIsExpert] = useState(false);
   const [isAssermente, setIsAssermente] = useState(false);
+  const [isPermanence, setIsPermanence] = useState(false);
 
   //start Raoua new updates
   const [first, setFirst] = useState(0);
@@ -77,6 +82,8 @@ export function Search() {
       setIsExpert(e.target.checked);
     } else if (type === "CESEDA") {
       setIsAssermente(e.target.checked);
+    } else if (type === "Permanence") {
+      setIsPermanence(e.target.checked);
     }
   };
 
@@ -117,6 +124,7 @@ export function Search() {
           langue: selectedLanguage || "",
           expert: isExpert,
           assermente: isAssermente,
+          permanence: isPermanence,
         }).unwrap();
 
         setTableData(result.traducteurs || []);
@@ -132,14 +140,22 @@ export function Search() {
       selectedreg ||
       selectedLanguage ||
       isExpert ||
-      isAssermente;
+      isAssermente ||
+      isPermanence;
 
     if (hasAnyFilter) {
       fetchData();
     } else {
       setTableData([]); // optional: clear table when no filter
     }
-  }, [searchTerm, selectedreg, selectedLanguage, isExpert, isAssermente]);
+  }, [
+    searchTerm,
+    selectedreg,
+    selectedLanguage,
+    isExpert,
+    isAssermente,
+    isPermanence,
+  ]);
 
   const handleResetFilters = () => {
     setSelectedLanguage(null);
@@ -147,6 +163,7 @@ export function Search() {
     setSelectedreg(null);
     setIsExpert(false);
     setIsAssermente(false);
+    setIsPermanence(false);
   };
 
   // // 1️⃣ Build a new array once with a `label` property:
@@ -186,6 +203,9 @@ export function Search() {
           </div>
 
           <div className="flex shrink-0 flex-col items-stretch gap-2 md:items-end">
+            <span className="text-sm font-medium text-white/90 md:text-right">
+              Interprètes &amp; Traducteurs judiciaires
+            </span>
             <a
               href="https://tally.so/r/XxLkAP"
               target="_blank"
@@ -195,7 +215,7 @@ export function Search() {
               <span className="flex h-9 w-9 items-center justify-center rounded-full bg-navy-50 text-navy-700 transition-colors duration-300 group-hover:bg-navy-900 group-hover:text-gold-500">
                 <FontAwesomeIcon icon={faUserPlus} />
               </span>
-              <span className="text-base font-bold">Référencez-vous</span>
+              <span className="text-base font-bold">Rejoignez-nous</span>
               <FontAwesomeIcon
                 icon={faArrowRight}
                 className="ml-1 text-sm transition-transform duration-300 group-hover:translate-x-1"
@@ -330,6 +350,33 @@ export function Search() {
               </span>
               CESEDA
             </button>
+
+            <button
+              type="button"
+              onClick={() =>
+                onCheckboxChange(
+                  { target: { checked: !isPermanence } },
+                  "Permanence"
+                )
+              }
+              aria-pressed={isPermanence}
+              className={`inline-flex items-center gap-2 rounded-lg border px-3.5 py-2.5 text-sm font-medium transition-all ${
+                isPermanence
+                  ? "border-amber-600 bg-amber-600 text-white shadow-soft"
+                  : "border-paper-border bg-white text-navy-700 hover:border-amber-600 hover:text-amber-700"
+              }`}
+            >
+              <span
+                className={`flex h-4 w-4 items-center justify-center rounded-full border ${
+                  isPermanence ? "border-white/70 bg-white/20" : "border-current"
+                }`}
+              >
+                {isPermanence && (
+                  <FontAwesomeIcon icon={faCheck} className="text-[9px]" />
+                )}
+              </span>
+              Permanence
+            </button>
           </div>
         </div>
       </div>
@@ -433,7 +480,9 @@ export function Search() {
                             ? "#1B2A4A"
                             : rowData.level === "1"
                               ? "#B23A48"
-                              : "#6B7280",
+                              : rowData.level === "2"
+                                ? "#B7791F"
+                                : "#6B7280",
                         color: "#ffffff",
                       }}
                     />
@@ -441,7 +490,7 @@ export function Search() {
                 </div>
               )}
             />
-            <Column field="telephone" header="Téléphone" />
+            <Column field="telephone" header="Téléphone" body={getTelephone} />
             <Column field="code_postal" header="Code Postal" />
           </DataTable>
         </div>

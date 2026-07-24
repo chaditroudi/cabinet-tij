@@ -16,10 +16,11 @@ export const traducteursApi = createApi({
         langue: string;
         assermente: boolean;
         expert: boolean;
+        permanence: boolean;
       }
     >({
-      query: ({ search, region, langue,assermente,expert }) =>
-        `/interpretes/filter?keyword=${encodeURIComponent(search)}&region=${region}&langue=${langue}&assermente=${assermente}&expert=${expert}`,
+      query: ({ search, region, langue,assermente,expert,permanence }) =>
+        `/interpretes/filter?keyword=${encodeURIComponent(search)}&region=${region}&langue=${langue}&assermente=${assermente}&expert=${expert}&permanence=${permanence}`,
       transformResponse: (response: any) => ({
         traducteurs: response,
       }),

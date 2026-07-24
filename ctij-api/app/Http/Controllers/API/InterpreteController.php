@@ -67,7 +67,7 @@ class InterpreteController extends Controller
             'telephone'    => 'required|string|max:20',
             'langue_ids'   => 'required|array|min:1',
             'langue_ids.*' => 'exists:langues,id',
-            'level'        => 'nullable|in:0,1', // optional level field
+            'level'        => 'nullable|in:0,1,2', // optional level field
                 'code_postal' => 'nullable|string|max:10',
 
         ]);
@@ -122,17 +122,24 @@ class InterpreteController extends Controller
             $query->with('langues');
         }
 
-        // Combine level filters correctly
-        if (
-            $request->filled('expert') && $request->expert == "true" &&
-            $request->filled('assermente') && $request->assermente == "true"
-        ) {
-            // Both filters are on: show level 0 or 1
-            $query->whereIn('level', [0, 1]);
-        } elseif ($request->filled('expert') && $request->expert == "true") {
-            $query->where('level', 1);
-        } elseif ($request->filled('assermente') && $request->assermente == "true") {
-            $query->where('level', 0);
+        // Combine level filters: CESEDA (0), Expert assermenté (1), Permanence (2)
+        $levels = [];
+
+        if ($request->filled('assermente') && $request->assermente == "true") {
+            $levels[] = 0;
+        }
+
+        if ($request->filled('expert') && $request->expert == "true") {
+            $levels[] = 1;
+        }
+
+        if ($request->filled('permanence') && $request->permanence == "true") {
+            $levels[] = 2;
+        }
+
+        // No level selected: no level restriction
+        if (! empty($levels)) {
+            $query->whereIn('level', $levels);
         }
 
         $results = $query->get();

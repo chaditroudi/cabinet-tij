@@ -61,13 +61,22 @@ export const languesBodyTemplate = (rowData: any) => {
   const langs = rowData.langues ?? [];
   return langs.map((l: any) => l.name).join(", ");
 };
+export const PERMANENCE_PHONE = "06 22 40 52 39";
+
 export function getLevelLabel(level: string) {
   switch (level) {
     case "0":
       return "CESEDA";
     case "1":
       return "Expert assermenté";
+    case "2":
+      return "Permanence";
   }
+}
+
+// Les traducteurs de permanence sont joignables sur le numéro unique de la permanence
+export function getTelephone(rowData: any) {
+  return String(rowData.level) === "2" ? PERMANENCE_PHONE : rowData.telephone;
 }
 export function Traducteurs() {
   const [traducteurs, setTraducteurs] = useState<traducteur[]>([]);
@@ -87,6 +96,7 @@ export function Traducteurs() {
   const levelOptions = [
     { label: "CESEDA", value: 0 },
     { label: "Expert assermenté", value: 1 },
+    { label: "Permanence", value: 2 },
   ];
 
   const debouncedSearch = useCallback(
@@ -393,14 +403,16 @@ export function Traducteurs() {
                       ? "bg-blue-500"
                       : rowData.level == "1"
                         ? "bg-red-500"
-                        : "bg-gray-500"
+                        : rowData.level == "2"
+                          ? "bg-amber-600"
+                          : "bg-gray-500"
                   }
                 />
               )}
             </div>
           )}
         />
-        <Column field="telephone" header="Numéro Tél" />
+        <Column field="telephone" header="Numéro Tél" body={getTelephone} />
         <Column field="code_postal" header="Code postal" />
         <Column
           field="region"

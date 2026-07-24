@@ -1,0 +1,29 @@
+# Local development overrides.
+#
+# docker-compose.yml targets production: nginx terminates TLS with the
+# letsencrypt certs for cabinettij.fr and redirects all HTTP to HTTPS, so it
+# cannot serve localhost. This file keeps the stack usable on a dev machine:
+#
+#   - nginx moves behind the "prod" profile so it stays down by default
+#   - the frontend container is published directly instead
+#   - Laravel moves off 8000, which is commonly taken by other local projects
+#
+# Compose loads this automatically alongside docker-compose.yml.
+# To run the production stack instead: docker compose -f docker-compose.yml up
+
+services:
+  laravel:
+    # !override replaces the base port list — without it Compose appends,
+    # and the 8000 binding would come back and conflict.
+    ports: !override
+      - "8001:8000"
+    environment:
+      - APP_ENV=local
+      - APP_DEBUG=true
+
+  frontend:
+    ports:
+      - "3000:80"
+
+  nginx:
+    profiles: ["prod"]
