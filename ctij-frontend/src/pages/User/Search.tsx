@@ -10,8 +10,6 @@ import regions from "@/assets/js/regions.json";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faFlag,
-  faUserPlus,
-  faArrowRight,
   faFilter,
   faRotateLeft,
   faCheck,
@@ -33,6 +31,7 @@ import {
 } from "@/pages/Admin/Traducteurs";
 import { AnnuaireHero } from "@/pages/User/AnnuaireHero";
 import { DevisSection } from "@/pages/User/DevisSection";
+import { RejoindreReseauSection } from "@/pages/User/RejoindreReseauSection";
 interface TableData {
   id: number;
   identite: string;
@@ -414,55 +413,9 @@ export function Search() {
         </div>
       </div>
 
+      <RejoindreReseauSection />
+
       <DevisSection />
-
-      <div
-        id="rejoignez-nous"
-        className="relative mb-10 scroll-mt-28 overflow-hidden rounded-2xl bg-navy-900 shadow-soft-lg"
-      >
-        <div
-          className="pointer-events-none absolute inset-0 bg-cover bg-center opacity-50"
-          style={{ backgroundImage: "url('/hero-flags.jpg')" }}
-        />
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-navy-900/95 via-navy-900/80 to-navy-800/55" />
-        <div className="pointer-events-none absolute -top-16 -right-10 h-56 w-56 rounded-full bg-gold-500/10 blur-3xl" />
-
-        <div className="relative flex flex-col gap-6 p-6 md:p-8 lg:p-10 md:flex-row md:items-center md:justify-between">
-          <div className="max-w-2xl">
-            <span className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs font-medium text-white ring-1 ring-white/20 backdrop-blur">
-              <FontAwesomeIcon icon={faFlag} className="text-[10px] text-gold-500" />
-              Annuaire des traducteurs &amp; interprètes professionnels
-            </span>
-            <h2 className="mt-4 text-2xl md:text-3xl lg:text-4xl font-bold leading-tight tracking-tight text-white">
-              Recherche de Traducteur / Interprète
-            </h2>
-            <p className="mt-3 text-sm md:text-base lg:text-lg text-white/80">
-              Des experts linguistiques accessibles selon vos besoins et votre localisation.
-            </p>
-          </div>
-
-          <div className="flex shrink-0 flex-col items-stretch gap-2 md:items-end">
-            <span className="text-sm font-medium text-white/90 md:text-right">
-              Interprètes &amp; Traducteurs judiciaires
-            </span>
-            <a
-              href="https://tally.so/r/XxLkAP"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group inline-flex items-center justify-center gap-3 rounded-full bg-white px-6 py-3 text-navy-900 shadow-soft ring-1 ring-black/5 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-soft-lg"
-            >
-              <span className="flex h-9 w-9 items-center justify-center rounded-full bg-navy-50 text-navy-700 transition-colors duration-300 group-hover:bg-navy-900 group-hover:text-gold-500">
-                <FontAwesomeIcon icon={faUserPlus} />
-              </span>
-              <span className="text-base font-bold">Rejoignez-nous</span>
-              <FontAwesomeIcon
-                icon={faArrowRight}
-                className="ml-1 text-sm transition-transform duration-300 group-hover:translate-x-1"
-              />
-            </a>
-          </div>
-        </div>
-      </div>
     </>
   );
 
