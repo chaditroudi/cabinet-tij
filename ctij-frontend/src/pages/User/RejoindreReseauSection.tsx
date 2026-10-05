@@ -13,7 +13,7 @@ const ADHESION_URL = "https://tally.so/r/XxLkAP";
 type Point = { primary: ReactNode; detail?: ReactNode };
 
 const PANEL =
-  "relative flex flex-col overflow-hidden rounded-2xl border border-navy-900/10 bg-white transition-colors duration-300 hover:border-gold-500/60";
+  "relative flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-white ring-1 ring-transparent transition-all duration-300 hover:ring-2 hover:ring-gold-500/70";
 const PANEL_BODY = "p-5 sm:p-10";
 const PANEL_FOOTER =
   "relative flex flex-col border-t border-paper-border bg-paper/70 px-5 py-8 sm:px-10 sm:py-10";
@@ -90,7 +90,7 @@ function PointList({
               {point.primary}
             </p>
             {point.detail && (
-              <p className="mt-1.5 text-[15px] leading-relaxed text-muted">
+              <p className="mt-1.5 text-[15px] leading-relaxed text-navy-700/90">
                 {point.detail}
               </p>
             )}
@@ -230,43 +230,43 @@ export function RejoindreReseauSection() {
     <section
       id="rejoignez-nous"
       aria-labelledby="rejoindre-reseau-titre"
-      className="relative isolate mb-10 scroll-mt-28 overflow-hidden rounded-2xl border border-paper-border bg-white px-3 py-12 shadow-soft sm:px-10 md:py-16 lg:px-14 lg:py-20"
+      className="relative isolate mb-10 scroll-mt-28 overflow-hidden rounded-2xl bg-gradient-to-b from-navy-900 via-navy-900 to-navy-800 px-3 py-12 shadow-soft-lg sm:px-10 md:py-16 lg:px-14 lg:py-20"
     >
-      <div
+      <span
         aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[26rem] bg-gradient-to-b from-paper to-white"
+        className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-gold-500/0 via-gold-500 to-gold-500/0"
       />
       <div
         aria-hidden
-        className="pointer-events-none absolute -right-20 -top-20 -z-10 h-64 w-64 rounded-full bg-gold-500/10 blur-3xl"
+        className="pointer-events-none absolute -right-24 -top-24 -z-10 h-80 w-80 rounded-full bg-gold-500/15 blur-3xl"
       />
       <div
         aria-hidden
-        className="pointer-events-none absolute -left-24 top-40 -z-10 h-56 w-56 rounded-full bg-sang-500/5 blur-3xl"
+        className="pointer-events-none absolute -left-24 top-1/3 -z-10 h-72 w-72 rounded-full bg-sang-500/15 blur-3xl"
       />
 
       <div className="mx-auto max-w-3xl px-2 text-center sm:px-0">
-        <span className="inline-flex items-center gap-2 rounded-full border border-paper-border bg-white px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.16em] text-navy-800 sm:text-sm">
-          <FontAwesomeIcon icon={faGavel} aria-hidden className="text-gold-600" />
+        <span className="inline-flex items-center gap-2 rounded-full border border-gold-500/40 bg-white/5 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.16em] text-gold-500 sm:text-sm">
+          <FontAwesomeIcon icon={faGavel} aria-hidden />
           Interprètes &amp; traducteurs judiciaires
         </span>
         <h2
           id="rejoindre-reseau-titre"
-          className="mt-6 font-display text-4xl font-semibold leading-[1.1] text-navy-900 sm:text-5xl lg:text-[3.4rem]"
+          className="mt-6 font-display text-4xl font-semibold leading-[1.1] text-white sm:text-5xl lg:text-[3.4rem]"
         >
           Rejoignez le réseau{" "}
-          <span className="block italic text-navy-700">
+          <span className="block italic text-white/90">
             d&apos;interprètes-traducteurs{" "}
-            <span className="relative not-italic text-sang-500">
+            <span className="relative not-italic text-gold-500">
               TIJ
               <span
                 aria-hidden
-                className="absolute -bottom-1 left-0 h-[3px] w-full rounded-full bg-gold-500"
+                className="absolute -bottom-1 left-0 h-[3px] w-full rounded-full bg-gold-500/70"
               />
             </span>
           </span>
         </h2>
-        <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-navy-700 sm:text-xl">
+        <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-white/80 sm:text-xl">
           Le cabinet TIJ propose deux façons de collaborer avec ses
           interprètes-traducteurs judiciaires. Choisissez la formule qui
           correspond à votre pratique.
@@ -276,13 +276,13 @@ export function RejoindreReseauSection() {
       <div
         className="mx-auto mt-12 flex max-w-3xl items-center gap-4 px-2 sm:px-0 md:mt-14"
       >
-        <span aria-hidden className="h-px flex-1 bg-gradient-to-r from-transparent to-gold-500/60" />
+        <span aria-hidden className="h-px flex-1 bg-gradient-to-r from-transparent to-gold-500/70" />
         <span aria-hidden className="h-1.5 w-1.5 rotate-45 bg-gold-500" />
-        <p className="text-center font-display text-lg italic text-navy-800 sm:text-xl">
+        <p className="text-center font-display text-lg italic text-white sm:text-xl">
           Deux façons de collaborer avec TIJ
         </p>
         <span aria-hidden className="h-1.5 w-1.5 rotate-45 bg-gold-500" />
-        <span aria-hidden className="h-px flex-1 bg-gradient-to-l from-transparent to-gold-500/60" />
+        <span aria-hidden className="h-px flex-1 bg-gradient-to-l from-transparent to-gold-500/70" />
       </div>
 
       <div className="mt-10 grid items-start gap-6 md:mt-14 xl:grid-cols-2 xl:gap-8">
@@ -374,7 +374,7 @@ export function RejoindreReseauSection() {
               <h4 className="font-display text-lg font-semibold text-navy-900">
                 Ce que comprend votre adhésion
               </h4>
-              <p className="mt-2 text-[15px] leading-relaxed text-muted">
+              <p className="mt-2 text-[15px] leading-relaxed text-navy-700/90">
                 <span className="font-semibold text-navy-800">
                   Contrepartie&nbsp;:
                 </span>{" "}
