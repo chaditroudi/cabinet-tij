@@ -4,41 +4,49 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
+
+concurrency:
+  group: production-deploy
+  cancel-in-progress: false
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-      # Checkout the code
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      # Set up SSH agent with your VPS private key
       - name: Set up SSH
-        uses: webfactory/ssh-agent@v0.5.3
+        uses: webfactory/ssh-agent@v0.9.0
         with:
           ssh-private-key: ${{ secrets.VPS_SSH_KEY }}
 
-      # Deploy to VPS via SSH
+      - name: Trust VPS host key
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -H "${{ secrets.VPS_HOST }}" >> ~/.ssh/known_hosts
+
+      # The frontend is served from the committed ctij-frontend/dist, so the VPS
+      # must never rebuild it (a local build would bake in the wrong API URL).
       - name: Deploy to VPS
         run: |
-          ssh -o StrictHostKeyChecking=no root@${{ secrets.VPS_HOST }} << 'EOF'
-            set -e
-
-            echo ">>> Pulling latest code..."
+          ssh "${{ secrets.VPS_USER || 'root' }}@${{ secrets.VPS_HOST }}" 'bash -s' << 'EOF'
+            set -euo pipefail
             cd /var/www/cabinet-tij
-            git pull origin main
 
-            echo ">>> Building frontend..."
-            cd ctij-frontend
-            npm install
-            npm run build
-            cd ..
+            echo ">>> Fetching origin/main..."
+            git fetch origin
+            CHANGED=$(git diff --name-only HEAD origin/main || true)
 
-            echo ">>> Rebuilding Docker containers..."
-            docker-compose -f docker-compose.prod.yml down
-            docker-compose -f docker-compose.prod.yml up -d --build
+            echo ">>> Resetting to origin/main..."
+            git reset --hard origin/main
 
-            echo ">>> Deployment complete!"
+            SERVICES="frontend nginx"
+            if echo "$CHANGED" | grep -q '^ctij-api/'; then
+              SERVICES="laravel $SERVICES"
+            fi
+
+            echo ">>> Restarting: $SERVICES"
+            docker compose restart $SERVICES
+
+            echo ">>> Deployed $(git rev-parse --short HEAD)"
           EOF
