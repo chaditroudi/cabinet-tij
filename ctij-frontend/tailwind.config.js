@@ -14,9 +14,14 @@ module.exports = {
           "50%": { transform: "scale(1.2)" },
           "100%": { transform: "scale(1)" },
         },
+        "page-in": {
+          "0%": { opacity: "0", transform: "translateY(12px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
+        },
       },
       animation: {
         pulse: "pulse 1.5s infinite",
+        "page-in": "page-in 0.5s ease-out both",
       },
       gridTemplateColumns: {
         custom: "repeat(3, minmax(0px, 1fr))",

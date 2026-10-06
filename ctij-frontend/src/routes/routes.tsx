@@ -11,7 +11,7 @@ import { initializeAuth } from "../services/reducers/authentication";
 import VerifyEmail from "../pages/auth/VerifyEmail";
 import Logout from "../pages/auth/Logout";
 import GuestRoute from "../middleware/GuestRoute";
-import { Home, Search } from "@/pages/User/Index";
+import { Home, RejoindreReseau, Search } from "@/pages/User/Index";
 import AdminLayout from "@/layouts/AdminLayout";
 import UserLayout from "@/layouts/UserLayout";
 import { Langues, Traducteurs } from "@/pages/Admin/Index";
@@ -37,6 +37,7 @@ export default function AppRoutes() {
         <Route element={<UserLayout pd />}>
         
           <Route path="/" element={<Search />} />
+          <Route path="/rejoignez-nous" element={<RejoindreReseau />} />
         </Route>
         <Route element={<PrivateRoute />}>
           <Route element={<AdminLayout />}>

@@ -31,7 +31,8 @@ import {
 } from "@/pages/Admin/Traducteurs";
 import { AnnuaireHero } from "@/pages/User/AnnuaireHero";
 import { DevisSection } from "@/pages/User/DevisSection";
-import { RejoindreReseauSection } from "@/pages/User/RejoindreReseauSection";
+import { JOIN_PAGE_PATH } from "@/pages/User/RejoindreReseau";
+import { useNavigate } from "react-router-dom";
 interface TableData {
   id: number;
   identite: string;
@@ -44,6 +45,7 @@ interface TableData {
 }
 
 export function Search() {
+  const navigate = useNavigate();
   const [selectedLanguage, setSelectedLanguage] = useState(null) as any;
   const [searchTerm, setSearchTerm] = useState("");
   const [tableData, setTableData] = useState<TableData[]>([]);
@@ -166,17 +168,15 @@ export function Search() {
       ?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
-  const scrollToJoin = () => {
-    document
-      .getElementById("rejoignez-nous")
-      ?.scrollIntoView({ behavior: "smooth", block: "start" });
+  const goToServices = () => {
+    navigate(JOIN_PAGE_PATH);
   };
 
   return (
     <>
       <AnnuaireHero
         onSearchClick={scrollToFilters}
-        onJoinClick={scrollToJoin}
+        onJoinClick={goToServices}
       />
 
       <h1 className="sr-only">Recherche de Traducteur / Interprète</h1>
@@ -412,8 +412,6 @@ export function Search() {
           </DataTable>
         </div>
       </div>
-
-      <RejoindreReseauSection />
 
       <DevisSection />
     </>

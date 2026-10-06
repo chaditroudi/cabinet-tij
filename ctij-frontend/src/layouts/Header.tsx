@@ -2,6 +2,7 @@ import { useAppSelector } from "@/hooks";
 import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState, type MouseEvent } from "react";
 import logo from "@/assets/images/logo.png";
+import { JOIN_PAGE_PATH } from "@/pages/User/RejoindreReseau";
 import Swal from "sweetalert2";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -132,9 +133,8 @@ const Header = () => {
             {underline}
           </a>
 
-          <a
-            href="#rejoignez-nous"
-            onClick={scrollToSection("rejoignez-nous")}
+          <Link
+            to={JOIN_PAGE_PATH}
             title="Interprètes & Traducteurs judiciaires"
             className="group ml-1 inline-flex h-10 items-center gap-2 rounded-full bg-gradient-to-r from-navy-900 to-navy-700 pl-1.5 pr-1.5 text-sm font-semibold text-white shadow-soft transition-all duration-300 hover:shadow-soft-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy-900 motion-safe:hover:-translate-y-0.5 sm:ml-2 sm:pr-4"
           >
@@ -151,7 +151,7 @@ const Header = () => {
               aria-hidden
               className="hidden text-xs transition-transform duration-300 motion-safe:group-hover:translate-x-0.5 sm:inline"
             />
-          </a>
+          </Link>
 
           {isAuthenticated && (
             <>
