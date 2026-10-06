@@ -1,6 +1,8 @@
 ﻿import type { ReactNode } from "react";
+import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
+  faArrowLeft,
   faArrowRight,
   faCheck,
   faHandshake,
@@ -244,6 +246,22 @@ export function RejoindreReseauSection() {
         aria-hidden
         className="pointer-events-none absolute -left-24 top-1/3 -z-10 h-72 w-72 rounded-full bg-sang-500/15 blur-3xl"
       />
+
+      <Link
+        to="/"
+        className="group mb-8 inline-flex items-center gap-2.5 rounded-full border border-white/20 bg-white/5 py-1.5 pl-1.5 pr-4 text-sm font-semibold text-white/90 transition-colors hover:border-gold-500/60 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold-500 sm:mb-6"
+      >
+        <span
+          aria-hidden
+          className="flex h-7 w-7 items-center justify-center rounded-full bg-gold-500 text-navy-900"
+        >
+          <FontAwesomeIcon
+            icon={faArrowLeft}
+            className="text-xs transition-transform duration-200 motion-safe:group-hover:-translate-x-0.5"
+          />
+        </span>
+        Retour à l&apos;accueil
+      </Link>
 
       <div className="mx-auto max-w-3xl px-2 text-center sm:px-0">
         <span className="inline-flex items-center gap-2 rounded-full border border-gold-500/40 bg-white/5 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.16em] text-gold-500 sm:text-sm">
